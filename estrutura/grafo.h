@@ -1,0 +1,43 @@
+/*
+ * grafo.h
+ *
+ *  Created on: 12 de mai de 2018
+ *      Author: adamr
+ */
+
+#ifndef GRAFO_H_
+#define GRAFO_H_
+
+#include <vector>
+
+#include "aresta.h"
+#include "vertice.h"
+
+using namespace std;
+
+class Grafo {
+private:
+	int quantidade_vertices;
+	int quantidade_veiculos;
+
+public:
+	int contador_de_arestas;
+
+	vector<vector<int> > lista_de_adjacencia;
+	vector<Aresta> lista_de_arestas;
+	vector<Vertice> lista_de_vertices;
+
+
+	Grafo(int quantidade_vertices);
+	int getQuantidadeVertices();
+
+	void adicionarVerticeNaLista(int id, int x, int y);
+	void adicionarVerticesNoGrafo();
+	void adicionarAresta(Vertice u, Vertice v);
+
+	int calculoDoPeso(int x, int y);
+	int getQuantidadeVeiculos();
+	void setQuantidadeVeiculos(int quantidadeVeiculos);
+};
+
+#endif /* GRAFO_H_ */
