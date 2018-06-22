@@ -22,13 +22,13 @@ int Grafo::getQuantidadeVertices(){
 	return quantidade_vertices;
 }
 
-int Grafo::calculoDoPeso(int x, int y){
-	return sqrt(x*x + y*y);
+int Grafo::calculoDoPeso(int x1,int x2,int y1, int y2){
+	return sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2));
 }
 
 void Grafo::adicionarVerticeNaLista(int id, int x, int y){
 
-	//lista_de_vertices[id] = new Vertice(id, x, y);
+	lista_de_vertices[id] = new Vertice(id, x, y);
 
 }
 
@@ -42,14 +42,9 @@ void Grafo::adicionarVerticesNoGrafo(){
 }
 
 
-void Grafo::adicionarAresta(Vertice u, Vertice v){
+void Grafo::adicionarAresta(Vertice* u, Vertice* v){
 
-	lista_de_adjacencia[u.getId()][v.getId()] = calculoDoPeso(u.getX(),v.getY());
-
-	//lista_de_arestas[contador_de_arestas].vertice_origem = u.getId();
-	//lista_de_arestas[contador_de_arestas].vertice_destino = v.getId();
-	//lista_de_arestas[contador_de_arestas++].peso_ = lista_de_adjacencia[u.getId()][v.getId()];
-
+	lista_de_adjacencia[u->getId()][v->getId()] = calculoDoPeso(u->getX(),v->getX(),u->getY(),v->getY());
 
 }
 

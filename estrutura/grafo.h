@@ -25,7 +25,7 @@ public:
 
 	vector<vector<int> > lista_de_adjacencia;
 	vector<Aresta> lista_de_arestas;
-	vector<Vertice> lista_de_vertices;
+	vector<Vertice*> lista_de_vertices;
 
 
 	Grafo(int quantidade_vertices);
@@ -33,9 +33,9 @@ public:
 
 	void adicionarVerticeNaLista(int id, int x, int y);
 	void adicionarVerticesNoGrafo();
-	void adicionarAresta(Vertice u, Vertice v);
+	void adicionarAresta(Vertice* u, Vertice* v);
 
-	int calculoDoPeso(int x, int y);
+	int calculoDoPeso(int x1,int x2,int y1, int y2);
 	int getQuantidadeVeiculos();
 	void setQuantidadeVeiculos(int quantidadeVeiculos);
 };

@@ -30,16 +30,15 @@ private:
 	Selecao *seletor_;
 	Cruzamento *operador_crossover;
 	Mutacao *operador_mutacao;
-	//Mutacao a;
 
 	pair<Individuo,Individuo> pais_;
 	pair<Individuo, Individuo> filhos_;
 
 public:
-	Evolucao(Parametros *p,Grafo *g);
+	Evolucao(Grafo *g);
 	Evolucao();
 
-	void operacaoGenetica();
+	void realizarOperacaoGenetica();
 
 };
 

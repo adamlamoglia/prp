@@ -8,22 +8,20 @@
 #include "evolucao.h"
 
 
-Evolucao::Evolucao(Parametros *p,Grafo *g) {
+Evolucao::Evolucao(Grafo *g) {
 
-	this->p = p;
-
-	populacao_ = new Populacao(g,p->getTamanhoPopulacao());
-	seletor_ = new Selecao(p->getFatorDeSorte());
-	operador_crossover = new Cruzamento(populacao_,p->getTamanhoCorte());
+	populacao_ = new Populacao(g,500);
+	seletor_ = new Selecao(5);
+	operador_crossover = new Cruzamento(populacao_,g->getQuantidadeVertices()/2);
 	operador_mutacao = new Mutacao(populacao_);
 
-	alfa_maximo = p->getAlfa();
-	beta_maximo = p->getBeta();
+	alfa_maximo = 10;
+	beta_maximo = 10;
 	numero_geracoes = 0;
 
 }
 
-void Evolucao::operacaoGenetica(){
+void Evolucao::realizarOperacaoGenetica(){
 	int alfa,beta;
 	float indice_mutacao_aleatorio;
 	int indice_individuo_comparacao;
@@ -33,7 +31,7 @@ void Evolucao::operacaoGenetica(){
 	populacao_->gerarPrimeiraGeracao();
 	numero_geracoes++;
 
-	while(numero_geracoes <= p->getNumeroLimiteGeracoes()){
+	while(numero_geracoes <= 100){
 
 		while(alfa < alfa_maximo and beta < beta_maximo){
 
@@ -47,7 +45,7 @@ void Evolucao::operacaoGenetica(){
 
 			indice_mutacao_aleatorio *= 0.01;
 
-			if(indice_mutacao_aleatorio < p->getProbabilidadeMutacao()){
+			if(indice_mutacao_aleatorio < 0.4){
 
 				//TODO: mudar classe "veiculo" para rota ser um atributo privado!
 				filhos_.first.veiculo_->rota_ = operador_mutacao->doisOpt(filhos_.first.veiculo_->rota_);
