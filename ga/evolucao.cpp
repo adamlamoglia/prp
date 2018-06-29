@@ -6,7 +6,8 @@
  */
 
 #include "evolucao.h"
-
+#include <iostream>
+using namespace std;
 
 Evolucao::Evolucao(Grafo *g) {
 
@@ -36,7 +37,7 @@ void Evolucao::realizarOperacaoGenetica(){
 		while(alfa < alfa_maximo and beta < beta_maximo){
 
 			melhor_fitness = populacao_->lista_de_individuos[0].getFitness();
-
+			cout<<melhor_fitness<<endl;
 			pais_ = seletor_->selecionarPorTorneioBinario(populacao_);
 
 			filhos_ = operador_crossover->cruzarPorCorteDeUmPonto(pais_);
