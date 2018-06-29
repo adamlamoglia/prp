@@ -17,6 +17,12 @@ Populacao::Populacao(Grafo *g, int tamanho_inicial) {
 
 	lista_de_individuos.resize(tamanho_inicial);
 
+	for(int i = 0; i < lista_de_individuos.size(); i++){
+
+		lista_de_individuos[i].veiculo_ = new Veiculo(grafo_->getQuantidadeVertices());
+		int a = 2;
+	}
+
 }
 
 int Populacao::getTamanho(){
@@ -59,13 +65,17 @@ void Populacao::gerarPrimeiraGeracao(){
 	vector<bool> vertices_visitados;
 	int vertice_aleatorio;
 
+
 	for(int i = 0; i < getTamanho(); i++){
+
 
 		//criacao de vetor auxiliar para controlar aleatoriedade
 		vertices_visitados.resize(grafo_->getQuantidadeVertices(),false);
 		vertices_visitados[0] = vertices_visitados[vertices_visitados.size() - 1] = true;
 
-		for(int j = 1; j < lista_de_individuos[i].veiculo_->rota_.size() - 1; j++){
+
+		for(int j = 1; j < grafo_->getQuantidadeVertices() - 1; j++){
+
 
 			//os vertices sao escolhidos no intervalo de 1 a vertices-2
 			vertice_aleatorio = rand() % (grafo_->getQuantidadeVertices() - 2) + 1;
@@ -74,12 +84,19 @@ void Populacao::gerarPrimeiraGeracao(){
 				vertice_aleatorio = rand() % (grafo_->getQuantidadeVertices() - 2) + 1;
 
 			lista_de_individuos[i].veiculo_->rota_[j] = vertice_aleatorio;
+
 		}
 
 		lista_de_individuos[i].setFitness(calcularFitness(lista_de_individuos[i].veiculo_->rota_));
+
+
 	}
 
 	ordenarIndividuos();
+
+	for(int i = 0; i < lista_de_individuos.size(); i++){
+		//cout << lista_de_individuos[i].getFitness() << endl;
+	}
 }
 
 
