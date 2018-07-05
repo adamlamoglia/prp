@@ -50,12 +50,15 @@ vector<int> Mutacao::doisOpt(vector<int> rota_){
 
 				if(verificaMelhoriaNaMutacao(rota_,rota_nova,i,j)){
 					rota_final = rota_nova;
+
+					return rota_final;
 				}
 			}
 
 		}
 
-	return rota_final;
+	return rota_;
+	//return rota_final;
 
 }
 

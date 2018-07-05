@@ -53,8 +53,11 @@ void Populacao::ordenarIndividuos(){
 double Populacao::calcularFitness(vector<int> &rota){
 	double fitnessAtual = 0;
 
+
 	for(int i = 0; i < rota.size() - 1; i++)
 		fitnessAtual += grafo_->matriz_de_adjacencia[rota[i]][rota[i+1]];
+
+
 
 	// EF = 147
 	//TODO: ADAPTAR RETORNO PARA PRP
@@ -98,17 +101,6 @@ void Populacao::gerarPrimeiraGeracao(){
 	}
 
 	ordenarIndividuos();
-
-
-	/*for(int i = 0 ; i < lista_de_individuos.size(); i++){
-		cout << "rota do individuo " << i << ":" << endl;
-		for(int j = 0; j < lista_de_individuos[i].veiculo_->rota_.size(); j++){
-			cout <<  lista_de_individuos[i].veiculo_->rota_[j] << " ";
-		}
-		cout << endl;
-		cout << "fitness: " << lista_de_individuos[i].getFitness() << endl;
-
-	}*/
 
 
 }

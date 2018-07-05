@@ -15,7 +15,7 @@ Evolucao::Evolucao(Grafo *g) {
 	operador_crossover = new Cruzamento(populacao_,g->getQuantidadeVertices()/2);
 	operador_mutacao = new Mutacao(populacao_);
 
-	alfa_maximo = 10;
+	alfa_maximo = 100;
 	beta_maximo = 10;
 	numero_geracoes = 0;
 
@@ -34,7 +34,7 @@ void Evolucao::realizarOperacaoGenetica(){
 
 
 	while(numero_geracoes <= 100){
-		//alfa = 0;
+		alfa = 0;
 		beta = 0;
 
 		while(alfa < alfa_maximo and beta < beta_maximo){
@@ -43,73 +43,66 @@ void Evolucao::realizarOperacaoGenetica(){
 
 			pais_ = seletor_->selecionarPorTorneioBinario(populacao_);
 
-			cout << "rota do pai1: " << endl;
-			for(int i = 0; i < pais_.first.veiculo_->rota_.size(); i++){
-				cout <<  pais_.first.veiculo_->rota_[i] << " ";
-			}
-			cout << endl;
-
-			//cout << "fitness do pai1: " << pais_.first.getFitness() << endl;
-
-			cout << "rota do pai2: " << endl;
-			for(int i = 0; i < pais_.second.veiculo_->rota_.size(); i++){
-				cout <<  pais_.second.veiculo_->rota_[i] << " ";
-			}
-			cout << endl;
-
-			//cout << "fitness do pai2: " << pais_.second.getFitness() << endl;
-
-			//cout << pais_.first.getFitness() << " " << pais_.second.getFitness() << endl;
 
 			filhos_ = operador_crossover->cruzarPorCorteDeUmPonto(pais_);
 
-			//cout << filhos_.first.getFitness() << " " << filhos_.second.getFitness() << endl;
+			//cout <<"best_fitness: " << melhor_fitness << endl;
 
-			alfa++;
 
-			/*indice_mutacao_aleatorio = rand() % 100;
+			indice_mutacao_aleatorio = rand() % 100;
 
 			indice_mutacao_aleatorio *= 0.01;
 
-			if(indice_mutacao_aleatorio < 0.4){
+			if(indice_mutacao_aleatorio < 0.8){
 
-				//TODO: mudar classe "veiculo" para rota ser um atributo privado!
+
 				filhos_.first.veiculo_->rota_ = operador_mutacao->doisOpt(filhos_.first.veiculo_->rota_);
 				filhos_.first.setFitness(populacao_->calcularFitness(filhos_.first.veiculo_->rota_));
+
 
 				filhos_.second.veiculo_->rota_ = operador_mutacao->doisOpt(filhos_.second.veiculo_->rota_);
 				filhos_.second.setFitness(populacao_->calcularFitness(filhos_.second.veiculo_->rota_));
 
-				//FILHO 1
-				indice_individuo_comparacao = rand() % populacao_->getTamanho()/2 + populacao_->getTamanho();
+				//indice de comparacao povoado: individuos entre 250 e 500
+				indice_individuo_comparacao = rand() % populacao_->getTamanho()/2 + populacao_->getTamanho()/2;
 
 				if(!populacao_->procurarIndividuoPorFitness(filhos_.first.getFitness()) &&
 						filhos_.first.getFitness() <
 						populacao_->lista_de_individuos[indice_individuo_comparacao].getFitness()){
-					populacao_->lista_de_individuos[indice_individuo_comparacao] = filhos_.first;
+
+						populacao_->lista_de_individuos[indice_individuo_comparacao] = filhos_.first;
 				}
 
-				//FILHO 2
-				indice_individuo_comparacao = rand() % populacao_->getTamanho()/2 + populacao_->getTamanho();
+				//indice de comparacao elitizado: individuos entre 0 e 250
+				indice_individuo_comparacao = rand() % populacao_->getTamanho()/2;
 
 				if(!populacao_->procurarIndividuoPorFitness(filhos_.second.getFitness()) &&
 						filhos_.second.getFitness() <
 						populacao_->lista_de_individuos[indice_individuo_comparacao].getFitness()){
+
 						populacao_->lista_de_individuos[indice_individuo_comparacao] = filhos_.second;
-						//alfa++;
 				}
 
 				alfa++;
 			}
 
+
 			populacao_->ordenarIndividuos();
 			if(populacao_->lista_de_individuos[0].getFitness() == melhor_fitness)
-				beta++;*/
+				beta++;
 
 		}
 
 		numero_geracoes++;
 	}
+
+	cout << "rota otima" << endl;
+
+	for(int i = 0; i < populacao_->lista_de_individuos[0].veiculo_->rota_.size(); i++)
+		cout << populacao_->lista_de_individuos[0].veiculo_->rota_[i] << " ";
+
+	cout << endl;
+	cout << "fitness: " << populacao_->lista_de_individuos[0].getFitness() << endl;
 
 }
 
