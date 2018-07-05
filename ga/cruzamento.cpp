@@ -21,12 +21,16 @@ Cruzamento::Cruzamento(Populacao* populacao_, int tamanho_corte) {
 //TODO: Ver se esta certo
 vector<int> Cruzamento::eliminarRepeticoes(vector<int> &rota_){
 
+	//cout << "entrou5" << endl;
+
 	for(int i = 0; i < lista_de_vertices_repetidos_na_rota.size(); i++){
 
 		if(lista_de_vertices_repetidos_na_rota[rota_[i]]){
-			rota_[i] = -1;
 			lista_de_vertices_repetidos_na_rota[rota_[i]] = false;
+			rota_[i] = -1;
 		}
+
+		//cout << "entrou6" << endl;
 
 
 	}
@@ -59,6 +63,7 @@ pair<Individuo, Individuo> Cruzamento::cruzarPorCorteDeUmPonto(pair<Individuo, I
 
 	gerados_ = geradores;
 
+
 	for(int i = 1; i < tamanho_corte; i++){
 		novo_vertice = gerados_.second.veiculo_->rota_[i];
 
@@ -69,14 +74,32 @@ pair<Individuo, Individuo> Cruzamento::cruzarPorCorteDeUmPonto(pair<Individuo, I
 
 
 		gerados_.first.veiculo_->rota_[i] = novo_vertice;
+
 	}
+
+	cout << "nova rota1: " << endl;
+		for(int i = 0; i < gerados_.first.veiculo_->rota_.size(); i++){
+			cout << gerados_.first.veiculo_->rota_[i] << " ";
+		}
+		cout << endl;
+
+		cout << "nova rota2: " << endl;
+		for(int i = 0; i < gerados_.second.veiculo_->rota_.size(); i++){
+			cout << gerados_.second.veiculo_->rota_[i] << " ";
+		}
+		cout << endl;
+
 
 	gerados_.first.veiculo_->rota_ = eliminarRepeticoes(gerados_.first.veiculo_->rota_);
 
+
 	gerados_.first.veiculo_->rota_ = inserirVerticesNaRotaDoIndividuo(gerados_.first.veiculo_->rota_);
 
+	//cout << "SAIU2" << endl;
 
 	gerados_.first.setFitness(populacao_->calcularFitness(gerados_.first.veiculo_->rota_));
+
+	//cout << "entrou3" << endl;
 
 
 
@@ -90,6 +113,8 @@ pair<Individuo, Individuo> Cruzamento::cruzarPorCorteDeUmPonto(pair<Individuo, I
 
 		gerados_.second.veiculo_->rota_[i] = novo_vertice;
 
+		//cout << "entrou4" << endl;
+
 	}
 
 	gerados_.second.veiculo_->rota_ = eliminarRepeticoes(gerados_.second.veiculo_->rota_);
@@ -97,6 +122,8 @@ pair<Individuo, Individuo> Cruzamento::cruzarPorCorteDeUmPonto(pair<Individuo, I
 	gerados_.second.veiculo_->rota_ = inserirVerticesNaRotaDoIndividuo(gerados_.second.veiculo_->rota_);
 
 	gerados_.second.setFitness(populacao_->calcularFitness(gerados_.second.veiculo_->rota_));
+
+	//cout << "entrou5" << endl;
 
 
 

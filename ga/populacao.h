@@ -12,6 +12,7 @@ using namespace std;
 
 #include <vector>
 #include <algorithm>
+#include <iostream>
 #include <stdlib.h>
 
 #include "individuo.h"

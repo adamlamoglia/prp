@@ -10,7 +10,7 @@
 
 Individuo::Individuo(double fitness,Grafo *grafo) {
 	fitness_ = fitness;
-	veiculo_ = new Veiculo(grafo->getQuantidadeVertices());
+	veiculo_ = new Veiculo(grafo->getQuantidadeVertices()+1);
 
 }
 

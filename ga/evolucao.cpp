@@ -6,8 +6,7 @@
  */
 
 #include "evolucao.h"
-#include <iostream>
-using namespace std;
+
 
 Evolucao::Evolucao(Grafo *g) {
 
@@ -32,17 +31,43 @@ void Evolucao::realizarOperacaoGenetica(){
 	populacao_->gerarPrimeiraGeracao();
 	numero_geracoes++;
 
+
+
 	while(numero_geracoes <= 100){
+		//alfa = 0;
+		beta = 0;
 
 		while(alfa < alfa_maximo and beta < beta_maximo){
 
 			melhor_fitness = populacao_->lista_de_individuos[0].getFitness();
-			cout<<melhor_fitness<<endl;
+
 			pais_ = seletor_->selecionarPorTorneioBinario(populacao_);
+
+			cout << "rota do pai1: " << endl;
+			for(int i = 0; i < pais_.first.veiculo_->rota_.size(); i++){
+				cout <<  pais_.first.veiculo_->rota_[i] << " ";
+			}
+			cout << endl;
+
+			//cout << "fitness do pai1: " << pais_.first.getFitness() << endl;
+
+			cout << "rota do pai2: " << endl;
+			for(int i = 0; i < pais_.second.veiculo_->rota_.size(); i++){
+				cout <<  pais_.second.veiculo_->rota_[i] << " ";
+			}
+			cout << endl;
+
+			//cout << "fitness do pai2: " << pais_.second.getFitness() << endl;
+
+			//cout << pais_.first.getFitness() << " " << pais_.second.getFitness() << endl;
 
 			filhos_ = operador_crossover->cruzarPorCorteDeUmPonto(pais_);
 
-			indice_mutacao_aleatorio = rand() % 100;
+			//cout << filhos_.first.getFitness() << " " << filhos_.second.getFitness() << endl;
+
+			alfa++;
+
+			/*indice_mutacao_aleatorio = rand() % 100;
 
 			indice_mutacao_aleatorio *= 0.01;
 
@@ -79,9 +104,11 @@ void Evolucao::realizarOperacaoGenetica(){
 
 			populacao_->ordenarIndividuos();
 			if(populacao_->lista_de_individuos[0].getFitness() == melhor_fitness)
-				beta++;
+				beta++;*/
 
 		}
+
+		numero_geracoes++;
 	}
 
 }

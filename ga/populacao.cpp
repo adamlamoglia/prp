@@ -20,7 +20,7 @@ Populacao::Populacao(Grafo *g, int tamanho_inicial) {
 	for(int i = 0; i < lista_de_individuos.size(); i++){
 
 		lista_de_individuos[i].veiculo_ = new Veiculo(grafo_->getQuantidadeVertices());
-		int a = 2;
+
 	}
 
 }
@@ -54,36 +54,41 @@ double Populacao::calcularFitness(vector<int> &rota){
 	double fitnessAtual = 0;
 
 	for(int i = 0; i < rota.size() - 1; i++)
-		fitnessAtual += grafo_->lista_de_adjacencia[rota[i]][rota[i+1]];
+		fitnessAtual += grafo_->matriz_de_adjacencia[rota[i]][rota[i+1]];
 
 	// EF = 147
-	return fitnessAtual*147;
+	//TODO: ADAPTAR RETORNO PARA PRP
+	return fitnessAtual;
 }
 
 
 void Populacao::gerarPrimeiraGeracao(){
 	vector<bool> vertices_visitados;
 	int vertice_aleatorio;
+	vertices_visitados.resize(grafo_->getQuantidadeVertices(),false);
 
 
 	for(int i = 0; i < getTamanho(); i++){
 
-
 		//criacao de vetor auxiliar para controlar aleatoriedade
-		vertices_visitados.resize(grafo_->getQuantidadeVertices(),false);
-		vertices_visitados[0] = vertices_visitados[vertices_visitados.size() - 1] = true;
+		for(int j = 0; j < vertices_visitados.size(); j++)
+			vertices_visitados[j] = false;
+
+		vertices_visitados[0]  =  true;
 
 
-		for(int j = 1; j < grafo_->getQuantidadeVertices() - 1; j++){
+		for(int j = 1; j < grafo_->getQuantidadeVertices(); j++){
 
+			//os vertices sao escolhidos no intervalo de 1 a vertices-1
+			vertice_aleatorio = rand() % (grafo_->getQuantidadeVertices() - 1) + 1;
 
-			//os vertices sao escolhidos no intervalo de 1 a vertices-2
-			vertice_aleatorio = rand() % (grafo_->getQuantidadeVertices() - 2) + 1;
-
-			while(vertices_visitados[vertice_aleatorio])
-				vertice_aleatorio = rand() % (grafo_->getQuantidadeVertices() - 2) + 1;
+			while(vertices_visitados[vertice_aleatorio]){
+				vertice_aleatorio = rand() % (grafo_->getQuantidadeVertices() - 1) + 1;
+			}
 
 			lista_de_individuos[i].veiculo_->rota_[j] = vertice_aleatorio;
+
+			vertices_visitados[vertice_aleatorio] = true;
 
 		}
 
@@ -94,9 +99,18 @@ void Populacao::gerarPrimeiraGeracao(){
 
 	ordenarIndividuos();
 
-	for(int i = 0; i < lista_de_individuos.size(); i++){
-		//cout << lista_de_individuos[i].getFitness() << endl;
-	}
+
+	/*for(int i = 0 ; i < lista_de_individuos.size(); i++){
+		cout << "rota do individuo " << i << ":" << endl;
+		for(int j = 0; j < lista_de_individuos[i].veiculo_->rota_.size(); j++){
+			cout <<  lista_de_individuos[i].veiculo_->rota_[j] << " ";
+		}
+		cout << endl;
+		cout << "fitness: " << lista_de_individuos[i].getFitness() << endl;
+
+	}*/
+
+
 }
 
 

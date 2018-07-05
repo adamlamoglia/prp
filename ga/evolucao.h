@@ -26,7 +26,7 @@ private:
 	int numero_geracoes;
 	int probabilidade_mutacao;
 
-	Populacao *populacao_;
+
 	Selecao *seletor_;
 	Cruzamento *operador_crossover;
 	Mutacao *operador_mutacao;
@@ -35,6 +35,7 @@ private:
 	pair<Individuo, Individuo> filhos_;
 
 public:
+	Populacao *populacao_;
 	Evolucao(Grafo *g);
 	Evolucao();
 

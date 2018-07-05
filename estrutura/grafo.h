@@ -9,7 +9,7 @@
 #define GRAFO_H_
 
 #include <vector>
-
+#include <iostream>
 #include "aresta.h"
 #include "vertice.h"
 
@@ -23,7 +23,7 @@ private:
 public:
 	int contador_de_arestas;
 
-	vector<vector<int> > lista_de_adjacencia;
+	vector<vector<double> > matriz_de_adjacencia;
 	vector<Aresta> lista_de_arestas;
 	vector<Vertice*> lista_de_vertices;
 
@@ -35,9 +35,11 @@ public:
 	void adicionarVerticesNoGrafo();
 	void adicionarAresta(Vertice* u, Vertice* v);
 
-	int calculoDoPeso(int x1,int x2,int y1, int y2);
+	double calculoDoPeso(int x1,int x2,int y1, int y2);
 	int getQuantidadeVeiculos();
 	void setQuantidadeVeiculos(int quantidadeVeiculos);
+
+	void imprimeMatrizAdjacencia();
 };
 
 #endif /* GRAFO_H_ */

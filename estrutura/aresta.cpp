@@ -18,8 +18,4 @@ Aresta::Aresta(int u, int v, double w) {
 Aresta::Aresta(){
 
 }
-
-namespace std {
-
-
-} /* namespace std */
+/* namespace std */

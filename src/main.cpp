@@ -54,8 +54,12 @@ int main() {
 
 	}
 
+	//grafo_->imprimeMatrizAdjacencia();
+
 	operador_genetico = new Evolucao(grafo_);
 
 	operador_genetico->realizarOperacaoGenetica();
+
+	//cout << operador_genetico->populacao_->lista_de_individuos[0].getFitness() << endl;
 
 }

@@ -16,17 +16,17 @@ Mutacao::Mutacao(Populacao *populacao_) {
 }
 
 bool Mutacao::verificaMelhoriaNaMutacao(vector<int> &rota_atual, vector<int> &rota_nova, int u, int v){
-	int fitness_parcial_atual, fitness_parcial_novo;
+	double fitness_parcial_atual, fitness_parcial_novo;
 
-	fitness_parcial_atual = populacao_->getGrafo()->lista_de_adjacencia[rota_atual[u-1]][rota_atual[u]]
-							+ populacao_->getGrafo()->lista_de_adjacencia[rota_atual[u]][rota_atual[u+1]]
-									+  populacao_->getGrafo()->lista_de_adjacencia[rota_atual[v-1]][rota_atual[v]]
-											+ populacao_->getGrafo()->lista_de_adjacencia[rota_atual[v]][rota_atual[v+1]];
+	fitness_parcial_atual = populacao_->getGrafo()->matriz_de_adjacencia[rota_atual[u-1]][rota_atual[u]]
+							+ populacao_->getGrafo()->matriz_de_adjacencia[rota_atual[u]][rota_atual[u+1]]
+									+  populacao_->getGrafo()->matriz_de_adjacencia[rota_atual[v-1]][rota_atual[v]]
+											+ populacao_->getGrafo()->matriz_de_adjacencia[rota_atual[v]][rota_atual[v+1]];
 
-	fitness_parcial_novo = populacao_->getGrafo()->lista_de_adjacencia[rota_nova[u-1]][rota_nova[u]]
-							+ populacao_->getGrafo()->lista_de_adjacencia[rota_nova[u]][rota_nova[u+1]]
-									+  populacao_->getGrafo()->lista_de_adjacencia[rota_nova[v-1]][rota_nova[v]]
-											+ populacao_->getGrafo()->lista_de_adjacencia[rota_nova[v]][rota_nova[v+1]];
+	fitness_parcial_novo = populacao_->getGrafo()->matriz_de_adjacencia[rota_nova[u-1]][rota_nova[u]]
+							+ populacao_->getGrafo()->matriz_de_adjacencia[rota_nova[u]][rota_nova[u+1]]
+									+  populacao_->getGrafo()->matriz_de_adjacencia[rota_nova[v-1]][rota_nova[v]]
+											+ populacao_->getGrafo()->matriz_de_adjacencia[rota_nova[v]][rota_nova[v+1]];
 
 	if(fitness_parcial_novo < fitness_parcial_atual)
 		return true;
