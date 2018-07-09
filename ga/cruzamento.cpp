@@ -122,6 +122,7 @@ pair<Individuo, Individuo> Cruzamento::cruzarPorCorteDeUmPonto(pair<Individuo, I
 			lista_de_vertices_inseridos_na_rota[novo_vertice] = true;
 
 		gerados_.second.veiculo_->rota_[i] = novo_vertice;
+		cout << "";
 
 	}
 
