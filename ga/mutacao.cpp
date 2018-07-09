@@ -43,7 +43,6 @@ vector<int> Mutacao::doisOpt(vector<int> rota_){
 	int vertice_de_mudanca_atual = 1;
 
 
-
 		for(int i = 1; i < rota_.size()-1; i++){
 			for(int j = 2; j < rota_.size() - 1; j++){
 				swap(rota_nova[i],rota_nova[j]);
@@ -58,7 +57,6 @@ vector<int> Mutacao::doisOpt(vector<int> rota_){
 		}
 
 	return rota_;
-	//return rota_final;
 
 }
 

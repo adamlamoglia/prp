@@ -15,7 +15,7 @@ Evolucao::Evolucao(Grafo *g) {
 	operador_crossover = new Cruzamento(populacao_,g->getQuantidadeVertices()/2);
 	operador_mutacao = new Mutacao(populacao_);
 
-	alfa_maximo = 100;
+	alfa_maximo = 1000;
 	beta_maximo = 10;
 	numero_geracoes = 0;
 
@@ -32,7 +32,6 @@ void Evolucao::realizarOperacaoGenetica(){
 	numero_geracoes++;
 
 
-
 	while(numero_geracoes <= 100){
 		alfa = 0;
 		beta = 0;
@@ -41,12 +40,14 @@ void Evolucao::realizarOperacaoGenetica(){
 
 			melhor_fitness = populacao_->lista_de_individuos[0].getFitness();
 
-			pais_ = seletor_->selecionarPorTorneioBinario(populacao_);
 
+			pais_ = seletor_->selecionarPorTorneioBinario(populacao_);
+			pais_.first.calcularFitnessIndividual();
+			pais_.second.calcularFitnessIndividual();
 
 			filhos_ = operador_crossover->cruzarPorCorteDeUmPonto(pais_);
-
-			//cout <<"best_fitness: " << melhor_fitness << endl;
+			filhos_.first.calcularFitnessIndividual();
+			filhos_.second.calcularFitnessIndividual();
 
 
 			indice_mutacao_aleatorio = rand() % 100;
@@ -57,20 +58,23 @@ void Evolucao::realizarOperacaoGenetica(){
 
 
 				filhos_.first.veiculo_->rota_ = operador_mutacao->doisOpt(filhos_.first.veiculo_->rota_);
-				filhos_.first.setFitness(populacao_->calcularFitness(filhos_.first.veiculo_->rota_));
+				filhos_.first.calcularFitnessIndividual();
 
 
 				filhos_.second.veiculo_->rota_ = operador_mutacao->doisOpt(filhos_.second.veiculo_->rota_);
-				filhos_.second.setFitness(populacao_->calcularFitness(filhos_.second.veiculo_->rota_));
+				filhos_.second.calcularFitnessIndividual();
 
 				//indice de comparacao povoado: individuos entre 250 e 500
 				indice_individuo_comparacao = rand() % populacao_->getTamanho()/2 + populacao_->getTamanho()/2;
+
+
 
 				if(!populacao_->procurarIndividuoPorFitness(filhos_.first.getFitness()) &&
 						filhos_.first.getFitness() <
 						populacao_->lista_de_individuos[indice_individuo_comparacao].getFitness()){
 
 						populacao_->lista_de_individuos[indice_individuo_comparacao] = filhos_.first;
+
 				}
 
 				//indice de comparacao elitizado: individuos entre 0 e 250
@@ -84,10 +88,14 @@ void Evolucao::realizarOperacaoGenetica(){
 				}
 
 				alfa++;
+
 			}
 
-
+			populacao_->calcularFitness();
 			populacao_->ordenarIndividuos();
+
+
+
 			if(populacao_->lista_de_individuos[0].getFitness() == melhor_fitness)
 				beta++;
 
@@ -96,13 +104,7 @@ void Evolucao::realizarOperacaoGenetica(){
 		numero_geracoes++;
 	}
 
-	cout << "rota otima" << endl;
-
-	for(int i = 0; i < populacao_->lista_de_individuos[0].veiculo_->rota_.size(); i++)
-		cout << populacao_->lista_de_individuos[0].veiculo_->rota_[i] << " ";
-
-	cout << endl;
-	cout << "fitness: " << populacao_->lista_de_individuos[0].getFitness() << endl;
+	populacao_->imprimirRotaFitness();
 
 }
 

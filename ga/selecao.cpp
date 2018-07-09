@@ -41,7 +41,6 @@ pair<Individuo, Individuo> Selecao::selecionarPorTorneioBinario(Populacao *p){
 	else
 		selecionados_.first = p2;
 
-	selecionados_.first.setFitness(p->calcularFitness(selecionados_.first.veiculo_->rota_));
 
 
 	numero_sorte = rand() % 11;
@@ -66,7 +65,6 @@ pair<Individuo, Individuo> Selecao::selecionarPorTorneioBinario(Populacao *p){
 	else
 		selecionados_.second = p2;
 
-	selecionados_.second.setFitness(p->calcularFitness(selecionados_.second.veiculo_->rota_));
 
 	return selecionados_;
 

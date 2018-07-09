@@ -13,14 +13,12 @@ Populacao::Populacao(Grafo *g, int tamanho_inicial) {
 	grafo_ = g;
 	tamanho = tamanho_inicial;
 
-	//individuoInicial = new Individuo(-1, g);
-
 	lista_de_individuos.resize(tamanho_inicial);
 
 	for(int i = 0; i < lista_de_individuos.size(); i++){
 
 		lista_de_individuos[i].veiculo_ = new Veiculo(grafo_->getQuantidadeVertices());
-
+		lista_de_individuos[i].grafo_ = g;
 	}
 
 }
@@ -50,18 +48,39 @@ void Populacao::ordenarIndividuos(){
 	sort(lista_de_individuos.begin(), lista_de_individuos.end(), ordemCrescente);
 }
 
-double Populacao::calcularFitness(vector<int> &rota){
+void Populacao::calcularFitness(){
 	double fitnessAtual = 0;
 
+	for(int i = 0; i < lista_de_individuos.size(); i++){
 
-	for(int i = 0; i < rota.size() - 1; i++)
-		fitnessAtual += grafo_->matriz_de_adjacencia[rota[i]][rota[i+1]];
+		vector<int> rota = lista_de_individuos[i].veiculo_->rota_;
+		fitnessAtual = 0;
+
+		for(int x = 0; x < rota.size() - 1; x++)
+			fitnessAtual += grafo_->matriz_de_adjacencia[rota[x]][rota[x+1]];
 
 
+		lista_de_individuos[i].setFitness(fitnessAtual);
+	}
 
-	// EF = 147
-	//TODO: ADAPTAR RETORNO PARA PRP
-	return fitnessAtual;
+
+}
+
+void Populacao::imprimirRotaFitness(){
+	vector<int> rota;
+
+	for(int i = lista_de_individuos.size() - 1; i >= 0; i--){
+		cout << "rota do Individuo " << i << endl;
+		rota = lista_de_individuos[i].veiculo_->rota_;
+
+		for(int x = 0; x < rota.size(); x++)
+			cout << rota[x] << " ";
+		cout << endl;
+
+		cout << "fitness: " << lista_de_individuos[i].getFitness();
+		cout << endl;
+	}
+
 }
 
 
@@ -95,12 +114,12 @@ void Populacao::gerarPrimeiraGeracao(){
 
 		}
 
-		lista_de_individuos[i].setFitness(calcularFitness(lista_de_individuos[i].veiculo_->rota_));
-
 
 	}
 
+	calcularFitness();
 	ordenarIndividuos();
+
 
 
 }

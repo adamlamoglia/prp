@@ -110,7 +110,6 @@ pair<Individuo, Individuo> Cruzamento::cruzarPorCorteDeUmPonto(pair<Individuo, I
 
 	gerados_.first.veiculo_->rota_ = inserirVerticesNaRotaDoIndividuo(gerados_.first.veiculo_->rota_);
 
-	gerados_.first.setFitness(populacao_->calcularFitness(gerados_.first.veiculo_->rota_));
 
 	zerarListaDeVertices();
 
@@ -140,8 +139,6 @@ pair<Individuo, Individuo> Cruzamento::cruzarPorCorteDeUmPonto(pair<Individuo, I
 
 
 	gerados_.second.veiculo_->rota_ = inserirVerticesNaRotaDoIndividuo(gerados_.second.veiculo_->rota_);
-
-	gerados_.second.setFitness(populacao_->calcularFitness(gerados_.second.veiculo_->rota_));
 
 
 	return gerados_;

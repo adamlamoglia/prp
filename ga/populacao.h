@@ -33,7 +33,8 @@ public:
 	void gerarPrimeiraGeracao();
 	void ordenarIndividuos();
 	bool procurarIndividuoPorFitness(double fitness);
-	double calcularFitness(vector<int> &rota);
+	void calcularFitness();
+	void imprimirRotaFitness();
 	Grafo* getGrafo();
 };
 

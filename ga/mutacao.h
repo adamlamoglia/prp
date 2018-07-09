@@ -24,7 +24,7 @@ public:
 	Mutacao(Populacao *populacao_);
 	vector<int> doisOpt(vector<int> rota_);
 	bool verificaMelhoriaNaMutacao(vector<int> &rota_atual, vector<int> &rota_nova, int u, int v);
-	pair<int,int> procurarArestaMaisCustosa(vector<int,int> rota_);
+
 };
 
 

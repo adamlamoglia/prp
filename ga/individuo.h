@@ -21,14 +21,17 @@ private:
 	//valor de EF associado
 	double fitness_;
 
+
 public:
 	Individuo(double fitness,Grafo *grafo);
 	Individuo();
 	//atributo associado ao PTSP
 	Veiculo* veiculo_;
+	Grafo* grafo_;
 
 
 	void setFitness(double fitness);
+	void calcularFitnessIndividual();
 	double getFitness();
 };
 
