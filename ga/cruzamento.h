@@ -23,9 +23,11 @@ public:
 
 	Cruzamento(Populacao* populacao_, int tamanho_corte);
 	Cruzamento();
-	vector<int> eliminarRepeticoes(vector<int> &rota_);
+	vector<int> eliminarRepeticoesFilho1(vector<int> &rota_);
+	vector<int> eliminarRepeticoesFilho2(vector<int> &rota_);
 	vector<int> inserirVerticesNaRotaDoIndividuo(vector<int> &rota_);
 	pair<Individuo, Individuo> cruzarPorCorteDeUmPonto(pair<Individuo, Individuo> geradores);
+	void zerarListaDeVertices();
 };
 
 
