@@ -19,7 +19,7 @@ public:
 
 	int alfa_maximo,
 		beta_maximo,
-		numero_geracoes;
+		limite_geracoes;
 
 	double probabilidade_mutacao;
 
@@ -32,6 +32,11 @@ public:
 	void inicializarPopulacao();
 	void realizarOperacaoGenetica();
 	void ordenarPopulacao();
+	void selecionarPaisPorTorneioBinario();
+	void cruzarFilhosPorCorteDeUmPonto();
+	void doisOpt(Individuo solucao);
+	void realizarAceitacaoDosFilhosNaPopulacao();
+	bool existeIndividuoComFitnessIgual(Individuo solucao);
 
 };
 

@@ -14,7 +14,7 @@ Ga::Ga(Input *in, int alfa, int beta, int num_geracoes, double prob_mutacao, int
 
 	alfa_maximo = alfa;
 	beta_maximo = beta;
-	numero_geracoes = num_geracoes;
+	limite_geracoes = num_geracoes;
 	probabilidade_mutacao = prob_mutacao;
 
 	populacao.resize(quantidade_individuos, Individuo(in));
@@ -64,6 +64,13 @@ void Ga::inicializarPopulacao(){
 }
 
 void Ga::realizarOperacaoGenetica(){
+	int quantidade_geracoes = 0,
+		alfa = 0,
+		beta = 0,
+		indice_individuo;
+
+	double melhor_fitness,
+	       indice_mutacao;
 
 	Individuo pai1(in),
 			  pai2(in),
@@ -75,6 +82,57 @@ void Ga::realizarOperacaoGenetica(){
 	for(unsigned int i = 0; i < populacao.size(); i++){
 		populacao[i].imprimirRota();
 		populacao[i].imprimirFitness();
+	}
+
+	while(quantidade_geracoes <= limite_geracoes){
+		alfa = beta = 0;
+
+		while(alfa < alfa_maximo and beta < beta_maximo){
+
+			melhor_fitness = populacao[0].getFitness();
+
+			selecionarPaisPorTorneioBinario();
+
+			cruzarFilhosPorCorteDeUmPonto();
+
+			indice_mutacao = (rand() % 100)*0.01;
+
+			if(indice_mutacao < probabilidade_mutacao){
+
+				doisOpt(filho1);
+				doisOpt(filho2);
+			}
+
+			if(!existeIndividuoComFitnessIgual(filho1)){
+
+				//escolhe um individuo entre 250 e 500 posicao da populacao
+				indice_individuo = rand() % populacao.size()/2 + populacao.size()/2;
+
+				if(populacao[indice_individuo].getFitness() > filho1.getFitness())
+					populacao[indice_individuo] = filho1;
+
+			}
+
+			if(!existeIndividuoComFitnessIgual(filho2)){
+
+				//escolhe um individuo entre 250 e 500 posicao da populacao
+				indice_individuo = rand() % populacao.size()/2 + populacao.size()/2;
+
+				if(populacao[indice_individuo].getFitness() > filho2.getFitness())
+					populacao[indice_individuo] = filho2;
+
+			}
+
+			alfa++;
+
+			ordenarPopulacao();
+
+			if(populacao[0].getFitness() == melhor_fitness)
+				beta++;
+		}
+
+		quantidade_geracoes++;
+
 	}
 
 }
