@@ -1,65 +1,31 @@
 //============================================================================
-// Name        : prp2.cpp
+// Name        : pollutionRoutingProblem.cpp
 // Author      : adamlamoglia
 // Version     :
 // Copyright   : Your copyright notice
 // Description : Hello World in C++, Ansi-style
 //============================================================================
 
-#include <iostream>
-#include <fstream>
-#include <string>
-#include "parametros.h"
-#include "../ga/evolucao.h"
+#include "input.h"
+#include "ga.h"
 
 using namespace std;
 
-int main() {
+int main(int argc, char ** argv  ) {
 
-	ifstream arquivo_("eil22.txt");
-	string leitor_;
-	Parametros p;
-	Grafo *grafo_;
-	Evolucao *operador_genetico;
+	//srand(time(NULL));
 
-	if(arquivo_.is_open()){
-
-		while(arquivo_ >> leitor_){
-
-			if(leitor_ == "DIMENSION"){
-				arquivo_ >> leitor_; // :
-				arquivo_ >> p.quantidade_vertices;
-
-				grafo_ = new Grafo(p.quantidade_vertices);
-				grafo_->setQuantidadeVeiculos(1);
-			}
-
-			if(leitor_ == "NODE_COORD_SECTION"){
-
-				for(int i = 0; i < p.quantidade_vertices; i++){
-
-					arquivo_ >> p.id_vertice; // id do vertice
-					arquivo_ >> p.x_vertice; // x
-					arquivo_ >> p.y_vertice; // y
-
-					grafo_->adicionarVerticeNaLista(p.id_vertice - 1, p.x_vertice,  p.y_vertice);
-				}
-
-				grafo_->adicionarVerticesNoGrafo(); // constroi arestas
-			}
+	//if(argc > 1)
 
 
-		}
-		arquivo_.close();
+	Input in;
 
-	}
+	in.lerArquivo();
 
-	//grafo_->imprimeMatrizAdjacencia();
+	Ga operador_genetico(&in, 10, 10, 100, 0.8, 500);
 
-	operador_genetico = new Evolucao(grafo_);
+	operador_genetico.realizarOperacaoGenetica();
 
-	operador_genetico->realizarOperacaoGenetica();
-
-	//cout << operador_genetico->populacao_->lista_de_individuos[0].getFitness() << endl;
+	return 0;
 
 }
