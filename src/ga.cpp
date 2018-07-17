@@ -8,132 +8,154 @@
 #include "ga.h"
 
 
-Ga::Ga(Input *in, int alfa, int beta, int num_geracoes, double prob_mutacao, int quantidade_individuos) {
+Genetic::Genetic(Input *in, int alfa, int beta, int generations, double prob_mutation, int size) {
 
 	this->in = in;
 
-	alfa_maximo = alfa;
-	beta_maximo = beta;
-	limite_geracoes = num_geracoes;
-	probabilidade_mutacao = prob_mutacao;
+	alfa_max = alfa;
+	beta_max = beta;
+	limit = generations;
+	probability = prob_mutation;
 
-	populacao.resize(quantidade_individuos, Individuo(in));
+	population.resize(size, Individuo(in));
 
-	vertices_visitados.resize(in->quantidade_vertices,false);
+	visited_vertex.resize(in->num_vertices,false);
 
 }
 
-bool ordemCrescenteDeFitness(Individuo a, Individuo b){
+bool lowerFitness(Individuo a, Individuo b){
 	return a.getFitness() < b.getFitness();
 }
 
-void Ga::ordenarPopulacao(){
-	sort(populacao.begin(), populacao.end(), ordemCrescenteDeFitness);
+void Genetic::sortPopulation(){
+
+	sort(population.begin(), population.end(), lowerFitness);
 }
 
-void Ga::inicializarPopulacao(){
-	int vertice_aleatorio;
 
-	for(unsigned int i = 0; i < populacao.size(); i++){
+void Genetic::init(){
+	int random;
 
-		for(unsigned int j = 0; j < vertices_visitados.size(); j++)
-					vertices_visitados[j] = false;
+	for(unsigned int i = 0; i < population.size(); i++){
 
-		vertices_visitados[0]  =  true;
+		for(unsigned int j = 0; j < visited_vertex.size(); j++)
+			visited_vertex[j] = false;
+
+		visited_vertex[0]  =  true;
 
 
-		for(unsigned int indice_vertice = 1; indice_vertice < in->quantidade_vertices; indice_vertice++){
+		for(unsigned int id_vertex = 1; id_vertex < in->num_vertices; id_vertex++){
 
 			//os vertices sao escolhidos no intervalo de 1 a vertices-1
-			vertice_aleatorio = rand() % (in->quantidade_vertices - 1) + 1;
+			random = rand() % (in->num_vertices - 1) + 1;
 
-			while(vertices_visitados[vertice_aleatorio]){
-				vertice_aleatorio = rand() % (in->quantidade_vertices - 1) + 1;
-			}
+			while(visited_vertex[random])
+				random = rand() % (in->num_vertices - 1) + 1;
 
-			populacao[i].setRota(indice_vertice,vertice_aleatorio);
+			population[i].setRoute(id_vertex,random);
 
-			vertices_visitados[vertice_aleatorio] = true;
+			visited_vertex[random] = true;
 
 		}
 
-		populacao[i].setFitness();
+		population[i].setFitness();
 	}
 
-	ordenarPopulacao();
+	sortPopulation();
 }
 
-void Ga::realizarOperacaoGenetica(){
-	int quantidade_geracoes = 0,
+void Genetic::binaryTour(){
+
+}
+
+void Genetic::onePointCrossover(){
+
+}
+
+void Genetic::twoOpt(Individuo solution){
+
+}
+
+void Genetic::acception(){
+
+}
+
+bool Genetic::searchFitness(Individuo solution){
+
+}
+
+void Genetic::run(){
+
+	int generations = 0,
 		alfa = 0,
 		beta = 0,
-		indice_individuo;
+		random_person;
 
-	double melhor_fitness,
-	       indice_mutacao;
+	double best_fitness,
+	       random_mutation;
 
-	Individuo pai1(in),
-			  pai2(in),
-			  filho1(in),
-			  filho2(in);
+	Individuo f1(in),
+			  f2(in),
+			  s1(in),
+			  s2(in);
 
-	inicializarPopulacao();
+	init();
 
-	for(unsigned int i = 0; i < populacao.size(); i++){
-		populacao[i].imprimirRota();
-		populacao[i].imprimirFitness();
+	for(unsigned int i = 0; i < population.size(); i++){
+		population[i].printRoute();
+		population[i].printFitness();
 	}
 
-	while(quantidade_geracoes <= limite_geracoes){
+	/*while(generations <= limit){
 		alfa = beta = 0;
 
-		while(alfa < alfa_maximo and beta < beta_maximo){
+		while(alfa < alfa_max and beta < beta_max){
 
-			melhor_fitness = populacao[0].getFitness();
+			best_fitness = population[0].getFitness();
 
-			selecionarPaisPorTorneioBinario();
+			binaryTour();
 
-			cruzarFilhosPorCorteDeUmPonto();
+			onePointCrossover();
 
-			indice_mutacao = (rand() % 100)*0.01;
+			random_mutation = (rand() % 100)*0.01;
 
-			if(indice_mutacao < probabilidade_mutacao){
+			if(random_mutation < probability){
 
-				doisOpt(filho1);
-				doisOpt(filho2);
+				twoOpt(s1);
+				twoOpt(s2);
 			}
 
-			if(!existeIndividuoComFitnessIgual(filho1)){
+			if(!searchFitness(s1)){
 
 				//escolhe um individuo entre 250 e 500 posicao da populacao
-				indice_individuo = rand() % populacao.size()/2 + populacao.size()/2;
+				random_person = rand() % population.size()/2 + population.size()/2;
 
-				if(populacao[indice_individuo].getFitness() > filho1.getFitness())
-					populacao[indice_individuo] = filho1;
+				if(population[random_person].getFitness() > s1.getFitness())
+					population[random_person] = s1;
 
 			}
 
-			if(!existeIndividuoComFitnessIgual(filho2)){
+			if(!searchFitness(s2)){
 
 				//escolhe um individuo entre 250 e 500 posicao da populacao
-				indice_individuo = rand() % populacao.size()/2 + populacao.size()/2;
+				random_person = rand() % population.size()/2 + population.size()/2;
 
-				if(populacao[indice_individuo].getFitness() > filho2.getFitness())
-					populacao[indice_individuo] = filho2;
+				if(population[random_person].getFitness() > s2.getFitness())
+					population[random_person] = s2;
 
 			}
 
 			alfa++;
 
-			ordenarPopulacao();
+			sortPopulation();
 
-			if(populacao[0].getFitness() == melhor_fitness)
+			if(population[0].getFitness() == best_fitness)
 				beta++;
 		}
 
-		quantidade_geracoes++;
+		generations++;
 
-	}
+	}*/
 
 }
 

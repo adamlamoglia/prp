@@ -15,13 +15,13 @@ class Output {
 
 public:
 	Input *in;
-	vector<unsigned int> rota;
+	vector<unsigned int> route;
 	double fitness;
 
 	Output(Input *in);
-	void imprimirMatrizDeDistancias();
-	void imprimirRota();
-	void imprimirFitness();
+	void printDistanceMatrix();
+	void printRoute();
+	void printFitness();
 
 
 };

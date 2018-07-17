@@ -12,31 +12,31 @@
 #include <algorithm>
 #include <utility>
 
-class Ga{
+class Genetic{
 
 public:
 	Input *in;
 
-	int alfa_maximo,
-		beta_maximo,
-		limite_geracoes;
+	int alfa_max,
+		beta_max,
+		limit;
 
-	double probabilidade_mutacao;
+	double probability;
 
-	vector<bool> vertices_visitados;
+	vector<bool> visited_vertex;
 
-	vector<Individuo> populacao;
+	vector<Individuo> population;
 
-	Ga(Input *in, int alfa, int beta, int num_geracoes, double prob_mutacao, int quantidade_individuos);
+	Genetic(Input *in, int alfa, int beta, int generations, double prob_mutation, int num_individuals);
 
-	void inicializarPopulacao();
-	void realizarOperacaoGenetica();
-	void ordenarPopulacao();
-	void selecionarPaisPorTorneioBinario();
-	void cruzarFilhosPorCorteDeUmPonto();
-	void doisOpt(Individuo solucao);
-	void realizarAceitacaoDosFilhosNaPopulacao();
-	bool existeIndividuoComFitnessIgual(Individuo solucao);
+	void init();
+	void run();
+	void sortPopulation();
+	void binaryTour();
+	void onePointCrossover();
+	void twoOpt(Individuo solution);
+	void acception();
+	bool searchFitness(Individuo solution);
 
 };
 

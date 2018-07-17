@@ -14,34 +14,34 @@ Output::Output(Input *in) {
 	this->in = in;
 
 	//o tamanho da rota tem um valor a mais, pois sempre ha o retorno para o deposito
-	rota.resize(in->quantidade_vertices + 1, 0);
+	route.resize(in->num_vertices + 1, 0);
 
 	fitness = 0;
 
 }
 
 
-void Output::imprimirMatrizDeDistancias(){
+void Output::printDistanceMatrix(){
 
-	for(unsigned int i = 0; i < in->matriz_distancias.size(); i++){
-		for(unsigned int j = 0; j < in->matriz_distancias.size(); j++){
+	for(unsigned int i = 0; i < in->distance_matrix.size(); i++){
+		for(unsigned int j = 0; j < in->distance_matrix.size(); j++){
 
-			cout << in->matriz_distancias[i][j] << " - ";
+			cout << in->distance_matrix[i][j] << " - ";
 		}
 		cout << endl;
 	}
 }
 
-void Output::imprimirRota(){
+void Output::printRoute(){
 
-	for(unsigned int i = 0; i < rota.size(); i++)
-		cout << rota[i] << " ";
+	for(unsigned int i = 0; i < route.size(); i++)
+		cout << route[i] << " ";
 
 	cout << endl;
 
 }
 
-void Output::imprimirFitness(){
+void Output::printFitness(){
 
 	cout << fitness << endl;
 

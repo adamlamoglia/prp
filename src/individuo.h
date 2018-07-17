@@ -18,7 +18,7 @@ public:
 
 	double getFitness();
 	void setFitness();
-	void setRota(unsigned int id, unsigned int vertice);
+	void setRoute(unsigned int id, unsigned int vertex);
 
 
 };

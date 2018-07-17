@@ -11,74 +11,73 @@
 
 Input::Input() {
 
-	quantidade_vertices = 0;
+	num_vertices = 0;
 }
 
-Input::~Input(){
 
-}
-
-double Input::calcularDistanciaEuclidiana2D(int x1, int y1, int x2, int y2){
+double Input::euclidian2D(int x1, int y1, int x2, int y2){
 	return sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2));
 }
 
-void Input::adicionarCoordenada(int id, int x, int y){
+void Input::addCoordenates(int id, int x, int y){
 
-	coordenadas_vertices[id].first = x;
-	coordenadas_vertices[id].second = y;
+	coordenates[id].first = x;
+	coordenates[id].second = y;
 }
 
-void Input::construirMatrizDeDistancias(){
-	pair<int,int> vertice1,vertice2;
+void Input::build(){
 
-	for(unsigned int i = 0; i < quantidade_vertices; i++){
-		for(unsigned int j = 0; j < quantidade_vertices; j++){
-			vertice1 = coordenadas_vertices[i];
-			vertice2 = coordenadas_vertices[j];
+	pair<int,int> v1,v2;
 
-			matriz_distancias[i][j] = calcularDistanciaEuclidiana2D(vertice1.first, vertice1.second,
-																		vertice2.first, vertice2.second);
+	for(unsigned int i = 0; i < num_vertices; i++){
+		for(unsigned int j = 0; j < num_vertices; j++){
+			v1 = coordenates[i];
+			v2 = coordenates[j];
+
+			distance_matrix[i][j] = euclidian2D(v1.first, v1.second,
+													v2.first, v2.second);
 		}
 	}
 }
 
 
 
-void Input::lerArquivo(){
+void Input::load(string name){
 
-	ifstream arquivo_("eil22.txt");
+	//TODO: Não deixar informação fixa, mudar para name
+	ifstream file("eil22.txt");
 
-	if( arquivo_.is_open() ){
+	if( file.is_open() ){
 
-		while(arquivo_ >> leitor_arquivo){
+		while(file >> reader){
 
-					if(leitor_arquivo == "DIMENSION"){
+					if(reader == "DIMENSION"){
 
-						arquivo_ >> leitor_arquivo; // :
-						arquivo_ >> quantidade_vertices;
+						file >> reader; // :
+						file >> num_vertices;
 
-						coordenadas_vertices.resize( quantidade_vertices );
-						matriz_distancias.resize( quantidade_vertices, vector<double>(quantidade_vertices) );
+						coordenates.resize( num_vertices );
+						distance_matrix.resize( num_vertices, vector<double>(num_vertices) );
 					}
 
-					if(leitor_arquivo == "NODE_COORD_SECTION"){
+					if(reader == "NODE_COORD_SECTION"){
 						int id, x, y;
 
-						for(unsigned int i = 0; i < quantidade_vertices; i++){
+						for(unsigned int i = 0; i < num_vertices; i++){
 
-							arquivo_ >> id >> x >> y;
+							file >> id >> x >> y;
 
-							adicionarCoordenada(id-1,x,y);
+							addCoordenates(id-1,x,y);
 
 						}
 
-						construirMatrizDeDistancias();
+						build();
 					}
 
 
 		}
 
-		arquivo_.close();
+		file.close();
 	}
 
 }
