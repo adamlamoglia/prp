@@ -19,10 +19,15 @@ Genetic::Genetic(Input *in, int alfa, int beta, int generations, double prob_mut
 
 	//TODO: Implement this in class "Parametros.h"
 	lucky_factor = 5;
+	cut_size = in->num_vertices/2;
 
 	population.resize(size, Individuo(in));
 
 	visited_vertex.resize(in->num_vertices,false);
+	repeated_vertex_f1.resize(in->num_vertices,false);
+	repeated_vertex_f2.resize(in->num_vertices,false);
+	inserted_vertex_f1.resize(in->num_vertices,false);
+	inserted_vertex_f2.resize(in->num_vertices,false);
 
 }
 
@@ -113,8 +118,51 @@ void Genetic::binaryTour(Individuo &i1, Individuo &i2, Individuo &p1, Individuo 
 
 }
 
-void Genetic::onePointCrossover(Individuo &p1, Individuo &p2, Individuo &s1, Individuo &s2){
+void Genetic::removeRepetitions(Individuo &f1, Individuo &f2){
 
+
+}
+
+void Genetic::onePointCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2){
+
+		int novo_vertice;
+
+		f1 = p1;
+		f2 = p2;
+
+		for(int i = 1; i < cut_size; i++)
+			inserted_vertex_f2[f2.route[i]] = true;
+
+		for(int i = cut_size; i < in->num_vertices - 1; i++)
+			inserted_vertex_f1[f1.route[i]] = true;
+
+		for(int i = 1; i < cut_size; i++){
+
+			if(inserted_vertex_f1[f2.route[i]])
+				repeated_vertex_f1[f2.route[i]] = true;
+			else
+				inserted_vertex_f1[f2.route[i]] = true;
+
+
+			f1.route[i] = f2.route[i];
+		}
+
+
+		for(int i = cut_size; i < in->num_vertices - 1; i++){
+
+			if(inserted_vertex_f2[f1.route[i]])
+				repeated_vertex_f2[f1.route[i]] = true;
+			else
+				inserted_vertex_f2[f1.route[i]] = true;
+
+
+			f2.route[i] = f1.route[i];
+		}
+
+		removeRepetitions(f1,f2);
+
+		f1.setFitness();
+		f2.setFitness();
 }
 
 void Genetic::twoOpt(Individuo *solution){

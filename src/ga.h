@@ -22,11 +22,16 @@ public:
 		limit,
 		lucky_factor,
 		random_person,
-		lucky_number;
+		lucky_number,
+		cut_size;
 
 	double probability;
 
-	vector<bool> visited_vertex;
+	vector<bool> visited_vertex,
+				 inserted_vertex_f1,
+				 inserted_vertex_f2,
+				 repeated_vertex_f1,
+				 repeated_vertex_f2;
 
 	vector<Individuo> population;
 
@@ -40,6 +45,7 @@ public:
 	void twoOpt(Individuo *solution);
 	void acception(Individuo *f1, Individuo *f2);
 	bool searchFitness(Individuo *solution);
+	void removeRepetitions(Individuo &f1, Individuo &f2);
 
 };
 
