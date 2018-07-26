@@ -17,6 +17,9 @@ Genetic::Genetic(Input *in, int alfa, int beta, int generations, double prob_mut
 	limit = generations;
 	probability = prob_mutation;
 
+	//TODO: Implement this in class "Parametros.h"
+	lucky_factor = 5;
+
 	population.resize(size, Individuo(in));
 
 	visited_vertex.resize(in->num_vertices,false);
@@ -64,68 +67,125 @@ void Genetic::init(){
 	sortPopulation();
 }
 
-void Genetic::binaryTour(){
+void Genetic::binaryTour(Individuo *i1, Individuo *i2, Individuo *p1, Individuo *p2){
+
+
+		random_person = rand() % population.size();
+		lucky_number = rand() % 11;
+
+		(*i1) = population[random_person];
+
+		do{
+
+			random_person = rand() % population.size();
+			(*i2) = population[random_person];
+
+		}while(i1->getFitness() == i2->getFitness());
+
+		if(i1->getFitness() < i2->getFitness() && lucky_factor > lucky_number)
+			(*p1) = (*i1);
+
+		else
+			(*p1) = (*i2);
+
+
+		lucky_number = rand() % 11;
+
+
+		do{
+			random_person = rand() % population.size();
+
+			(*i1) = population[random_person];
+
+		}while(i1->getFitness() == p1->getFitness());
+
+		do{
+			random_person = rand() % population.size();
+
+			(*i2) = population[random_person];
+		}while(i2->getFitness() == p1->getFitness() || i1->getFitness() == i2->getFitness());
+
+		if(i1->getFitness() < i2->getFitness() && lucky_factor > lucky_number)
+			(*p2) = (*i1);
+
+		else
+			(*p2) = (*i2);
 
 }
 
-void Genetic::onePointCrossover(){
+void Genetic::onePointCrossover(Individuo *p1, Individuo *p2, Individuo *s1, Individuo *s2){
 
 }
 
-void Genetic::twoOpt(Individuo solution){
+void Genetic::twoOpt(Individuo *solution){
 
 }
 
-void Genetic::acception(){
+void Genetic::acception(Individuo *f1, Individuo *f2){
 
 }
 
-bool Genetic::searchFitness(Individuo solution){
+bool Genetic::searchFitness(Individuo *solution){
 
+	for(unsigned int i = 0; i < population.size(); i++)
+		if(solution->getFitness() == population[i].getFitness())
+			return true;
+
+	return false;
 }
 
 void Genetic::run(){
 
 	int generations = 0,
 		alfa = 0,
-		beta = 0,
-		random_person;
+		beta = 0;
 
 	double best_fitness,
 	       random_mutation;
 
-	Individuo f1(in),
+	Individuo i1(in),
+			  i2(in),
+			  p1(in),
+			  p2(in),
+			  f1(in),
 			  f2(in),
 			  s1(in),
 			  s2(in);
 
 	init();
 
-	for(unsigned int i = 0; i < population.size(); i++){
+	/*for(unsigned int i = 0; i < population.size(); i++){
 		population[i].printRoute();
 		population[i].printFitness();
-	}
+	}*/
 
-	/*while(generations <= limit){
+	while(generations <= limit){
 		alfa = beta = 0;
 
 		while(alfa < alfa_max and beta < beta_max){
 
 			best_fitness = population[0].getFitness();
 
-			binaryTour();
+			binaryTour(&i1, &i2, &p1, &p2);
 
-			onePointCrossover();
+			p1.printRoute();
+			p1.printFitness();
+
+			p2.printRoute();
+			p2.printFitness();
+
+
+			/*onePointCrossover(&p1,&p2, &f1,&f2);
 
 			random_mutation = (rand() % 100)*0.01;
 
 			if(random_mutation < probability){
 
-				twoOpt(s1);
-				twoOpt(s2);
+				twoOpt(&s1);
+				twoOpt(&s2);
 			}
 
-			if(!searchFitness(s1)){
+			if(!searchFitness(&s1)){
 
 				//escolhe um individuo entre 250 e 500 posicao da populacao
 				random_person = rand() % population.size()/2 + population.size()/2;
@@ -135,7 +195,7 @@ void Genetic::run(){
 
 			}
 
-			if(!searchFitness(s2)){
+			if(!searchFitness(&s2)){
 
 				//escolhe um individuo entre 250 e 500 posicao da populacao
 				random_person = rand() % population.size()/2 + population.size()/2;
@@ -143,19 +203,19 @@ void Genetic::run(){
 				if(population[random_person].getFitness() > s2.getFitness())
 					population[random_person] = s2;
 
-			}
+			}*/
 
 			alfa++;
 
-			sortPopulation();
+			//sortPopulation();
 
-			if(population[0].getFitness() == best_fitness)
-				beta++;
+			//if(population[0].getFitness() == best_fitness)
+				//beta++;
 		}
 
 		generations++;
 
-	}*/
+	}
 
 }
 
