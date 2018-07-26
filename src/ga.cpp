@@ -67,26 +67,26 @@ void Genetic::init(){
 	sortPopulation();
 }
 
-void Genetic::binaryTour(Individuo *i1, Individuo *i2, Individuo *p1, Individuo *p2){
+void Genetic::binaryTour(Individuo &i1, Individuo &i2, Individuo &p1, Individuo &p2){
 
 
 		random_person = rand() % population.size();
 		lucky_number = rand() % 11;
 
-		(*i1) = population[random_person];
+		i1 = population[random_person];
 
 		do{
 
 			random_person = rand() % population.size();
-			(*i2) = population[random_person];
+			i2 = population[random_person];
 
-		}while(i1->getFitness() == i2->getFitness());
+		}while(i1.getFitness() == i2.getFitness());
 
-		if(i1->getFitness() < i2->getFitness() && lucky_factor > lucky_number)
-			(*p1) = (*i1);
+		if(i1.getFitness() < i2.getFitness() && lucky_factor > lucky_number)
+			p1 = i1;
 
 		else
-			(*p1) = (*i2);
+			p1 = i2;
 
 
 		lucky_number = rand() % 11;
@@ -95,25 +95,25 @@ void Genetic::binaryTour(Individuo *i1, Individuo *i2, Individuo *p1, Individuo 
 		do{
 			random_person = rand() % population.size();
 
-			(*i1) = population[random_person];
+			i1 = population[random_person];
 
-		}while(i1->getFitness() == p1->getFitness());
+		}while(i1.getFitness() == p1.getFitness());
 
 		do{
 			random_person = rand() % population.size();
 
-			(*i2) = population[random_person];
-		}while(i2->getFitness() == p1->getFitness() || i1->getFitness() == i2->getFitness());
+			i2 = population[random_person];
+		}while(i2.getFitness() == p1.getFitness() || i1.getFitness() == i2.getFitness());
 
-		if(i1->getFitness() < i2->getFitness() && lucky_factor > lucky_number)
-			(*p2) = (*i1);
+		if(i1.getFitness() < i2.getFitness() && lucky_factor > lucky_number)
+			p2 = i1;
 
 		else
-			(*p2) = (*i2);
+			p2 = i2;
 
 }
 
-void Genetic::onePointCrossover(Individuo *p1, Individuo *p2, Individuo *s1, Individuo *s2){
+void Genetic::onePointCrossover(Individuo &p1, Individuo &p2, Individuo &s1, Individuo &s2){
 
 }
 
@@ -166,7 +166,7 @@ void Genetic::run(){
 
 			best_fitness = population[0].getFitness();
 
-			binaryTour(&i1, &i2, &p1, &p2);
+			binaryTour(i1, i2, p1, p2);
 
 			p1.printRoute();
 			p1.printFitness();

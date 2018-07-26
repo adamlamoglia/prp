@@ -35,8 +35,8 @@ public:
 	void init();
 	void run();
 	void sortPopulation();
-	void binaryTour(Individuo *i1, Individuo *i2, Individuo *p1, Individuo *p2);
-	void onePointCrossover(Individuo *p1, Individuo *p2, Individuo *f1, Individuo *f2);
+	void binaryTour(Individuo &i1, Individuo &i2, Individuo &p1, Individuo &p2);
+	void onePointCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2);
 	void twoOpt(Individuo *solution);
 	void acception(Individuo *f1, Individuo *f2);
 	bool searchFitness(Individuo *solution);
