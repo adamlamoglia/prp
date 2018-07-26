@@ -46,6 +46,7 @@ public:
 	void acception(Individuo *f1, Individuo *f2);
 	bool searchFitness(Individuo *solution);
 	void removeRepetitions(Individuo &f1, Individuo &f2);
+	void insertVertices(Individuo &f1, Individuo &f2);
 
 };
 

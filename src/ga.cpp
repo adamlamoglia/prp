@@ -120,6 +120,61 @@ void Genetic::binaryTour(Individuo &i1, Individuo &i2, Individuo &p1, Individuo 
 
 void Genetic::removeRepetitions(Individuo &f1, Individuo &f2){
 
+	for(int i = 1; i < in->num_vertices; i++){
+		int a =  f1.route[i];
+		if(repeated_vertex_f1[a]){
+
+			f1.route[i] = -1;
+			repeated_vertex_f1[a] = false;
+
+		}
+
+	}
+
+
+	for(int i = 1; i < in->num_vertices; i++){
+		int a =  f2.route[i];
+		if(repeated_vertex_f2[a]){
+
+			f2.route[i] = -1;
+			repeated_vertex_f2[a] = false;
+		}
+
+	}
+
+}
+
+void Genetic::insertVertices(Individuo &f1, Individuo &f2){
+
+	for(int i = 1; i < in->num_vertices; i++){
+
+			if(!inserted_vertex_f1[i]){
+
+				for(int j = 0; j < in->num_vertices; j++){
+
+					if(f1.route[j] == -1){
+						f1.route[j] = i;
+						inserted_vertex_f1[i] = false;
+					}
+				}
+			}
+
+	}
+
+	for(int i = 1; i < in->num_vertices; i++){
+
+			if(!inserted_vertex_f2[i]){
+
+				for(int j = 0; j < in->num_vertices; j++){
+
+					if(f2.route[j] == -1){
+						f2.route[j] = i;
+						inserted_vertex_f2[i] = false;
+					}
+				}
+			}
+
+	}
 
 }
 
@@ -133,7 +188,7 @@ void Genetic::onePointCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Ind
 		for(int i = 1; i < cut_size; i++)
 			inserted_vertex_f2[f2.route[i]] = true;
 
-		for(int i = cut_size; i < in->num_vertices - 1; i++)
+		for(int i = cut_size; i < in->num_vertices; i++)
 			inserted_vertex_f1[f1.route[i]] = true;
 
 		for(int i = 1; i < cut_size; i++){
@@ -148,7 +203,7 @@ void Genetic::onePointCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Ind
 		}
 
 
-		for(int i = cut_size; i < in->num_vertices - 1; i++){
+		for(int i = cut_size; i < in->num_vertices; i++){
 
 			if(inserted_vertex_f2[f1.route[i]])
 				repeated_vertex_f2[f1.route[i]] = true;
@@ -159,7 +214,10 @@ void Genetic::onePointCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Ind
 			f2.route[i] = f1.route[i];
 		}
 
+
+
 		removeRepetitions(f1,f2);
+		insertVertices(f1,f2);
 
 		f1.setFitness();
 		f2.setFitness();
@@ -214,6 +272,7 @@ void Genetic::run(){
 
 			best_fitness = population[0].getFitness();
 
+			if(alfa == 0 && generations == 0){
 			binaryTour(i1, i2, p1, p2);
 
 			p1.printRoute();
@@ -222,10 +281,16 @@ void Genetic::run(){
 			p2.printRoute();
 			p2.printFitness();
 
+			onePointCrossover(p1,p2, f1,f2);
 
-			/*onePointCrossover(&p1,&p2, &f1,&f2);
+			p1.printRoute();
+			p1.printFitness();
 
-			random_mutation = (rand() % 100)*0.01;
+			p2.printRoute();
+			p2.printFitness();
+			}
+
+			/*random_mutation = (rand() % 100)*0.01;
 
 			if(random_mutation < probability){
 
