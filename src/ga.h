@@ -17,6 +17,8 @@ class Genetic{
 public:
 	Input *in;
 
+	bool no_improvement;
+
 	int alfa_max,
 		beta_max,
 		limit,
@@ -25,13 +27,18 @@ public:
 		lucky_number,
 		cut_size;
 
-	double probability;
+	double probability,
+		   best_fitness,
+		   new_fitness;
 
 	vector<bool> visited_vertex,
 				 inserted_vertex_f1,
 				 inserted_vertex_f2,
 				 repeated_vertex_f1,
 				 repeated_vertex_f2;
+
+	vector<int> existing_route,
+				new_route;
 
 	vector<Individuo> population;
 
@@ -42,9 +49,10 @@ public:
 	void sortPopulation();
 	void binaryTour(Individuo &i1, Individuo &i2, Individuo &p1, Individuo &p2);
 	void onePointCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2);
-	void twoOpt(Individuo *solution);
-	void acception(Individuo *f1, Individuo *f2);
-	bool searchFitness(Individuo *solution);
+	void twoOpt(Individuo &f, Individuo &s);
+	void twoOptSwap(Individuo &s, int i, int k);
+	void acception(Individuo &f1, Individuo &f2);
+	bool searchFitness(Individuo &s);
 	void removeRepetitions(Individuo &f1, Individuo &f2);
 	void insertVertices(Individuo &f1, Individuo &f2);
 

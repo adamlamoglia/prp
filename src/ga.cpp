@@ -40,7 +40,6 @@ void Genetic::sortPopulation(){
 	sort(population.begin(), population.end(), lowerFitness);
 }
 
-
 void Genetic::init(){
 	int random;
 
@@ -232,18 +231,53 @@ void Genetic::onePointCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Ind
 		}
 }
 
-void Genetic::twoOpt(Individuo *solution){
+void Genetic::twoOptSwap(Individuo &s, int i, int k){
+
+	swap(s.route[i], s.route[k]);
+	s.setFitness();
+}
+
+void Genetic::twoOpt(Individuo &f, Individuo &s){
+
+	no_improvement = true;
+
+	while(no_improvement){
+
+		repeat:
+			best_fitness = f.getFitness();
+
+			for(int i = 1; i < in->num_vertices - 2; i++){
+				for(int k = i + 1; k < in->num_vertices - 1; k++){
+
+					s.route = f.route;
+					twoOptSwap(s,i,k);
+
+					new_fitness = s.getFitness();
+
+					if(new_fitness < best_fitness){
+						f.route = s.route;
+						f.setFitness();
+
+						goto repeat;
+					}
+				}
+			}
+
+			no_improvement = false;
+	}
+
+
 
 }
 
-void Genetic::acception(Individuo *f1, Individuo *f2){
+void Genetic::acception(Individuo &f1, Individuo &f2){
 
 }
 
-bool Genetic::searchFitness(Individuo *solution){
+bool Genetic::searchFitness(Individuo &s){
 
 	for(unsigned int i = 0; i < population.size(); i++)
-		if(solution->getFitness() == population[i].getFitness())
+		if(s.getFitness() == population[i].getFitness())
 			return true;
 
 	return false;
@@ -281,15 +315,35 @@ void Genetic::run(){
 
 			onePointCrossover(p1, p2, f1,f2);
 
-			/*random_mutation = (rand() % 100)*0.01;
+			random_mutation = (rand() % 100)*0.01;
 
 			if(random_mutation < probability){
 
-				twoOpt(&s1);
-				twoOpt(&s2);
+				if(alfa == 0 && generations == 0){
+
+					f1.printRoute();
+					f1.printFitness();
+
+					f2.printRoute();
+					f2.printFitness();
+
+				}
+
+				twoOpt(f1, s1);
+				twoOpt(f2, s2);
+
+				if(alfa == 0 && generations == 0){
+
+					s1.printRoute();
+					s1.printFitness();
+
+					s2.printRoute();
+					s2.printFitness();
+
+				}
 			}
 
-			if(!searchFitness(&s1)){
+			/*if(!searchFitness(&s1)){
 
 				//escolhe um individuo entre 250 e 500 posicao da populacao
 				random_person = rand() % population.size()/2 + population.size()/2;
