@@ -148,13 +148,14 @@ void Genetic::insertVertices(Individuo &f1, Individuo &f2){
 
 	for(int i = 1; i < in->num_vertices; i++){
 
-			if(!inserted_vertex_f1[i]){
+			if(f1.route[i] == -1){
 
-				for(int j = 0; j < in->num_vertices; j++){
+				for(int j = 1; j < in->num_vertices; j++){
 
-					if(f1.route[j] == -1){
-						f1.route[j] = i;
-						inserted_vertex_f1[i] = false;
+					if(!inserted_vertex_f1[j]){
+						f1.route[i] = j;
+						inserted_vertex_f1[j] = true;
+						break;
 					}
 				}
 			}
@@ -163,13 +164,14 @@ void Genetic::insertVertices(Individuo &f1, Individuo &f2){
 
 	for(int i = 1; i < in->num_vertices; i++){
 
-			if(!inserted_vertex_f2[i]){
+			if(f2.route[i] == -1){
 
-				for(int j = 0; j < in->num_vertices; j++){
+				for(int j = 1; j < in->num_vertices; j++){
 
-					if(f2.route[j] == -1){
-						f2.route[j] = i;
-						inserted_vertex_f2[i] = false;
+					if(!inserted_vertex_f2[j]){
+						f2.route[i] = j;
+						inserted_vertex_f2[j] = true;
+						break;
 					}
 				}
 			}
@@ -185,11 +187,11 @@ void Genetic::onePointCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Ind
 		f1 = p1;
 		f2 = p2;
 
-		for(int i = 1; i < cut_size; i++)
-			inserted_vertex_f2[f2.route[i]] = true;
-
-		for(int i = cut_size; i < in->num_vertices; i++)
+		for(int i = cut_size; i < in->num_vertices; i++){
 			inserted_vertex_f1[f1.route[i]] = true;
+			inserted_vertex_f2[f2.route[i]] = true;
+		}
+
 
 		for(int i = 1; i < cut_size; i++){
 
@@ -199,19 +201,19 @@ void Genetic::onePointCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Ind
 				inserted_vertex_f1[f2.route[i]] = true;
 
 
-			f1.route[i] = f2.route[i];
+			f1.route[i] = p2.route[i];
 		}
 
 
-		for(int i = cut_size; i < in->num_vertices; i++){
+		for(int i = 1; i < cut_size; i++){
 
-			if(inserted_vertex_f2[f1.route[i]])
-				repeated_vertex_f2[f1.route[i]] = true;
+			if(inserted_vertex_f2[p1.route[i]])
+				repeated_vertex_f2[p1.route[i]] = true;
 			else
-				inserted_vertex_f2[f1.route[i]] = true;
+				inserted_vertex_f2[p1.route[i]] = true;
 
 
-			f2.route[i] = f1.route[i];
+			f2.route[i] = p1.route[i];
 		}
 
 
@@ -221,6 +223,13 @@ void Genetic::onePointCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Ind
 
 		f1.setFitness();
 		f2.setFitness();
+
+		for(int i = 1; i < in->num_vertices; i++){
+			inserted_vertex_f1[i] = false;
+			inserted_vertex_f2[i] = false;
+			repeated_vertex_f1[i] = false;
+			repeated_vertex_f2[i] = false;
+		}
 }
 
 void Genetic::twoOpt(Individuo *solution){
@@ -260,10 +269,6 @@ void Genetic::run(){
 
 	init();
 
-	/*for(unsigned int i = 0; i < population.size(); i++){
-		population[i].printRoute();
-		population[i].printFitness();
-	}*/
 
 	while(generations <= limit){
 		alfa = beta = 0;
@@ -272,23 +277,9 @@ void Genetic::run(){
 
 			best_fitness = population[0].getFitness();
 
-			if(alfa == 0 && generations == 0){
 			binaryTour(i1, i2, p1, p2);
 
-			p1.printRoute();
-			p1.printFitness();
-
-			p2.printRoute();
-			p2.printFitness();
-
-			onePointCrossover(p1,p2, f1,f2);
-
-			p1.printRoute();
-			p1.printFitness();
-
-			p2.printRoute();
-			p2.printFitness();
-			}
+			onePointCrossover(p1, p2, f1,f2);
 
 			/*random_mutation = (rand() % 100)*0.01;
 

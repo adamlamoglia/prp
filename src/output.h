@@ -15,7 +15,7 @@ class Output {
 
 public:
 	Input *in;
-	vector<unsigned int> route;
+	vector<int> route;
 	double fitness;
 
 	Output(Input *in);
