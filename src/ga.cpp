@@ -244,7 +244,7 @@ void Genetic::twoOpt(Individuo &f, Individuo &s){
 	while(no_improvement){
 
 		repeat:
-			best_fitness = f.getFitness();
+			lowest_fitness = f.getFitness();
 
 			for(int i = 1; i < in->num_vertices - 2; i++){
 				for(int k = i + 1; k < in->num_vertices - 1; k++){
@@ -254,7 +254,7 @@ void Genetic::twoOpt(Individuo &f, Individuo &s){
 
 					new_fitness = s.getFitness();
 
-					if(new_fitness < best_fitness){
+					if(new_fitness < lowest_fitness){
 						f.route = s.route;
 						f.setFitness();
 
@@ -270,8 +270,12 @@ void Genetic::twoOpt(Individuo &f, Individuo &s){
 
 }
 
-void Genetic::acception(Individuo &f1, Individuo &f2){
+void Genetic::acception(Individuo &s){
 
+	random_person = rand() % population.size()/2 + population.size()/2;
+
+	if(population[random_person].getFitness() > s.getFitness())
+		population[random_person] = s;
 }
 
 bool Genetic::searchFitness(Individuo &s){
@@ -319,61 +323,31 @@ void Genetic::run(){
 
 			if(random_mutation < probability){
 
-				if(alfa == 0 && generations == 0){
-
-					f1.printRoute();
-					f1.printFitness();
-
-					f2.printRoute();
-					f2.printFitness();
-
-				}
-
 				twoOpt(f1, s1);
 				twoOpt(f2, s2);
 
-				if(alfa == 0 && generations == 0){
-
-					s1.printRoute();
-					s1.printFitness();
-
-					s2.printRoute();
-					s2.printFitness();
-
-				}
 			}
 
-			/*if(!searchFitness(&s1)){
+			if(!searchFitness(s1))
+				acception(s1);
 
-				//escolhe um individuo entre 250 e 500 posicao da populacao
-				random_person = rand() % population.size()/2 + population.size()/2;
 
-				if(population[random_person].getFitness() > s1.getFitness())
-					population[random_person] = s1;
-
-			}
-
-			if(!searchFitness(&s2)){
-
-				//escolhe um individuo entre 250 e 500 posicao da populacao
-				random_person = rand() % population.size()/2 + population.size()/2;
-
-				if(population[random_person].getFitness() > s2.getFitness())
-					population[random_person] = s2;
-
-			}*/
+			if(!searchFitness(s2))
+				acception(s2);
 
 			alfa++;
 
-			//sortPopulation();
+			sortPopulation();
 
-			//if(population[0].getFitness() == best_fitness)
-				//beta++;
+			if(population[0].getFitness() == best_fitness)
+				beta++;
 		}
 
 		generations++;
 
 	}
+	population[0].printRoute();
+	population[0].printFitness();
 
 }
 

@@ -28,7 +28,7 @@ public:
 		cut_size;
 
 	double probability,
-		   best_fitness,
+		   lowest_fitness,
 		   new_fitness;
 
 	vector<bool> visited_vertex,
@@ -51,7 +51,7 @@ public:
 	void onePointCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2);
 	void twoOpt(Individuo &f, Individuo &s);
 	void twoOptSwap(Individuo &s, int i, int k);
-	void acception(Individuo &f1, Individuo &f2);
+	void acception(Individuo &s);
 	bool searchFitness(Individuo &s);
 	void removeRepetitions(Individuo &f1, Individuo &f2);
 	void insertVertices(Individuo &f1, Individuo &f2);
