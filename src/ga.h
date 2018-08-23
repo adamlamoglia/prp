@@ -41,6 +41,7 @@ public:
 	vector<Individuo> population;
 
 	Genetic(Input *in, int alfa, int beta, int generations, double prob_mutation, int num_individuals);
+	~Genetic();
 
 	void init();
 	void run();
@@ -53,7 +54,7 @@ public:
 	bool searchFitness(Individuo &s);
 	void removeRepetitions(Individuo &f1, Individuo &f2);
 	void insertVertices(Individuo &f1, Individuo &f2);
-	void printPopulation();
+	void showResult();
 
 };
 

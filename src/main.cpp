@@ -14,30 +14,35 @@ using namespace std;
 
 int main( int argc, char ** argv ) {
 
-	//srand(time(NULL));
+	srand(98);
 
-	//if(argc > 1)
+	if(argc > 1){
 
-	/*TODO Utilizar a Classe Parametros e deixar que ela cuide da entrada dos dados*/
-	//Parametros::Store(argc, argv);
+		Input in;
 
-	Input in;
-	
-	/*TODO: Implementar o carregamento dos arquivos de entrada atraves da Classe Parametro*/
-	//in.load(Parametros::getInstance());
+		/*TODO Ajeitar a Classe Parametros para o PRP*/
+		Parametros::Store(argc, argv);
 
-	cout << "GA for one vehicle, " << Parametros::getGenerations() << " generations" << endl;
 
-	for(int i = 1; i < argc; i++){
-		in.load(argv[i]);
+
+		/*TODO: Implementar o carregamento dos arquivos de entrada atraves da Classe Parametro*/
+		//in.load(Parametros::getInstance().c_str()); //segmentation fault
+		in.load(argv[1]);
+
+		cout << "GA for one vehicle, " << Parametros::getGenerations() << " generations" << endl;
 
 		Genetic ga(&in, Parametros::getAlfa(), Parametros::getBeta(), Parametros::getGenerations()
 					, Parametros::getProbability(), Parametros::getPopulationSize());
 
-		cout << "test " << i << ": " << argv[i] << endl;
-		ga.run();
 
+		ga.run();
+		ga.showResult();
 	}
+	else
+		cout << "error: missing file" << endl;
+
+
+
 
 	return 0;
 

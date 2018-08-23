@@ -31,6 +31,10 @@ Genetic::Genetic(Input *in, int alfa, int beta, int generations, double prob_mut
 
 }
 
+Genetic::~Genetic(){
+
+}
+
 bool lowerFitness(Individuo a, Individuo b){
 	return a.getFitness() < b.getFitness();
 }
@@ -184,6 +188,7 @@ void Genetic::onePointCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Ind
 		f1 = p1;
 		f2 = p2;
 
+
 		for(int i = cut_size; i < in->num_vertices; i++){
 			inserted_vertex_f1[f1.route[i]] = true;
 			inserted_vertex_f2[f2.route[i]] = true;
@@ -192,10 +197,10 @@ void Genetic::onePointCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Ind
 
 		for(int i = 1; i < cut_size; i++){
 
-			if(inserted_vertex_f1[f2.route[i]])
-				repeated_vertex_f1[f2.route[i]] = true;
+			if(inserted_vertex_f1[p2.route[i]])
+				repeated_vertex_f1[p2.route[i]] = true;
 			else
-				inserted_vertex_f1[f2.route[i]] = true;
+				inserted_vertex_f1[p2.route[i]] = true;
 
 
 			f1.route[i] = p2.route[i];
@@ -284,12 +289,11 @@ bool Genetic::searchFitness(Individuo &s){
 	return false;
 }
 
-void Genetic::printPopulation(){
+void Genetic::showResult(){
 
-	for(unsigned int i = 0; i < population.size(); i++){
-		population[i].printRoute();
-		population[i].printFitness();
-	}
+	population[0].printRoute();
+	population[0].printFitness();
+
 }
 
 void Genetic::run(){
@@ -312,9 +316,9 @@ void Genetic::run(){
 
 	init();
 
-	//printPopulation();
-
 	while(generations <= limit){
+		cout << "generation " << generations << endl;
+
 		alfa = beta = 0;
 
 		while(alfa < alfa_max and beta < beta_max){
@@ -331,7 +335,6 @@ void Genetic::run(){
 
 				twoOpt(f1, s1);
 				twoOpt(f2, s2);
-
 			}
 
 			if(!searchFitness(s1))
@@ -352,18 +355,5 @@ void Genetic::run(){
 
 		generations++;
 	}
-
-	//printPopulation();
-
-	cout << endl;
-	cout << "best route" << endl;
-	population[0].printRoute();
-
-	cout << endl;
-	cout << "fitness: ";
-	population[0].printFitness();
-	cout << endl;
-	cout << endl;
-
 }
 

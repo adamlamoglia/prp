@@ -228,7 +228,7 @@ double Parametros::getAlfa(){
 		return 0;
 	}*/
 
-	return 100;
+	return 1000;
 }
 
 
@@ -243,7 +243,7 @@ double Parametros::getBeta(){
 		return 0;
 	}*/
 
-	return 100;
+	return 300;
 }
 
 
