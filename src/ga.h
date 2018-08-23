@@ -37,8 +37,6 @@ public:
 				 repeated_vertex_f1,
 				 repeated_vertex_f2;
 
-	vector<int> existing_route,
-				new_route;
 
 	vector<Individuo> population;
 
@@ -55,6 +53,7 @@ public:
 	bool searchFitness(Individuo &s);
 	void removeRepetitions(Individuo &f1, Individuo &f2);
 	void insertVertices(Individuo &f1, Individuo &f2);
+	void printPopulation();
 
 };
 

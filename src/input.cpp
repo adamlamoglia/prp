@@ -42,10 +42,11 @@ void Input::build(){
 
 
 
-void Input::load(string name){
+void Input::load(const char* name){
 
 	//TODO: Não deixar informação fixa, mudar para name
-	ifstream file("eil22.txt");
+	ifstream file(name);
+
 
 	if( file.is_open() ){
 
@@ -79,6 +80,7 @@ void Input::load(string name){
 
 		file.close();
 	}
+
 
 }
 

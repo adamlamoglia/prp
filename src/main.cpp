@@ -12,7 +12,7 @@
 
 using namespace std;
 
-int main( int argc, char * argv[ ] ) {
+int main( int argc, char ** argv ) {
 
 	//srand(time(NULL));
 
@@ -24,13 +24,20 @@ int main( int argc, char * argv[ ] ) {
 	Input in;
 	
 	/*TODO: Implementar o carregamento dos arquivos de entrada atraves da Classe Parametro*/
-	in.load(Parametros::getInstance());
+	//in.load(Parametros::getInstance());
 
+	cout << "GA for one vehicle, " << Parametros::getGenerations() << " generations" << endl;
 
-	Genetic ga(&in, Parametros::getAlfa(), Parametros::getBeta(), Parametros::getGenerations()
+	for(int i = 1; i < argc; i++){
+		in.load(argv[i]);
+
+		Genetic ga(&in, Parametros::getAlfa(), Parametros::getBeta(), Parametros::getGenerations()
 					, Parametros::getProbability(), Parametros::getPopulationSize());
 
-	ga.run();
+		cout << "test " << i << ": " << argv[i] << endl;
+		ga.run();
+
+	}
 
 	return 0;
 

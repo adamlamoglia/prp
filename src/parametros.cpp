@@ -118,7 +118,7 @@ void Parametros::Store(int argc, char * argv[ ]) {
 			//size_t x = str.find_last_of("/");
 			//if(x == string::npos)
 				//str = "/home/guilera/Dropbox/IC/instancias/" + str + ".txt";
-			vm["instance"] = "att48.txt";
+			vm["instance"] = "eil22.txt";
 		}
 			break;
 		case 004:
@@ -228,7 +228,7 @@ double Parametros::getAlfa(){
 		return 0;
 	}*/
 
-	return 10;
+	return 100;
 }
 
 
@@ -243,7 +243,7 @@ double Parametros::getBeta(){
 		return 0;
 	}*/
 
-	return 10;
+	return 100;
 }
 
 

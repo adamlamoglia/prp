@@ -12,6 +12,7 @@
 #include <vector>
 #include <utility>
 #include <fstream>
+#include <string>
 #include <cmath>
 
 using namespace std;
@@ -27,7 +28,7 @@ public:
 	Input();
 
 	double euclidian2D(int x1, int y1, int x2, int y2);
-	void load(string name);
+	void load(const char* name);
 	void addCoordenates(int id, int x, int y);
 	void build();
 

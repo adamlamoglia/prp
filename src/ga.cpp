@@ -148,10 +148,10 @@ void Genetic::insertVertices(Individuo &f1, Individuo &f2){
 	for(int i = 1; i < in->num_vertices; i++){
 
 			if(f1.route[i] == -1){
-
 				for(int j = 1; j < in->num_vertices; j++){
 
 					if(!inserted_vertex_f1[j]){
+
 						f1.route[i] = j;
 						inserted_vertex_f1[j] = true;
 						break;
@@ -180,8 +180,6 @@ void Genetic::insertVertices(Individuo &f1, Individuo &f2){
 }
 
 void Genetic::onePointCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2){
-
-		int novo_vertice;
 
 		f1 = p1;
 		f2 = p2;
@@ -229,6 +227,7 @@ void Genetic::onePointCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Ind
 			repeated_vertex_f1[i] = false;
 			repeated_vertex_f2[i] = false;
 		}
+
 }
 
 void Genetic::twoOptSwap(Individuo &s, int i, int k){
@@ -240,6 +239,7 @@ void Genetic::twoOptSwap(Individuo &s, int i, int k){
 void Genetic::twoOpt(Individuo &f, Individuo &s){
 
 	no_improvement = true;
+
 
 	while(no_improvement){
 
@@ -255,8 +255,7 @@ void Genetic::twoOpt(Individuo &f, Individuo &s){
 					new_fitness = s.getFitness();
 
 					if(new_fitness < lowest_fitness){
-						f.route = s.route;
-						f.setFitness();
+						f = s;
 
 						goto repeat;
 					}
@@ -265,8 +264,6 @@ void Genetic::twoOpt(Individuo &f, Individuo &s){
 
 			no_improvement = false;
 	}
-
-
 
 }
 
@@ -285,6 +282,14 @@ bool Genetic::searchFitness(Individuo &s){
 			return true;
 
 	return false;
+}
+
+void Genetic::printPopulation(){
+
+	for(unsigned int i = 0; i < population.size(); i++){
+		population[i].printRoute();
+		population[i].printFitness();
+	}
 }
 
 void Genetic::run(){
@@ -307,6 +312,7 @@ void Genetic::run(){
 
 	init();
 
+	//printPopulation();
 
 	while(generations <= limit){
 		alfa = beta = 0;
@@ -341,13 +347,23 @@ void Genetic::run(){
 
 			if(population[0].getFitness() == best_fitness)
 				beta++;
+
 		}
 
 		generations++;
-
 	}
+
+	//printPopulation();
+
+	cout << endl;
+	cout << "best route" << endl;
 	population[0].printRoute();
+
+	cout << endl;
+	cout << "fitness: ";
 	population[0].printFitness();
+	cout << endl;
+	cout << endl;
 
 }
 
