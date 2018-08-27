@@ -73,6 +73,8 @@ void Genetic::init(){
 	}
 
 	sortPopulation();
+
+
 }
 
 void Genetic::binaryTour(Individuo &i1, Individuo &i2, Individuo &p1, Individuo &p2){
@@ -270,6 +272,8 @@ void Genetic::twoOpt(Individuo &f, Individuo &s){
 			no_improvement = false;
 	}
 
+	s = f;
+
 }
 
 void Genetic::acception(Individuo &s){
@@ -294,6 +298,14 @@ void Genetic::showResult(){
 	population[0].printRoute();
 	population[0].printFitness();
 
+}
+
+void Genetic::printPopulation(){
+
+	for(unsigned int i = 0; i < population.size(); i++){
+		population[i].printRoute();
+		population[i].printFitness();
+	}
 }
 
 void Genetic::run(){
@@ -322,8 +334,11 @@ void Genetic::run(){
 		alfa = beta = 0;
 
 		while(alfa < alfa_max and beta < beta_max){
+			cout << "alfa: " << alfa << endl;
+			cout << "beta: " << beta << endl;
 
 			best_fitness = population[0].getFitness();
+
 
 			binaryTour(i1, i2, p1, p2);
 
@@ -335,6 +350,10 @@ void Genetic::run(){
 
 				twoOpt(f1, s1);
 				twoOpt(f2, s2);
+			}
+			else{
+				s1 = f1;
+				s2 = f2;
 			}
 
 			if(!searchFitness(s1))

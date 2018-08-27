@@ -55,6 +55,7 @@ public:
 	void removeRepetitions(Individuo &f1, Individuo &f2);
 	void insertVertices(Individuo &f1, Individuo &f2);
 	void showResult();
+	void printPopulation();
 
 };
 
