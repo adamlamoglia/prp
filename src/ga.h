@@ -37,7 +37,6 @@ public:
 				 repeated_vertex_f1,
 				 repeated_vertex_f2;
 
-
 	vector<Individuo> population;
 
 	Genetic(Input *in, int alfa, int beta, int generations, double prob_mutation, int num_individuals);

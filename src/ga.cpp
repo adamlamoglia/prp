@@ -317,6 +317,7 @@ void Genetic::run(){
 	double best_fitness,
 	       random_mutation;
 
+
 	Individuo i1(in),
 			  i2(in),
 			  p1(in),
@@ -324,18 +325,21 @@ void Genetic::run(){
 			  f1(in),
 			  f2(in),
 			  s1(in),
-			  s2(in);
+			  s2(in),
+			  best(in);
 
-	init();
 
 	while(generations <= limit){
+
+		init();
+
 		cout << "generation " << generations << endl;
 
 		alfa = beta = 0;
 
 		while(alfa < alfa_max and beta < beta_max){
-			cout << "alfa: " << alfa << endl;
-			cout << "beta: " << beta << endl;
+			//cout << "alfa: " << alfa << endl;
+			//cout << "beta: " << beta << endl;
 
 			best_fitness = population[0].getFitness();
 
@@ -350,6 +354,8 @@ void Genetic::run(){
 
 				twoOpt(f1, s1);
 				twoOpt(f2, s2);
+
+				alfa++;
 			}
 			else{
 				s1 = f1;
@@ -363,8 +369,6 @@ void Genetic::run(){
 			if(!searchFitness(s2))
 				acception(s2);
 
-			alfa++;
-
 			sortPopulation();
 
 			if(population[0].getFitness() == best_fitness)
@@ -372,7 +376,14 @@ void Genetic::run(){
 
 		}
 
+		if(generations == 0)
+			best = population[0];
+		else if(best_fitness < best.getFitness())
+			best = population[0];
+
 		generations++;
 	}
+
+	population[0] = best;
 }
 
