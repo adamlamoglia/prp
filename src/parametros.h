@@ -36,6 +36,7 @@ class Parametros {
 		static int getGenerations();
 		static double getProbability();
 		static int getPopulationSize();
+		static double getLuckyFactor();
 
 
     private:

@@ -8,7 +8,7 @@
 #include "ga.h"
 
 
-Genetic::Genetic(Input *in, int alfa, int beta, int generations, double prob_mutation, int size) {
+Genetic::Genetic(Input *in, int alfa, int beta, int generations, double prob_mutation, int size, double lucky) {
 
 	this->in = in;
 
@@ -17,9 +17,11 @@ Genetic::Genetic(Input *in, int alfa, int beta, int generations, double prob_mut
 	limit = generations;
 	probability = prob_mutation;
 
-	//TODO: Implement this in class "Parametros.h"
-	lucky_factor = 5;
+	lucky_factor = lucky;
 	cut_size = in->num_vertices/2;
+
+	cut = size/2;
+
 
 	population.resize(size, Individuo(in));
 
@@ -44,10 +46,10 @@ void Genetic::sortPopulation(){
 	sort(population.begin(), population.end(), lowerFitness);
 }
 
-void Genetic::init(){
+void Genetic::create(int limit){
 	int random;
 
-	for(unsigned int i = 0; i < population.size(); i++){
+	for(int i = limit; i < population.size(); i++){
 
 		for(unsigned int j = 0; j < visited_vertex.size(); j++)
 			visited_vertex[j] = false;
@@ -73,9 +75,20 @@ void Genetic::init(){
 	}
 
 	sortPopulation();
+}
 
+void Genetic::init(){
+
+	create(0);
 
 }
+
+void Genetic::partialReplacement(){
+
+	create(cut);
+
+}
+
 
 void Genetic::binaryTour(Individuo &i1, Individuo &i2, Individuo &p1, Individuo &p2){
 
@@ -328,18 +341,15 @@ void Genetic::run(){
 			  s2(in),
 			  best(in);
 
+	init();
 
 	while(generations <= limit){
-
-		init();
 
 		cout << "generation " << generations << endl;
 
 		alfa = beta = 0;
 
 		while(alfa < alfa_max and beta < beta_max){
-			//cout << "alfa: " << alfa << endl;
-			//cout << "beta: " << beta << endl;
 
 			best_fitness = population[0].getFitness();
 
@@ -378,10 +388,12 @@ void Genetic::run(){
 
 		if(generations == 0)
 			best = population[0];
-		else if(best_fitness < best.getFitness())
+		else if(population[0].getFitness() < best.getFitness())
 			best = population[0];
 
 		generations++;
+
+		partialReplacement();
 	}
 
 	population[0] = best;

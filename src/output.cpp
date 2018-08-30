@@ -22,14 +22,18 @@ Output::Output(Input *in) {
 
 
 void Output::printDistanceMatrix(){
-
+	cout << "[";
 	for(unsigned int i = 0; i < in->distance_matrix.size(); i++){
 		for(unsigned int j = 0; j < in->distance_matrix.size(); j++){
 
-			cout << in->distance_matrix[i][j] << " - ";
+			if(i != j)
+				cout << in->distance_matrix[i][j] << "," << endl;
+
 		}
-		cout << endl;
+
 	}
+
+	cout << "]";
 }
 
 void Output::printRoute(){

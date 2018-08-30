@@ -32,9 +32,9 @@ int main( int argc, char ** argv ) {
 		cout << "GA for one vehicle, " << Parametros::getGenerations() << " generations" << endl;
 
 		Genetic ga(&in, Parametros::getAlfa(), Parametros::getBeta(), Parametros::getGenerations()
-					, Parametros::getProbability(), Parametros::getPopulationSize());
+					, Parametros::getProbability(), Parametros::getPopulationSize(), Parametros::getLuckyFactor());
 
-
+		ga.population[0].printDistanceMatrix();
 		ga.run();
 		ga.showResult();
 	}

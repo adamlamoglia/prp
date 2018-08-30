@@ -22,12 +22,13 @@ public:
 	int alfa_max,
 		beta_max,
 		limit,
-		lucky_factor,
 		random_person,
 		lucky_number,
-		cut_size;
+		cut_size,
+		cut;
 
 	double probability,
+		   lucky_factor,
 		   lowest_fitness,
 		   new_fitness;
 
@@ -39,10 +40,11 @@ public:
 
 	vector<Individuo> population;
 
-	Genetic(Input *in, int alfa, int beta, int generations, double prob_mutation, int num_individuals);
+	Genetic(Input *in, int alfa, int beta, int generations, double prob_mutation, int num_individuals, double lucky);
 	~Genetic();
 
 	void init();
+	void create(int limit);
 	void run();
 	void sortPopulation();
 	void binaryTour(Individuo &i1, Individuo &i2, Individuo &p1, Individuo &p2);
@@ -55,6 +57,7 @@ public:
 	void insertVertices(Individuo &f1, Individuo &f2);
 	void showResult();
 	void printPopulation();
+	void partialReplacement();
 
 };
 

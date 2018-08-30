@@ -289,6 +289,20 @@ int Parametros::getPopulationSize(){
 	return 50;
 }
 
+double Parametros::getLuckyFactor(){
+
+	/*try {
+		return stoi(vm["populationSize"]);
+	} catch (exception& e) {
+		cout<< "\nfile: "<< __FILE__;
+		cout<< ", line: "<< __LINE__;
+		cout << ", error: " << e.what() << endl;
+		return 0;
+	}*/
+
+	return 5;
+}
+
 
 
 map<string,string> Parametros::vm;
