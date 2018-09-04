@@ -22,6 +22,7 @@ public:
 	void printDistanceMatrix();
 	void printRoute();
 	void printFitness();
+	void printArray2d();//for minizinc
 
 
 };

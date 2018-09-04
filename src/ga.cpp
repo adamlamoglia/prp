@@ -59,7 +59,6 @@ void Genetic::create(int limit){
 
 		for(unsigned int id_vertex = 1; id_vertex < in->num_vertices; id_vertex++){
 
-			//os vertices sao escolhidos no intervalo de 1 a vertices-1
 			random = rand() % (in->num_vertices - 1) + 1;
 
 			while(visited_vertex[random])

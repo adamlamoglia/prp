@@ -228,7 +228,7 @@ double Parametros::getAlfa(){
 		return 0;
 	}*/
 
-	return 300;
+	return 3000;
 }
 
 
@@ -243,7 +243,7 @@ double Parametros::getBeta(){
 		return 0;
 	}*/
 
-	return 1500;
+	return 500;
 }
 
 
@@ -272,7 +272,7 @@ double Parametros::getProbability(){
 		return 0;
 	}*/
 
-	return 0.05;
+	return 0.5;
 }
 
 int Parametros::getPopulationSize(){

@@ -27,7 +27,7 @@ void Output::printDistanceMatrix(){
 		for(unsigned int j = 0; j < in->distance_matrix.size(); j++){
 
 			if(i != j)
-				cout << in->distance_matrix[i][j] << "," << endl;
+				cout << fixed << setprecision(0) << in->distance_matrix[i][j] << ",";
 
 		}
 
@@ -39,7 +39,7 @@ void Output::printDistanceMatrix(){
 void Output::printRoute(){
 
 	for(unsigned int i = 0; i < route.size(); i++)
-		cout << route[i] << " ";
+		cout << route[i]+1 << " ";
 
 	cout << endl;
 
@@ -49,5 +49,18 @@ void Output::printFitness(){
 
 	cout << fitness << endl;
 
+}
+
+void Output::printArray2d(){
+	cout << "[" << endl;
+	for(int i = 1; i <= in->num_vertices; i++){
+		for(int j = 1; j <= in->num_vertices; j++){
+			if(i != j){
+					cout << i << "," << j << ",";
+			}
+
+		}
+	}
+	cout << "]);" << endl;
 }
 
