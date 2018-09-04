@@ -249,6 +249,38 @@ void Genetic::onePointCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Ind
 
 }
 
+void Genetic::swapNodeCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2){
+
+	f1 = p1;
+	f2 = p2;
+
+	random_node1 = rand() % in->num_vertices;
+	do{
+		random_node1 = rand() % in->num_vertices;
+	}while(random_node1 == 0);
+
+	random_node2 = rand() % in->num_vertices;
+	do{
+		random_node2 = rand() % in->num_vertices;
+	}while(random_node2 == 0);
+
+
+	swap(f1.route[random_node1],f1.route[random_node2]);
+
+	random_node1 = rand() % in->num_vertices;
+	do{
+		random_node1 = rand() % in->num_vertices;
+	}while(random_node1 == 0);
+
+	random_node2 = rand() % in->num_vertices;
+	do{
+		random_node2 = rand() % in->num_vertices;
+	}while(random_node2 == 0);
+
+	swap(f2.route[random_node1],f2.route[random_node2]);
+
+}
+
 void Genetic::twoOptSwap(Individuo &s, int i, int k){
 
 	swap(s.route[i], s.route[k]);
@@ -355,7 +387,8 @@ void Genetic::run(){
 
 			binaryTour(i1, i2, p1, p2);
 
-			onePointCrossover(p1, p2, f1,f2);
+			//onePointCrossover(p1, p2, f1,f2);
+			swapNodeCrossover(p1, p2, f1,f2);
 
 			random_mutation = (rand() % 100)*0.01;
 

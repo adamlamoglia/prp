@@ -255,7 +255,7 @@ double Parametros::getProbability(){
 
 int Parametros::getPopulationSize(){
 
-	return 30;
+	return 50;
 }
 
 double Parametros::getLuckyFactor(){

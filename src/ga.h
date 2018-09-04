@@ -34,6 +34,12 @@ public:
 	//Used to pick up an random individual in population.
 	int	random_person;
 
+	//Used to select a node randomly to swap with another in crossover.
+	int random_node1;
+
+	//Same as above.
+	int random_node2;
+
 	//Represents a number to choose the parents to Crossover.
 	//Used in binaryTour().
 	int	lucky_number;
@@ -88,6 +94,7 @@ public:
 	void sortPopulation();
 	void binaryTour(Individuo &i1, Individuo &i2, Individuo &p1, Individuo &p2);
 	void onePointCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2);
+	void swapNodeCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2);
 	void twoOpt(Individuo &f, Individuo &s);
 	void twoOptSwap(Individuo &s, int i, int k);
 	void acception(Individuo &s);
