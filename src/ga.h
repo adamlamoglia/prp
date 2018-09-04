@@ -16,54 +16,67 @@ class Genetic{
 
 public:
 
-		//Represents a pointer to class Input, that contains size of graph and distance matrix.
+    //Represents a pointer to class Input, that contains size of graph and distance matrix.
 	Input *in;
 
-		//Used in twoOpt() to indicate improvement of an individual.
+	//Used in twoOpt() to indicate improvement of an individual.
 	bool no_improvement;
 
-		//Used in run(), and means the number of times that individuals mutate (twoOpt).
-	int alfa_max,
-		//Used in run(). Means the times of a change in the best individual of population.
-		beta_max,
-		//Represents the limit of generations of populations (stop criterion).
-		limit,
-		//Used to pick up an random individual in population.
-		random_person,
-		//Represents a number to choose the parents to Crossover.
-		//Used in binaryTour().
-		lucky_number,
-		//Used to crossover the chosen parents.
-		//A size of cut is chosen and the split of chromosomes occurs
-		//at the point indicated by the cut size.
-		cut_size,
-		//Used in partial replacement.
-		//New individuals are created from cut to population->size.
-		cut;
+	//Used in run(), and means the number of times that individuals mutate (twoOpt).
+	int alfa_max;
 
-			//Used in run() to limit mutation.
-	double probability,
-			//Represents a lucky factor to choose the parents to Crossover.
-			//Used in binaryTour().
-		   lucky_factor,
-		   //Used in twoOpt() to return the best solution after mutation.
-		   lowest_fitness,
-		   //Helper variable used in twoOpt().
-		   new_fitness;
+	//Used in run(). Means the times of a change in the best individual of population.
+	int	beta_max;
 
-				 //Represents the clients that was visited in a route. Used in init().
-	vector<bool> visited_vertex,
-				 //Represents the clients that makes part of route of individual f1.
-				 inserted_vertex_f1,
-				 //Represents the clients that makes part of route of individual f2.
-				 inserted_vertex_f2,
-				 //Represents the repeated clients  of route of individual f1.
-				 repeated_vertex_f1,
-				 //Represents the repeated clients of route of individual f2.
-				 repeated_vertex_f2;
+	//Represents the limit of generations of populations (stop criterion).
+	int	limit;
 
-					  //Is the space of solutions.
-					  //The individuals of population will undergo genetic operations to improve solutions.
+	//Used to pick up an random individual in population.
+	int	random_person;
+
+	//Represents a number to choose the parents to Crossover.
+	//Used in binaryTour().
+	int	lucky_number;
+
+	//Used to crossover the chosen parents.
+	//A size of cut is chosen and the split of chromosomes occurs
+	//at the point indicated by the cut size.
+	int	cut_size;
+
+	//Used in partial replacement.
+	//New individuals are created from cut to population->size.
+	int	cut;
+
+	//Used in run() to limit mutation.
+	double probability;
+
+	//Represents a lucky factor to choose the parents to Crossover.
+	//Used in binaryTour().
+	double lucky_factor;
+
+	//Used in twoOpt() to return the best solution after mutation.
+	double lowest_fitness;
+
+	//Helper variable used in twoOpt().
+	double new_fitness;
+
+	//Represents nodes visited in a route. Used in init().
+	vector<bool> visited_vertex;
+
+	//Represents inserted nodes of route of individual f1.
+	vector<bool> inserted_vertex_f1;
+
+	//Represents inserted nodes of route of individual f2.
+	vector<bool> inserted_vertex_f2;
+
+	//Represents repeated nodes  of route of individual f1.
+	vector<bool> repeated_vertex_f1;
+
+	//Represents repeated nodes of route of individual f2.
+	vector<bool> repeated_vertex_f2;
+
+	//Is the space of solutions.
+	//The individuals of population will undergo genetic operations to improve solutions.
 	vector<Individuo> population;
 
 	Genetic(Input *in, int alfa, int beta, int generations, double prob_mutation, int num_individuals, double lucky);

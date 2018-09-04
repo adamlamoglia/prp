@@ -144,7 +144,7 @@ void Parametros::Store(int argc, char * argv[ ]) {
 
 }
 
-///////////// ADAM - ATRIBUTOS QUE ESTAO NOS ARQUIVOS ///////////////
+///////////// ADAM - ATTRIBUTES THAT ARE  SPECIFIED ON FILE ///////////////
 
 string Parametros::getName(){
 
@@ -213,20 +213,10 @@ double Parametros::getCapacity(){
 	}
 }
 
-//////////////////////////////////////////////
 
-/////////////// ADAM - ATRIBUTOS QUE NAO ESTAO NO ARQUIVO ////////////////
+/////////////// ADAM - ATTRIBUTES THAT ARE NOT SPECIFIED ON FILE ////////////////
 
 double Parametros::getAlfa(){
-
-	/*try {
-		return stod(vm["alfa"]);
-	} catch (exception& e) {
-		cout<< "\nfile: "<< __FILE__;
-		cout<< ", line: "<< __LINE__;
-		cout << ", error: " << e.what() << endl;
-		return 0;
-	}*/
 
 	return 3000;
 }
@@ -234,71 +224,26 @@ double Parametros::getAlfa(){
 
 double Parametros::getBeta(){
 
-	/*try {
-		return stod(vm["beta"]);
-	} catch (exception& e) {
-		cout<< "\nfile: "<< __FILE__;
-		cout<< ", line: "<< __LINE__;
-		cout << ", error: " << e.what() << endl;
-		return 0;
-	}*/
-
 	return 500;
 }
 
 
 int Parametros::getGenerations(){
 
-	/*try {
-		return stoi(vm["generations"]);
-	} catch (exception& e) {
-		cout<< "\nfile: "<< __FILE__;
-		cout<< ", line: "<< __LINE__;
-		cout << ", error: " << e.what() << endl;
-		return 0;
-	}*/
-
 	return 100;
 }
 
 double Parametros::getProbability(){
-
-	/*try {
-		return stod(vm["probability"]);
-	} catch (exception& e) {
-		cout<< "\nfile: "<< __FILE__;
-		cout<< ", line: "<< __LINE__;
-		cout << ", error: " << e.what() << endl;
-		return 0;
-	}*/
 
 	return 0.5;
 }
 
 int Parametros::getPopulationSize(){
 
-	/*try {
-		return stoi(vm["populationSize"]);
-	} catch (exception& e) {
-		cout<< "\nfile: "<< __FILE__;
-		cout<< ", line: "<< __LINE__;
-		cout << ", error: " << e.what() << endl;
-		return 0;
-	}*/
-
 	return 50;
 }
 
 double Parametros::getLuckyFactor(){
-
-	/*try {
-		return stoi(vm["populationSize"]);
-	} catch (exception& e) {
-		cout<< "\nfile: "<< __FILE__;
-		cout<< ", line: "<< __LINE__;
-		cout << ", error: " << e.what() << endl;
-		return 0;
-	}*/
 
 	return 5;
 }

@@ -21,9 +21,16 @@ using namespace std;
 class Input {
 
 public:
+	//Represents the dimension of graph.
 	unsigned int num_vertices;
+
+	//Represents the distance between vertex i to j.
 	vector<vector<double> > distance_matrix;
-	vector<pair<int,int> > coordenates;
+
+	//Represents the euclidian2D coordinates of vertex i.
+	vector<pair<int,int> > coordinates;
+
+	//Used in build() to read strings in file.
 	string reader;
 
 	Input();

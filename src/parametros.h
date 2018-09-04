@@ -22,7 +22,7 @@ class Parametros {
 		static string GetVersion();
 		static double GetSeed();
 
-		///////////// ADAM ///////////////
+		///////////// ADAM FUNCTIONS ///////////////
 
 		static string getName();
 		static string getComment();

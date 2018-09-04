@@ -21,8 +21,8 @@ double Input::euclidian2D(int x1, int y1, int x2, int y2){
 
 void Input::addCoordenates(int id, int x, int y){
 
-	coordenates[id].first = x;
-	coordenates[id].second = y;
+	coordinates[id].first = x;
+	coordinates[id].second = y;
 }
 
 void Input::build(){
@@ -31,8 +31,8 @@ void Input::build(){
 
 	for(unsigned int i = 0; i < num_vertices; i++){
 		for(unsigned int j = 0; j < num_vertices; j++){
-			v1 = coordenates[i];
-			v2 = coordenates[j];
+			v1 = coordinates[i];
+			v2 = coordinates[j];
 
 			distance_matrix[i][j] = euclidian2D(v1.first, v1.second,
 													v2.first, v2.second);
@@ -44,7 +44,6 @@ void Input::build(){
 
 void Input::load(const char* name){
 
-	//TODO: Não deixar informação fixa, mudar para name
 	ifstream file(name);
 
 
@@ -57,7 +56,7 @@ void Input::load(const char* name){
 						file >> reader; // :
 						file >> num_vertices;
 
-						coordenates.resize( num_vertices );
+						coordinates.resize( num_vertices );
 						distance_matrix.resize( num_vertices, vector<double>(num_vertices) );
 					}
 

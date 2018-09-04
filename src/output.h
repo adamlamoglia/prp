@@ -14,8 +14,13 @@
 class Output {
 
 public:
+	//Represents a pointer to class Input.
 	Input *in;
+
+	//Used to output a sequence of nodes representing the vertex of graph that was visited.
 	vector<int> route;
+
+	//Represents the value of route.
 	double fitness;
 
 	Output(Input *in);
