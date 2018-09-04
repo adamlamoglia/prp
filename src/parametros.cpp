@@ -144,7 +144,7 @@ void Parametros::Store(int argc, char * argv[ ]) {
 
 }
 
-///////////// ADAM - ATTRIBUTES THAT ARE  SPECIFIED ON FILE ///////////////
+// Attributes specified on files of TSPLIB
 
 string Parametros::getName(){
 
@@ -214,17 +214,32 @@ double Parametros::getCapacity(){
 }
 
 
-/////////////// ADAM - ATTRIBUTES THAT ARE NOT SPECIFIED ON FILE ////////////////
+// Attributes* of article "A Genetic Algorithm for a Green Vehicle Routing Problem (2018)"
+
+//GA-VRP1
+// PopulationSize = 30,
+//ProbabilityOfMutation = 0.1,
+//αmax = 300,
+//βmax = 3000
+
+// GA-VRP2
+//PopulationSize = 50,
+//ProbabilityOfMutation = 0.05,
+//αmax = 300,
+//βmax = 1500
+
+//* Missing information: Quantity of generations (iterations)
+//* LuckyFactor ensures greater randomness in the solution space. It are used in binaryTour() used to select parents.
 
 double Parametros::getAlfa(){
 
-	return 3000;
+	return 300;
 }
 
 
 double Parametros::getBeta(){
 
-	return 500;
+	return 3000;
 }
 
 
@@ -235,12 +250,12 @@ int Parametros::getGenerations(){
 
 double Parametros::getProbability(){
 
-	return 0.5;
+	return 0.1;
 }
 
 int Parametros::getPopulationSize(){
 
-	return 50;
+	return 30;
 }
 
 double Parametros::getLuckyFactor(){
