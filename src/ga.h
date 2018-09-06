@@ -31,17 +31,12 @@ public:
 	//Represents the limit of generations of populations (stop criterion).
 	int	limit;
 
-	//Used to pick up an random individual in population.
 	int	random_person;
 
-	//Used to select a node randomly to swap with another in crossover.
 	int random_node1;
 
-	//Same as above.
 	int random_node2;
 
-	//Represents a number to choose the parents to Crossover.
-	//Used in binaryTour().
 	int	lucky_number;
 
 	//Used to crossover the chosen parents.
@@ -53,57 +48,91 @@ public:
 	//New individuals are created from cut to population->size.
 	int	cut;
 
-	//Used in run() to limit mutation.
 	double probability;
 
-	//Represents a lucky factor to choose the parents to Crossover.
-	//Used in binaryTour().
 	double lucky_factor;
 
-	//Used in twoOpt() to return the best solution after mutation.
 	double lowest_fitness;
 
-	//Helper variable used in twoOpt().
 	double new_fitness;
 
-	//Represents nodes visited in a route. Used in init().
 	vector<bool> visited_vertex;
 
-	//Represents inserted nodes of route of individual f1.
 	vector<bool> inserted_vertex_f1;
 
-	//Represents inserted nodes of route of individual f2.
 	vector<bool> inserted_vertex_f2;
 
-	//Represents repeated nodes  of route of individual f1.
 	vector<bool> repeated_vertex_f1;
 
-	//Represents repeated nodes of route of individual f2.
 	vector<bool> repeated_vertex_f2;
 
-	//Is the space of solutions.
-	//The individuals of population will undergo genetic operations to improve solutions.
 	vector<Individuo> population;
 
 	Genetic(Input *in, int alfa, int beta, int generations, double prob_mutation, int num_individuals, double lucky);
 	~Genetic();
 
+	//Initializes a new population according to the limit of individuals.
+	//The function creates individuals from limit to population.size,
+	//and replaces any solution that where in population before.
 	void init();
+
+	//Initializes init() with the limit parameter.
 	void create(int limit);
+
+	//This function is the Genetic Algorithm.
+	//It performs several operations on individuals present in the population,
+	//such as Initiation, Crossover, Selection, Mutation and Acceptance.
+	//The function is iterative, and the stop criterion is generation limit.
+	//Variables such as alpha_max and beta_max are also present to finalize a generation of individuals.
 	void run();
-	void sortPopulation();
+
+	//Selects parents p1 and p2 for Crossover.
+	//The function randomly chooses two pairs of individuals,
+	//and each pair competes with each other for Crossover selection.
 	void binaryTour(Individuo &i1, Individuo &i2, Individuo &p1, Individuo &p2);
+
+	//With value of the cut_size variable,
+	//the method switches part of the routes from p1 to p2,
+	//and these generate 2 new children f1 and f2.
 	void onePointCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2);
+
+	//This method differs from onePointCrossover ()
+	//only in the exchange of routes.
+	//Only two nodes of the p1 routes will be exchanged.
+	//The same happens with p2.
 	void swapNodeCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2);
+
+	//Represents the mutation of f1 and f2.
+	//The function performs two-Opt heuristics on the individual's route.
+	//It occurs by swapping two nodes and checking if the new route found is better than the previous one.
+	//Finally, the new found route will contain the lowest amount of fitness.
 	void twoOpt(Individuo &f, Individuo &s);
+
+	//Helper method for twoOpt().
+	//Only exchanges two route nodes.
 	void twoOptSwap(Individuo &s, int i, int k);
+
+	//Randomly chooses an individual
+	//of the population and compares with the child generated.
+	//If this has the fitness smaller than the chosen individual
+	//the child enters in population and the other is deleted.
 	void acception(Individuo &s);
-	bool searchFitness(Individuo &s);
-	void removeRepetitions(Individuo &f1, Individuo &f2);
-	void insertVertices(Individuo &f1, Individuo &f2);
-	void showResult();
-	void printPopulation();
+
+	//This method is used to recreate half of the
+	//the next generation (elitist method).
 	void partialReplacement();
+
+	bool searchFitness(Individuo &s);
+
+	void removeRepeatedNodes(Individuo &f1, Individuo &f2);
+
+	void insertNodes(Individuo &f1, Individuo &f2);
+
+	void showResult();
+
+	void printPopulation();
+
+	void sortPopulation();
 
 };
 

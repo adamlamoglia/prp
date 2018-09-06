@@ -24,10 +24,14 @@ public:
 	double fitness;
 
 	Output(Input *in);
+
 	void printDistanceMatrix();
+
 	void printRoute();
+
 	void printFitness();
-	void printArray2d();//for minizinc
+
+	void printArray2d();
 
 
 };

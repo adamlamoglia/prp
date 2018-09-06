@@ -14,10 +14,13 @@
 class Individuo: public Output {
 
 public:
+
 	Individuo(Input *in);
 
 	double getFitness();
+
 	void setFitness();
+
 	void setRoute(unsigned int id, unsigned int vertex);
 
 

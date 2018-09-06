@@ -135,7 +135,7 @@ void Genetic::binaryTour(Individuo &i1, Individuo &i2, Individuo &p1, Individuo 
 
 }
 
-void Genetic::removeRepetitions(Individuo &f1, Individuo &f2){
+void Genetic::removeRepeatedNodes(Individuo &f1, Individuo &f2){
 
 	for(int i = 1; i < in->num_vertices; i++){
 		int a =  f1.route[i];
@@ -161,7 +161,7 @@ void Genetic::removeRepetitions(Individuo &f1, Individuo &f2){
 
 }
 
-void Genetic::insertVertices(Individuo &f1, Individuo &f2){
+void Genetic::insertNodes(Individuo &f1, Individuo &f2){
 
 	for(int i = 1; i < in->num_vertices; i++){
 
@@ -234,8 +234,8 @@ void Genetic::onePointCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Ind
 
 
 
-		removeRepetitions(f1,f2);
-		insertVertices(f1,f2);
+		removeRepeatedNodes(f1,f2);
+		insertNodes(f1,f2);
 
 		f1.setFitness();
 		f2.setFitness();
