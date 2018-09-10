@@ -52,7 +52,7 @@ void Genetic::create(int limit){
 
 	for(int i = limit; i < population.size(); i++){
 
-		for(unsigned int index = 1; index < in->num_vertices - 1; index++)
+		for(unsigned int index = 1; index < in->num_vertices; index++)
 			population[i].setRoute(index,index);
 
 		random_shuffle ( population[i].route.begin() + 1, population[i].route.end() - 1);
@@ -416,6 +416,8 @@ void Genetic::run(){
 			best = population[0];
 
 		generations++;
+
+		cout << "best: " << best.getFitness() << endl;
 
 		partialReplacement();
 	}
