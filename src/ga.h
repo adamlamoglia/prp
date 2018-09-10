@@ -22,6 +22,8 @@ public:
 	//Used in twoOpt() to indicate improvement of an individual.
 	bool no_improvement;
 
+	bool repeat;
+
 	//Used in run(), and means the number of times that individuals mutate (twoOpt).
 	int alfa_max;
 
@@ -78,6 +80,9 @@ public:
 
 	//Initializes init() with the limit parameter.
 	void create(int limit);
+
+
+	int generateRandom();
 
 	//This function is the Genetic Algorithm.
 	//It performs several operations on individuals present in the population,

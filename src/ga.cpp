@@ -46,46 +46,32 @@ void Genetic::sortPopulation(){
 	sort(population.begin(), population.end(), lowerFitness);
 }
 
+
+
 void Genetic::create(int limit){
-	int random;
 
 	for(int i = limit; i < population.size(); i++){
 
-		for(unsigned int j = 0; j < visited_vertex.size(); j++)
-			visited_vertex[j] = false;
+		for(unsigned int index = 1; index < in->num_vertices - 1; index++)
+			population[i].setRoute(index,index);
 
-		visited_vertex[0]  =  true;
-
-
-		for(unsigned int id_vertex = 1; id_vertex < in->num_vertices; id_vertex++){
-
-			random = rand() % (in->num_vertices - 1) + 1;
-
-			while(visited_vertex[random])
-				random = rand() % (in->num_vertices - 1) + 1;
-
-			population[i].setRoute(id_vertex,random);
-
-			visited_vertex[random] = true;
-
-		}
+		random_shuffle ( population[i].route.begin() + 1, population[i].route.end() - 1);
 
 		population[i].setFitness();
 	}
 
 	sortPopulation();
+
 }
 
 void Genetic::init(){
 
 	create(0);
-
 }
 
 void Genetic::partialReplacement(){
 
 	create(cut);
-
 }
 
 
@@ -294,8 +280,9 @@ void Genetic::twoOpt(Individuo &f, Individuo &s){
 
 	while(no_improvement){
 
-		repeat:
-			lowest_fitness = f.getFitness();
+		repeat = false;
+
+		lowest_fitness = f.getFitness();
 
 			for(int i = 1; i < in->num_vertices - 2; i++){
 				for(int k = i + 1; k < in->num_vertices - 1; k++){
@@ -308,12 +295,17 @@ void Genetic::twoOpt(Individuo &f, Individuo &s){
 					if(new_fitness < lowest_fitness){
 						f = s;
 
-						goto repeat;
+						repeat = true;
+						break;
 					}
 				}
+
+				if(repeat)
+					break;
 			}
 
-			no_improvement = false;
+			if(!repeat)
+				no_improvement = false;
 	}
 
 	s = f;
