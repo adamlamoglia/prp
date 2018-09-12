@@ -15,7 +15,7 @@ Input::Input() {
 }
 
 
-double Input::euclidian2D(int x1, int y1, int x2, int y2){
+int Input::euclidian2D(int x1, int y1, int x2, int y2){
 	return sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2));
 }
 
@@ -57,7 +57,7 @@ void Input::load(const char* name){
 						file >> num_vertices;
 
 						coordinates.resize( num_vertices );
-						distance_matrix.resize( num_vertices, vector<double>(num_vertices) );
+						distance_matrix.resize( num_vertices, vector<int>(num_vertices) );
 					}
 
 					if(reader == "NODE_COORD_SECTION"){

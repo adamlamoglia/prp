@@ -17,7 +17,7 @@ public:
 
 	Individuo(Input *in);
 
-	double getFitness();
+	int getFitness();
 
 	void setFitness();
 

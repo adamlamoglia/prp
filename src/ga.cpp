@@ -25,7 +25,6 @@ Genetic::Genetic(Input *in, int alfa, int beta, int generations, double prob_mut
 
 	population.resize(size, Individuo(in));
 
-	visited_vertex.resize(in->num_vertices,false);
 	repeated_vertex_f1.resize(in->num_vertices,false);
 	repeated_vertex_f2.resize(in->num_vertices,false);
 	inserted_vertex_f1.resize(in->num_vertices,false);
@@ -348,10 +347,10 @@ void Genetic::run(){
 
 	int generations = 0,
 		alfa = 0,
-		beta = 0;
+		beta = 0,
+		best_fitness;
 
-	double best_fitness,
-	       random_mutation;
+	double random_mutation;
 
 
 	Individuo i1(in),

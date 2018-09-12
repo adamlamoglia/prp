@@ -54,11 +54,9 @@ public:
 
 	double lucky_factor;
 
-	double lowest_fitness;
+	int lowest_fitness;
 
-	double new_fitness;
-
-	vector<bool> visited_vertex;
+	int new_fitness;
 
 	vector<bool> inserted_vertex_f1;
 

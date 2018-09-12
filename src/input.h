@@ -24,7 +24,7 @@ public:
 
 	unsigned int num_vertices;
 
-	vector<vector<double> > distance_matrix;
+	vector<vector<int> > distance_matrix;
 
 	//Represents the euclidian2D or geo coordinates of vertex i.
 	vector<pair<int,int> > coordinates;
@@ -33,9 +33,9 @@ public:
 
 	Input();
 
-	double euclidian2D(int x1, int y1, int x2, int y2);
+	int euclidian2D(int x1, int y1, int x2, int y2);
 
-	double geo(int x1, int y1, int x2, int y2);
+	int geo(int x1, int y1, int x2, int y2);
 
 	void load(const char* name);
 

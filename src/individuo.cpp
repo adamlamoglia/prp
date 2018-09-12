@@ -20,7 +20,7 @@ void Individuo::setFitness(){
 
 }
 
-double Individuo::getFitness(){
+int Individuo::getFitness(){
 	return fitness;
 }
 

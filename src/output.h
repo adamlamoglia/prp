@@ -21,7 +21,7 @@ public:
 	vector<int> route;
 
 	//Represents the value of route.
-	double fitness;
+	int fitness;
 
 	Output(Input *in);
 
