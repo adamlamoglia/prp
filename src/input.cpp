@@ -15,29 +15,61 @@ Input::Input() {
 }
 
 
-int Input::euclidian2D(int x1, int y1, int x2, int y2){
+double Input::euclidian2D(double x1, double y1, double x2, double y2){
 	return sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2));
 }
 
-void Input::addCoordenates(int id, int x, int y){
+double Input::geo(double x1, double y1, double x2, double y2){
+
+	latitude_x1 = computeGeo(x1);
+	longitude_y1 = computeGeo(y1);
+	latitude_x2 = computeGeo(x2);
+	longitude_y2 = computeGeo(y2);
+
+	q1 = cos(longitude_y1 - longitude_y2);
+	q2 = cos(latitude_x1 - latitude_x2);
+	q3 = cos(latitude_x1 + latitude_x2);
+
+	return (rrr * acos( 0.5 * ( (1+q1) * q2 - (1 - q1) * q3) ) + 1);
+}
+
+double Input::computeGeo(double a){
+
+	degree = a;
+	min = a - degree;
+
+	return (pi * (degree + 5 * min / 3) / 180);
+}
+
+void Input::addCoordenates(int id, double x, double y){
 
 	coordinates[id].first = x;
 	coordinates[id].second = y;
+}
+
+int Input::setBuild(double x1, double y1, double x2, double y2){
+
+	if(type == "EUC_2D")
+		return euclidian2D(x1,y1,x2,y2);
+
+	return geo(x1,y1,x2,y2);
 }
 
 void Input::build(){
 
 	pair<int,int> v1,v2;
 
-	for(unsigned int i = 0; i < num_vertices; i++){
-		for(unsigned int j = 0; j < num_vertices; j++){
-			v1 = coordinates[i];
-			v2 = coordinates[j];
 
-			distance_matrix[i][j] = euclidian2D(v1.first, v1.second,
-													v2.first, v2.second);
+		for(unsigned int i = 0; i < num_vertices; i++){
+			for(unsigned int j = 0; j < num_vertices; j++){
+				v1 = coordinates[i];
+				v2 = coordinates[j];
+
+				distance_matrix[i][j] = setBuild(v1.first, v1.second,
+														v2.first, v2.second);
+			}
 		}
-	}
+
 }
 
 
@@ -60,12 +92,22 @@ void Input::load(const char* name){
 						distance_matrix.resize( num_vertices, vector<int>(num_vertices) );
 					}
 
+					if(reader == "EDGE_WEIGHT_TYPE"){
+
+						file >> reader; // :
+						file >> type;
+
+					}
+
 					if(reader == "NODE_COORD_SECTION"){
-						int id, x, y;
+						int id;
+						double x,
+							   y;
 
 						for(unsigned int i = 0; i < num_vertices; i++){
 
 							file >> id >> x >> y;
+
 
 							addCoordenates(id-1,x,y);
 

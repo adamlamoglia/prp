@@ -365,6 +365,7 @@ void Genetic::run(){
 
 	init();
 
+
 	while(generations <= limit){
 
 		cout << "generation " << generations << endl;
@@ -378,10 +379,13 @@ void Genetic::run(){
 
 			binaryTour(i1, i2, p1, p2);
 
+
 			//onePointCrossover(p1, p2, f1,f2);
 			swapNodeCrossover(p1, p2, f1,f2);
 
 			random_mutation = (rand() % 100)*0.01;
+
+
 
 			if(random_mutation < probability){
 
@@ -394,6 +398,7 @@ void Genetic::run(){
 				s1 = f1;
 				s2 = f2;
 			}
+
 
 			if(!searchFitness(s1))
 				acception(s1);

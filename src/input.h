@@ -24,24 +24,47 @@ public:
 
 	unsigned int num_vertices;
 
+    int degree;
+
+	double q1,
+		   q2,
+		   q3,
+		   latitude_x1,
+		   longitude_y1,
+		   latitude_x2,
+		   longitude_y2,
+		   min,
+		   pi = 3.141592,
+		   rrr = 6378.388;
+
+
+
 	vector<vector<int> > distance_matrix;
 
 	//Represents the euclidian2D or geo coordinates of vertex i.
-	vector<pair<int,int> > coordinates;
+	vector<pair<double,double> > coordinates;
 
 	string reader;
 
+	string type;
+
 	Input();
 
-	int euclidian2D(int x1, int y1, int x2, int y2);
+	double euclidian2D(double x1, double y1, double x2, double y2);
 
-	int geo(int x1, int y1, int x2, int y2);
+	double geo(double x1, double y1, double x2, double y2);
+
+	int setBuild(double x1, double y1, double x2, double y2);
+
+	double computeGeo(double a);
 
 	void load(const char* name);
 
-	void addCoordenates(int id, int x, int y);
+	void addCoordenates(int id, double x, double y);
 
 	void build();
+
+	friend ostream& operator>>(ostream& os, ifstream& file);
 
 };
 

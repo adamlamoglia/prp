@@ -228,7 +228,7 @@ double Parametros::getCapacity(){
 //αmax = 300,
 //βmax = 1500
 
-//* Missing information: Quantity of generations (iterations)
+//* Missing information: Number of generations (iterations)
 //* LuckyFactor ensures greater randomness in the solution space. It are used in binaryTour() used to select parents.
 
 double Parametros::getAlfa(){
