@@ -74,9 +74,9 @@ void Input::build(){
 
 
 
-void Input::load(const char* name){
+void Input::load(string name){
 
-	ifstream file(name);
+	ifstream file(name.c_str());
 
 
 	if( file.is_open() ){

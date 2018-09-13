@@ -111,6 +111,14 @@ public:
 	//Finally, the new found route will contain the lowest amount of fitness.
 	void twoOpt(Individuo &f, Individuo &s);
 
+	/**
+	 * Realiza a busca local na solucao solution de forma eficiente
+	 * sem a necessidade de realizar de fato as mudancas na solucao
+	 * mas primeiramente, avaliando se a troca sera realmente
+	 * melhorante
+	*/
+	int twoOptLocalSearch(Individuo &solution);
+
 	//Helper method for twoOpt().
 	//Only exchanges two route nodes.
 	void twoOptSwap(Individuo &s, int i, int k);

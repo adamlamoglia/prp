@@ -1,7 +1,7 @@
 .PHONY: all clean fence debug
 
 CPPSOURCES = $(shell find . -name '*.cpp')
-CPPFLAGS = -std=c++11 -O3
+CPPFLAGS = -std=c++11
 
 all: prp clean
 fence: fnc clean
@@ -10,7 +10,7 @@ debug: dbg clean
 prp: $(CPPSOURCES:.cpp=.o)
 	@g++ $(CPPFLAGS) -o $@ $^
 
-dbg: CPPFLAGS += -g -p -pg -Wall
+dbg: CPPFLAGS += -pg -Wall
 dbg: $(CPPSOURCES:.cpp=.o)
 	@g++ $(CPPFLAGS) -o debug $^
 

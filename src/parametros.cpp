@@ -25,13 +25,13 @@ string Parametros::getInstance(){
 	}
 }
 
-string Parametros::getLocalSearch(){
+double Parametros::getAlphaMax(){
 	try {
-		return vm["localsearch"];
+		return stod(vm["alpha"]);
 	} catch (exception& e) {
 		cout << "error: " << e.what() << endl;
-		vm["localsearch"] = "best";
-		return vm["localsearch"];
+		vm["alpha"] = "300";
+		return stod( vm["alpha"]);
 	}
 }
 
@@ -94,7 +94,7 @@ void Parametros::Store(int argc, char * argv[ ]) {
 			{ "instance", required_argument, 0,				003 },
 			{ "i", required_argument, 0,					003 },
 			{ "seed", required_argument, 0,					004 },
-			{ "localsearch", required_argument, 0,			005 },
+			{ "alpha", required_argument, 0,				005 },
 			{ "neighborhood", required_argument, 0,			006 },
 			{ "maxIterations", required_argument, 0,		007 },
 			{ "maxIdleIterations", required_argument, 0,	010 },
@@ -114,18 +114,15 @@ void Parametros::Store(int argc, char * argv[ ]) {
 		    vm["size"] = string(optarg);
 			break;
 		case 003:{
-			//string str = string(optarg);
-			//size_t x = str.find_last_of("/");
-			//if(x == string::npos)
-				//str = "/home/guilera/Dropbox/IC/instancias/" + str + ".txt";
-			vm["instance"] = "eil22.txt";
+			vm["instance"] = string(optarg);
 		}
 			break;
 		case 004:
 			vm["seed"] = string(optarg);
 			break;
+		// alpha
 		case 005:
-			vm["localsearch"] = string(optarg);
+			vm["alpha"] = string(optarg);
 			break;
 		case 006:
 			vm["neighborhood"] = string(optarg);
@@ -260,7 +257,7 @@ int Parametros::getPopulationSize(){
 
 double Parametros::getLuckyFactor(){
 
-	return 5;
+	return 2;
 }
 
 

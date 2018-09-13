@@ -14,7 +14,7 @@ class Parametros {
 
 		//Retrive informations
 		static string getInstance();
-		static string getLocalSearch();
+		static double getAlphaMax();
 		static string getNeighborhood();
 		static int getMaxIterations();
 		static int getMaxIdleIterations();

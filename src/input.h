@@ -58,7 +58,7 @@ public:
 
 	double computeGeo(double a);
 
-	void load(const char* name);
+	void load(string name);
 
 	void addCoordenates(int id, double x, double y);
 

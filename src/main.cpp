@@ -24,15 +24,20 @@ int main( int argc, char ** argv ) {
 		Parametros::Store(argc, argv);
 
 
-
 		/*TODO: Implementar o carregamento dos arquivos de entrada atraves da Classe Parametro*/
 		//in.load(Parametros::getInstance().c_str()); //segmentation fault
-		in.load(argv[1]);
+
+		in.load(Parametros::getInstance());
 
 		cout << "GA for one vehicle, " << Parametros::getGenerations() << " generations" << endl;
 
-		Genetic ga(&in, Parametros::getAlfa(), Parametros::getBeta(), Parametros::getGenerations()
-					, Parametros::getProbability(), Parametros::getPopulationSize(), Parametros::getLuckyFactor());
+		Genetic ga(&in, 
+			Parametros::getAlphaMax(),		// Padrao: 300
+			Parametros::getBeta(),			// Padrao: 
+			Parametros::getGenerations(), 	// Padrao: 
+			Parametros::getProbability(),	// Padrao: 
+			Parametros::getPopulationSize(),// Padrao: 
+			Parametros::getLuckyFactor());	// Padrao: 
 
 		ga.run();
 		ga.showResult();

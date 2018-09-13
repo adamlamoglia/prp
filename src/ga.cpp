@@ -73,11 +73,16 @@ void Genetic::partialReplacement(){
 	create(cut);
 }
 
-
+/*
+*/
 void Genetic::binaryTour(Individuo &i1, Individuo &i2, Individuo &p1, Individuo &p2){
 
-
 		random_person = rand() % population.size();
+		
+		/* 
+		* TODO Este numero precisa ser muito pequeno
+		* A chance de ganhar atraves da sorte precisa ser bem pequena
+		*/
 		lucky_number = rand() % 11;
 
 		i1 = population[random_person];
@@ -95,9 +100,8 @@ void Genetic::binaryTour(Individuo &i1, Individuo &i2, Individuo &p1, Individuo 
 		else
 			p1 = i2;
 
-
+		// TODO retirar esse onze e colocar uma funcao ou variavel
 		lucky_number = rand() % 11;
-
 
 		do{
 			random_person = rand() % population.size();
@@ -272,6 +276,45 @@ void Genetic::twoOptSwap(Individuo &s, int i, int k){
 	s.setFitness();
 }
 
+int Genetic::twoOptLocalSearch(Individuo &solution){
+	bool improvement = true;
+	
+	while(improvement){
+
+		improvement = false;
+		
+		repeat = false;
+
+		lowest_fitness = f.getFitness();
+
+			for(int i = 1; i < in->num_vertices - 2; i++){
+				for(int k = i + 1; k < in->num_vertices - 1; k++){
+
+					s.route = f.route;
+					twoOptSwap(s,i,k);
+
+					new_fitness = s.getFitness();
+
+					if(new_fitness < lowest_fitness){
+						f = s;
+
+						repeat = true;
+						break;
+					}
+				}
+
+				if(repeat)
+					break;
+			}
+
+			if(!repeat)
+				no_improvement = false;
+	}
+
+	s = f;
+
+}
+
 void Genetic::twoOpt(Individuo &f, Individuo &s){
 
 	no_improvement = true;
@@ -354,14 +397,22 @@ void Genetic::run(){
 
 
 	Individuo i1(in),
-			  i2(in),
-			  p1(in),
-			  p2(in),
-			  f1(in),
-			  f2(in),
-			  s1(in),
-			  s2(in),
-			  best(in);
+			  i2(in);
+
+	// Pais
+	Individuo p1(in),
+			  p2(in);
+
+	// Filhos dos pais p1 e p2
+	Individuo f1(in),
+			  f2(in);
+	
+	// Filhos apos as mutacoes
+	Individuo s1(in),
+			  s2(in);
+			  
+	// Melhor solucao
+	Individuo  best(in);
 
 	init();
 
@@ -381,7 +432,7 @@ void Genetic::run(){
 
 
 			//onePointCrossover(p1, p2, f1,f2);
-			swapNodeCrossover(p1, p2, f1,f2);
+			swapNodeCrossover(p1, p2, f1, f2);
 
 			random_mutation = (rand() % 100)*0.01;
 
