@@ -20,24 +20,21 @@ int main( int argc, char ** argv ) {
 
 		Input in;
 
-		/*TODO Ajeitar a Classe Parametros para o PRP*/
 		Parametros::Store(argc, argv);
 
-
-		/*TODO: Implementar o carregamento dos arquivos de entrada atraves da Classe Parametro*/
-		//in.load(Parametros::getInstance().c_str()); //segmentation fault
+		//srand(Parametros::GetSeed()); // Standart: 0
 
 		in.load(Parametros::getInstance());
 
 		cout << "GA for one vehicle, " << Parametros::getGenerations() << " generations" << endl;
 
 		Genetic ga(&in, 
-			Parametros::getAlphaMax(),		// Padrao: 300
-			Parametros::getBeta(),			// Padrao: 
-			Parametros::getGenerations(), 	// Padrao: 
-			Parametros::getProbability(),	// Padrao: 
-			Parametros::getPopulationSize(),// Padrao: 
-			Parametros::getLuckyFactor());	// Padrao: 
+			Parametros::getAlphaMax(),		// Standard: 300
+			Parametros::getBetaMax(),		// Standard: 3000
+			Parametros::getGenerations(), 	// Standard: 100
+			Parametros::getProbability(),	// Standard: 0.1
+			Parametros::getPopulationSize(),// Standard: 30
+			Parametros::getLuckyFactor());	// Standard: 97
 
 		ga.run();
 		ga.showResult();

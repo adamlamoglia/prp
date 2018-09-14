@@ -58,6 +58,12 @@ public:
 
 	int new_fitness;
 
+	int old_fitness;
+
+	int current_edges_value;
+
+	int new_edges_value;
+
 	vector<bool> inserted_vertex_f1;
 
 	vector<bool> inserted_vertex_f2;
@@ -121,7 +127,7 @@ public:
 
 	//Helper method for twoOpt().
 	//Only exchanges two route nodes.
-	void twoOptSwap(Individuo &s, int i, int k);
+	void swapNodes(Individuo &s, int i, int k);
 
 	//Randomly chooses an individual
 	//of the population and compares with the child generated.

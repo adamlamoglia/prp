@@ -39,7 +39,7 @@ public:
 
 
 
-	vector<vector<int> > distance_matrix;
+	vector<vector<double> > distance_matrix;
 
 	//Represents the euclidian2D or geo coordinates of vertex i.
 	vector<pair<double,double> > coordinates;
@@ -54,7 +54,7 @@ public:
 
 	double geo(double x1, double y1, double x2, double y2);
 
-	int setBuild(double x1, double y1, double x2, double y2);
+	double setBuild(double x1, double y1, double x2, double y2);
 
 	double computeGeo(double a);
 

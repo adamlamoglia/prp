@@ -46,7 +46,6 @@ void Genetic::sortPopulation(){
 }
 
 
-
 void Genetic::create(int limit){
 
 	for(int i = limit; i < population.size(); i++){
@@ -73,8 +72,7 @@ void Genetic::partialReplacement(){
 	create(cut);
 }
 
-/*
-*/
+
 void Genetic::binaryTour(Individuo &i1, Individuo &i2, Individuo &p1, Individuo &p2){
 
 		random_person = rand() % population.size();
@@ -83,7 +81,7 @@ void Genetic::binaryTour(Individuo &i1, Individuo &i2, Individuo &p1, Individuo 
 		* TODO Este numero precisa ser muito pequeno
 		* A chance de ganhar atraves da sorte precisa ser bem pequena
 		*/
-		lucky_number = rand() % 11;
+		lucky_number = rand() % 100;
 
 		i1 = population[random_person];
 
@@ -101,7 +99,7 @@ void Genetic::binaryTour(Individuo &i1, Individuo &i2, Individuo &p1, Individuo 
 			p1 = i2;
 
 		// TODO retirar esse onze e colocar uma funcao ou variavel
-		lucky_number = rand() % 11;
+		lucky_number = rand() % 100;
 
 		do{
 			random_person = rand() % population.size();
@@ -246,72 +244,88 @@ void Genetic::swapNodeCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Ind
 	random_node1 = rand() % in->num_vertices;
 	do{
 		random_node1 = rand() % in->num_vertices;
-	}while(random_node1 == 0);
+
+	}while(random_node1 == 0 || random_node1 == in->num_vertices - 1);
 
 	random_node2 = rand() % in->num_vertices;
 	do{
 		random_node2 = rand() % in->num_vertices;
-	}while(random_node2 == 0);
+
+	}while(random_node2 == 0 || random_node1 == in->num_vertices - 1);
 
 
-	swap(f1.route[random_node1],f1.route[random_node2]);
+	swapNodes(f1,random_node1,random_node2);
 
 	random_node1 = rand() % in->num_vertices;
+
 	do{
 		random_node1 = rand() % in->num_vertices;
-	}while(random_node1 == 0);
+	}while(random_node1 == 0 || random_node1 == in->num_vertices - 1);
 
 	random_node2 = rand() % in->num_vertices;
+
 	do{
 		random_node2 = rand() % in->num_vertices;
-	}while(random_node2 == 0);
+	}while(random_node2 == 0 || random_node1 == in->num_vertices - 1);
 
-	swap(f2.route[random_node1],f2.route[random_node2]);
-
+	swapNodes(f2,random_node1,random_node2);
 }
 
-void Genetic::twoOptSwap(Individuo &s, int i, int k){
+void Genetic::swapNodes(Individuo &s, int i, int k){
 
-	swap(s.route[i], s.route[k]);
-	s.setFitness();
+	old_fitness = s.getFitness();
+
+	current_edges_value = 	in->distance_matrix[s.route[i]][s.route[i+1]]
+							+ in->distance_matrix[s.route[i-1]][s.route[i]]
+							+ in->distance_matrix[s.route[k]][s.route[k+1]]
+							+ in->distance_matrix[s.route[k-1]][s.route[k]];
+
+	swap(s.route[i],s.route[k]);
+
+	new_edges_value = 		in->distance_matrix[s.route[i]][s.route[i+1]]
+							+ in->distance_matrix[s.route[i-1]][s.route[i]]
+							+ in->distance_matrix[s.route[k]][s.route[k+1]]
+							+ in->distance_matrix[s.route[k-1]][s.route[k]];
+
+	s.fitness = old_fitness - current_edges_value + new_edges_value;
 }
 
 int Genetic::twoOptLocalSearch(Individuo &solution){
 	bool improvement = true;
 	
-	while(improvement){
+	//while(improvement){
 
-		improvement = false;
+		//improvement = false;
 		
-		repeat = false;
+		//repeat = false;
 
-		lowest_fitness = f.getFitness();
+		//lowest_fitness = f.getFitness();
 
-			for(int i = 1; i < in->num_vertices - 2; i++){
-				for(int k = i + 1; k < in->num_vertices - 1; k++){
+			//for(int i = 1; i < in->num_vertices - 2; i++){
+			//	for(int k = i + 1; k < in->num_vertices - 1; k++){
 
-					s.route = f.route;
-					twoOptSwap(s,i,k);
+					//s.route = f.route;
+					//twoOptSwap(s,i,k);
 
-					new_fitness = s.getFitness();
+					//new_fitness = s.getFitness();
 
-					if(new_fitness < lowest_fitness){
-						f = s;
+					//if(new_fitness < lowest_fitness){
+						//f = s;
 
-						repeat = true;
-						break;
-					}
-				}
+						//repeat = true;
+						//break;
+			//		}
+			//	}
 
-				if(repeat)
-					break;
-			}
+				//if(repeat)
+					//break;
+			//}
 
-			if(!repeat)
-				no_improvement = false;
-	}
+			//if(!repeat)
+				//no_improvement = false;
+	//}
 
-	s = f;
+	//s = f;
 
 }
 
@@ -329,8 +343,8 @@ void Genetic::twoOpt(Individuo &f, Individuo &s){
 			for(int i = 1; i < in->num_vertices - 2; i++){
 				for(int k = i + 1; k < in->num_vertices - 1; k++){
 
-					s.route = f.route;
-					twoOptSwap(s,i,k);
+					s = f;
+					swapNodes(s,i,k);
 
 					new_fitness = s.getFitness();
 
@@ -399,19 +413,19 @@ void Genetic::run(){
 	Individuo i1(in),
 			  i2(in);
 
-	// Pais
+	// Parents
 	Individuo p1(in),
 			  p2(in);
 
-	// Filhos dos pais p1 e p2
+	// Sons of parents p1 and p2
 	Individuo f1(in),
 			  f2(in);
 	
-	// Filhos apos as mutacoes
+	// Sons after mutation
 	Individuo s1(in),
 			  s2(in);
 			  
-	// Melhor solucao
+	// Best solution
 	Individuo  best(in);
 
 	init();
@@ -419,7 +433,7 @@ void Genetic::run(){
 
 	while(generations <= limit){
 
-		cout << "generation " << generations << endl;
+		cout << "generation " << generations << " - ";
 
 		alfa = beta = 0;
 
@@ -431,7 +445,6 @@ void Genetic::run(){
 			binaryTour(i1, i2, p1, p2);
 
 
-			//onePointCrossover(p1, p2, f1,f2);
 			swapNodeCrossover(p1, p2, f1, f2);
 
 			random_mutation = (rand() % 100)*0.01;
@@ -472,7 +485,7 @@ void Genetic::run(){
 
 		generations++;
 
-		cout << "best: " << best.getFitness() << endl;
+		cout << "best fitness: " << best.getFitness() << endl;
 
 		partialReplacement();
 	}

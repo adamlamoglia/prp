@@ -12,31 +12,16 @@ class Parametros {
 		Parametros();
 		static void Store(int ac, char * av[]);
 
-		//Retrive informations
 		static string getInstance();
 		static double getAlphaMax();
-		static string getNeighborhood();
-		static int getMaxIterations();
-		static int getMaxIdleIterations();
-		static int GetSize();
-		static string GetVersion();
-		static double GetSeed();
-
-		///////////// ADAM FUNCTIONS ///////////////
-
-		static string getName();
-		static string getComment();
-		static string getType();
-		static int getDimension();
-		static string getWeightType();
-		static double getCapacity();
-
-		static double getAlfa();
-		static double getBeta();
+		static double getBetaMax();
 		static int getGenerations();
 		static double getProbability();
 		static int getPopulationSize();
 		static double getLuckyFactor();
+		static double GetSeed();
+
+		
 
 
     private:

@@ -47,7 +47,7 @@ void Input::addCoordenates(int id, double x, double y){
 	coordinates[id].second = y;
 }
 
-int Input::setBuild(double x1, double y1, double x2, double y2){
+double Input::setBuild(double x1, double y1, double x2, double y2){
 
 	if(type == "EUC_2D")
 		return euclidian2D(x1,y1,x2,y2);
@@ -57,7 +57,7 @@ int Input::setBuild(double x1, double y1, double x2, double y2){
 
 void Input::build(){
 
-	pair<int,int> v1,v2;
+	pair<double,double> v1,v2;
 
 
 		for(unsigned int i = 0; i < num_vertices; i++){
@@ -65,8 +65,11 @@ void Input::build(){
 				v1 = coordinates[i];
 				v2 = coordinates[j];
 
-				distance_matrix[i][j] = setBuild(v1.first, v1.second,
-														v2.first, v2.second);
+				distance_matrix[i][j] = 
+				distance_matrix[j][i] =
+										round(setBuild(v1.first, v1.second,
+												v2.first, v2.second));
+				
 			}
 		}
 
@@ -89,7 +92,7 @@ void Input::load(string name){
 						file >> num_vertices;
 
 						coordinates.resize( num_vertices );
-						distance_matrix.resize( num_vertices, vector<int>(num_vertices) );
+						distance_matrix.resize( num_vertices, vector<double>(num_vertices) );
 					}
 
 					if(reader == "EDGE_WEIGHT_TYPE"){
