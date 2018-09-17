@@ -15,6 +15,7 @@ Output::Output(Input *in) {
 
 	//o tamanho da rota tem um valor a mais, pois sempre ha o retorno para o deposito
 	route.resize(in->num_vertices + 1, 0);
+	index.resize(in->num_vertices, 0);
 
 	fitness = 0;
 
@@ -40,6 +41,15 @@ void Output::printRoute(){
 
 	for(unsigned int i = 0; i < route.size(); i++)
 		cout << route[i]+1 << " ";
+
+	cout << endl;
+
+}
+
+void Output::printIndexes(){
+
+	for(unsigned int i = 0; i < in->num_vertices; i++)
+		cout << index[i] << " ";
 
 	cout << endl;
 

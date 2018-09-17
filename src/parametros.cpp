@@ -82,7 +82,7 @@ double Parametros::getProbability(){
 		return stod(vm["probability"]);
 	} catch (exception& e) {
 		cout << "error: " << e.what() << endl;
-		vm["probability"] = "0.1";
+		vm["probability"] = "25.4";
 		return stod( vm["probability"]);
 	}
 }
@@ -120,6 +120,17 @@ int Parametros::getLuckyRange(){
 	}
 }
 
+int Parametros::getMutationRange(){
+
+	try {
+		return stoi(vm["mutationRange"]);
+	} catch (exception& e) {
+		cout << "error: " << e.what() << endl;
+		vm["mutationRange"] = "100";
+		return stoi( vm["mutationRange"]);
+	}
+}
+
 
 void Parametros::Store(int argc, char * argv[ ]) {
 
@@ -135,6 +146,7 @@ void Parametros::Store(int argc, char * argv[ ]) {
 			{ "popSize"			, required_argument, 0,		005 },
 			{ "luckyFactor"			, required_argument, 0,	006 },
 			{ "luckyRange"			, required_argument, 0,	007 },
+			{ "mutationRange"		, required_argument, 0,	010 },
 			{ "help", no_argument, 0,						076 },
 			{ "h", no_argument, 0,							076 },
 			{ 0,0, 0, 0 } };
@@ -165,6 +177,9 @@ void Parametros::Store(int argc, char * argv[ ]) {
 			break;
 		case 007:
 			vm["luckyRange"] = string(optarg);
+			break;
+		case 010:
+			vm["mutationRange"] = string(optarg);
 			break;
 		case 076:
 			cout<<"write a help." << endl;

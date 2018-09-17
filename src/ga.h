@@ -50,11 +50,14 @@ public:
 	//New individuals are created from cut to population->size.
 	int	cut;
 
+	//TODO: Comment
 	double probability;
 
 	double lucky_factor;
 
 	double lucky_number;
+
+	int mutation_range;
 
 	int lowest_fitness;
 
@@ -65,6 +68,7 @@ public:
 	int current_edges_value;
 
 	int new_edges_value;
+	//TODO: Comment
 
 	vector<bool> inserted_vertex_f1;
 
@@ -77,7 +81,7 @@ public:
 	vector<Individuo> population;
 
 	Genetic(Input *in, int alfa, int beta, int generations, double prob_mutation,
-			int num_individuals, double lucky_factor, int lucky_range);
+			int num_individuals, double lucky_factor, int lucky_range, int mutation_range);
 	~Genetic();
 
 	//Initializes a new population according to the limit of individuals.
@@ -101,20 +105,19 @@ public:
 	//Selects parents p1 and p2 for Crossover.
 	//The function randomly chooses two pairs of individuals,
 	//and each pair competes with each other for Crossover selection.
-	void binaryTour(Individuo &i1, Individuo &i2, Individuo &p1, Individuo &p2);
+	void binaryTour(Individuo &i1, Individuo &i2, Individuo &p, int previous_fitness);
 
 	//With value of the cut_size variable,
 	//the method switches part of the routes from p1 to p2,
 	//and these generate 2 new children f1 and f2.
 	void onePointCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2);
 
-	//This method differs from onePointCrossover ()
-	//only in the exchange of routes.
-	//Only two nodes of the p1 routes will be exchanged.
-	//The same happens with p2.
-	void swapNodeCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2);
+	//TODO: Comment
+	void uniformCrossover(Individuo &p1, Individuo &p2,Individuo &f1, Individuo &f2);
 
-	//Represents the mutation of f1 and f2.
+	//TODO: Comment
+	void mutationSwap(Individuo &f);
+
 	//The function performs two-Opt heuristics on the individual's route.
 	//It occurs by swapping two nodes and checking if the new route found is better than the previous one.
 	//Finally, the new found route will contain the lowest amount of fitness.

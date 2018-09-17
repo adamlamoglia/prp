@@ -20,6 +20,7 @@ class Parametros {
 		static int getPopulationSize();
 		static double getLuckyFactor();
 		static int getLuckyRange();
+		static int getMutationRange();
 		static double GetSeed();
 
 		

@@ -23,6 +23,8 @@ public:
 
 	void setRoute(unsigned int id, unsigned int vertex);
 
+	void setIndexes();
+
 
 };
 

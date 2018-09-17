@@ -20,6 +20,9 @@ public:
 	//Used to output a sequence of nodes representing the vertex of graph that was visited.
 	vector<int> route;
 
+	//Sequence of indexes related to vehicle route
+	vector<int> index;
+
 	//Represents the value of route.
 	int fitness;
 
@@ -28,6 +31,8 @@ public:
 	void printDistanceMatrix();
 
 	void printRoute();
+
+	void printIndexes();
 
 	void printFitness();
 

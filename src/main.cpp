@@ -32,10 +32,11 @@ int main( int argc, char ** argv ) {
 			Parametros::getAlphaMax(),		// Standard: 300
 			Parametros::getBetaMax(),		// Standard: 3000
 			Parametros::getGenerations(), 	// Standard: 100
-			Parametros::getProbability(),	// Standard: 0.1
+			Parametros::getProbability(),	// Standard: 25.4
 			Parametros::getPopulationSize(),// Standard: 30
 			Parametros::getLuckyFactor(),	// Standard: 997
-			Parametros::getLuckyRange());	// Standard: 1000
+			Parametros::getLuckyRange(),	// Standard: 1000
+			Parametros::getMutationRange());// Standard: 100
 
 		ga.run();
 		ga.showResult();

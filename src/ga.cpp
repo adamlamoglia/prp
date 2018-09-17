@@ -9,7 +9,7 @@
 
 
 Genetic::Genetic(Input *in, int alfa, int beta, int generations, double prob_mutation,
-		int size, double lucky_factor, int lucky_range) {
+		int size, double lucky_factor, int lucky_range, int mutation_range) {
 
 	this->in = in;
 
@@ -20,6 +20,7 @@ Genetic::Genetic(Input *in, int alfa, int beta, int generations, double prob_mut
 
 	this->lucky_factor = lucky_factor;
 	this->lucky_range = lucky_range;
+	this->mutation_range = mutation_range;
 	cut_size = in->num_vertices/2;
 
 	cut = size/2;
@@ -57,6 +58,7 @@ void Genetic::create(int limit){
 		random_shuffle ( population[i].route.begin() + 1, population[i].route.end() - 1);
 
 		population[i].setFitness();
+		population[i].setIndexes();
 	}
 
 	sortPopulation();
@@ -74,52 +76,30 @@ void Genetic::partialReplacement(){
 }
 
 
-void Genetic::binaryTour(Individuo &i1, Individuo &i2, Individuo &p1, Individuo &p2){
+void Genetic::binaryTour(Individuo &i1, Individuo &i2, Individuo &p, int previous_fitness){
 
-		random_person = rand() % population.size();
-		
-		/* 
-		* TODO Este numero precisa ser muito pequeno
-		* A chance de ganhar atraves da sorte precisa ser bem pequena
-		*/
 		lucky_number = rand() % lucky_range;
 
-		i1 = population[random_person];
 
 		do{
 
 			random_person = rand() % population.size();
-			i2 = population[random_person];
-
-		}while(i1.getFitness() == i2.getFitness());
-
-		if(i1.getFitness() < i2.getFitness() && lucky_factor > lucky_number)
-			p1 = i1;
-
-		else
-			p1 = i2;
-
-		// TODO retirar esse onze e colocar uma funcao ou variavel
-		lucky_number = rand() % lucky_range;
-
-		do{
-			random_person = rand() % population.size();
-
 			i1 = population[random_person];
 
-		}while(i1.getFitness() == p1.getFitness());
+		}while(i1.getFitness() == previous_fitness);
 
 		do{
-			random_person = rand() % population.size();
 
+			random_person = rand() % population.size();
 			i2 = population[random_person];
-		}while(i2.getFitness() == p1.getFitness() || i1.getFitness() == i2.getFitness());
+
+		}while(i1.getFitness() == i2.getFitness() || i2.getFitness() == previous_fitness);
 
 		if(i1.getFitness() < i2.getFitness() && lucky_factor > lucky_number)
-			p2 = i1;
+			p = i1;
 
 		else
-			p2 = i2;
+			p = i2;
 
 }
 
@@ -237,18 +217,20 @@ void Genetic::onePointCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Ind
 
 }
 
-void Genetic::swapNodeCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2){
+void Genetic::uniformCrossover(Individuo &p1, Individuo &p2,Individuo &f1, Individuo &f2){
 
 	f1 = p1;
 	f2 = p2;
 
 	random_node1 = rand() % in->num_vertices;
+
 	do{
 		random_node1 = rand() % in->num_vertices;
 
 	}while(random_node1 == 0 || random_node1 == in->num_vertices - 1);
 
 	random_node2 = rand() % in->num_vertices;
+	
 	do{
 		random_node2 = rand() % in->num_vertices;
 
@@ -257,19 +239,46 @@ void Genetic::swapNodeCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Ind
 
 	swapNodes(f1,random_node1,random_node2);
 
+		random_node1 = rand() % in->num_vertices;
+
+	do{
+		random_node1 = rand() % in->num_vertices;
+
+	}while(random_node1 == 0 || random_node1 == in->num_vertices - 1);
+
+	random_node2 = rand() % in->num_vertices;
+	
+	do{
+		random_node2 = rand() % in->num_vertices;
+
+	}while(random_node2 == 0 || random_node1 == in->num_vertices - 1);
+
+
+	swapNodes(f2,random_node1,random_node2);
+
+
+	
+}
+
+void Genetic::mutationSwap(Individuo &f){
+
 	random_node1 = rand() % in->num_vertices;
 
 	do{
 		random_node1 = rand() % in->num_vertices;
+
 	}while(random_node1 == 0 || random_node1 == in->num_vertices - 1);
 
 	random_node2 = rand() % in->num_vertices;
-
+	
 	do{
 		random_node2 = rand() % in->num_vertices;
+
 	}while(random_node2 == 0 || random_node1 == in->num_vertices - 1);
 
-	swapNodes(f2,random_node1,random_node2);
+
+	swapNodes(f,random_node1,random_node2);
+
 }
 
 void Genetic::swapNodes(Individuo &s, int i, int k){
@@ -408,7 +417,7 @@ void Genetic::run(){
 		beta = 0,
 		best_fitness;
 
-	double random_mutation;
+	double mutation_number;
 
 
 	Individuo i1(in),
@@ -431,6 +440,8 @@ void Genetic::run(){
 
 	init();
 
+	population[0].printRoute();
+	population[0].printIndexes();
 
 	while(generations <= limit){
 
@@ -443,14 +454,18 @@ void Genetic::run(){
 			best_fitness = population[0].getFitness();
 
 
-			binaryTour(i1, i2, p1, p2);
+			binaryTour(i1, i2, p1, 0);
+			binaryTour(i1, i2, p2, p1.getFitness());
 
+			//TODO: Change method to crossover routes between p1 and p2
+			uniformCrossover(p1, p2, f1, f2);
 
-			swapNodeCrossover(p1, p2, f1, f2);
+			mutationSwap(f1);
+			mutationSwap(f2);
 
-			random_mutation = (rand() % 100)*0.01;
+			mutation_number = rand() % mutation_range;
 
-			if(random_mutation < probability){
+			if(mutation_number < probability){
 
 				twoOpt(f1, s1);
 				twoOpt(f2, s2);

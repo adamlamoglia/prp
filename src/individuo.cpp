@@ -29,4 +29,11 @@ void Individuo::setRoute(unsigned int id, unsigned int vertex){
 	route[id] = vertex;
 }
 
+void Individuo::setIndexes(){
+
+	for(unsigned int i = 1; i < route.size() - 1; i++){
+		index[route[i]] = i;
+	}
+}
+
 
