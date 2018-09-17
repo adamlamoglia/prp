@@ -39,7 +39,7 @@ public:
 
 	int random_node2;
 
-	int	lucky_number;
+	int lucky_range;
 
 	//Used to crossover the chosen parents.
 	//A size of cut is chosen and the split of chromosomes occurs
@@ -53,6 +53,8 @@ public:
 	double probability;
 
 	double lucky_factor;
+
+	double lucky_number;
 
 	int lowest_fitness;
 
@@ -74,7 +76,8 @@ public:
 
 	vector<Individuo> population;
 
-	Genetic(Input *in, int alfa, int beta, int generations, double prob_mutation, int num_individuals, double lucky);
+	Genetic(Input *in, int alfa, int beta, int generations, double prob_mutation,
+			int num_individuals, double lucky_factor, int lucky_range);
 	~Genetic();
 
 	//Initializes a new population according to the limit of individuals.

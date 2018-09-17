@@ -19,6 +19,7 @@ class Parametros {
 		static double getProbability();
 		static int getPopulationSize();
 		static double getLuckyFactor();
+		static int getLuckyRange();
 		static double GetSeed();
 
 		

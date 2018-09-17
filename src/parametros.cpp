@@ -101,11 +101,22 @@ int Parametros::getPopulationSize(){
 double Parametros::getLuckyFactor(){
 
 	try {
-		return stod(vm["lucky"]);
+		return stod(vm["luckyFactor"]);
 	} catch (exception& e) {
 		cout << "error: " << e.what() << endl;
-		vm["lucky"] = "97";
-		return stod( vm["lucky"]);
+		vm["luckyFactor"] = "997";
+		return stod( vm["luckyFactor"]);
+	}
+}
+
+int Parametros::getLuckyRange(){
+
+	try {
+		return stoi(vm["luckyRange"]);
+	} catch (exception& e) {
+		cout << "error: " << e.what() << endl;
+		vm["luckyRange"] = "1000";
+		return stoi( vm["luckyRange"]);
 	}
 }
 
@@ -122,7 +133,8 @@ void Parametros::Store(int argc, char * argv[ ]) {
 			{ "alpha", required_argument, 0,				003 },
 			{ "beta"		, required_argument, 0,			004 },
 			{ "popSize"			, required_argument, 0,		005 },
-			{ "lucky"				, required_argument, 0,	006 },
+			{ "luckyFactor"			, required_argument, 0,	006 },
+			{ "luckyRange"			, required_argument, 0,	007 },
 			{ "help", no_argument, 0,						076 },
 			{ "h", no_argument, 0,							076 },
 			{ 0,0, 0, 0 } };
@@ -149,7 +161,10 @@ void Parametros::Store(int argc, char * argv[ ]) {
 			vm["popSize"] = string(optarg);
 			break;
 		case 006:
-			vm["lucky"] = string(optarg);
+			vm["luckyFactor"] = string(optarg);
+			break;
+		case 007:
+			vm["luckyRange"] = string(optarg);
 			break;
 		case 076:
 			cout<<"write a help." << endl;

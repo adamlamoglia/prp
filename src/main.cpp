@@ -34,7 +34,8 @@ int main( int argc, char ** argv ) {
 			Parametros::getGenerations(), 	// Standard: 100
 			Parametros::getProbability(),	// Standard: 0.1
 			Parametros::getPopulationSize(),// Standard: 30
-			Parametros::getLuckyFactor());	// Standard: 97
+			Parametros::getLuckyFactor(),	// Standard: 997
+			Parametros::getLuckyRange());	// Standard: 1000
 
 		ga.run();
 		ga.showResult();

@@ -8,7 +8,8 @@
 #include "ga.h"
 
 
-Genetic::Genetic(Input *in, int alfa, int beta, int generations, double prob_mutation, int size, double lucky) {
+Genetic::Genetic(Input *in, int alfa, int beta, int generations, double prob_mutation,
+		int size, double lucky_factor, int lucky_range) {
 
 	this->in = in;
 
@@ -17,11 +18,11 @@ Genetic::Genetic(Input *in, int alfa, int beta, int generations, double prob_mut
 	limit = generations;
 	probability = prob_mutation;
 
-	lucky_factor = lucky;
+	this->lucky_factor = lucky_factor;
+	this->lucky_range = lucky_range;
 	cut_size = in->num_vertices/2;
 
 	cut = size/2;
-
 
 	population.resize(size, Individuo(in));
 
@@ -81,7 +82,7 @@ void Genetic::binaryTour(Individuo &i1, Individuo &i2, Individuo &p1, Individuo 
 		* TODO Este numero precisa ser muito pequeno
 		* A chance de ganhar atraves da sorte precisa ser bem pequena
 		*/
-		lucky_number = rand() % 100;
+		lucky_number = rand() % lucky_range;
 
 		i1 = population[random_person];
 
@@ -99,7 +100,7 @@ void Genetic::binaryTour(Individuo &i1, Individuo &i2, Individuo &p1, Individuo 
 			p1 = i2;
 
 		// TODO retirar esse onze e colocar uma funcao ou variavel
-		lucky_number = rand() % 100;
+		lucky_number = rand() % lucky_range;
 
 		do{
 			random_person = rand() % population.size();
@@ -449,8 +450,6 @@ void Genetic::run(){
 
 			random_mutation = (rand() % 100)*0.01;
 
-
-
 			if(random_mutation < probability){
 
 				twoOpt(f1, s1);
@@ -462,7 +461,6 @@ void Genetic::run(){
 				s1 = f1;
 				s2 = f2;
 			}
-
 
 			if(!searchFitness(s1))
 				acception(s1);
