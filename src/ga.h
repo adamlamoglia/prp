@@ -39,6 +39,8 @@ public:
 
 	int random_node2;
 
+	int random_index;
+
 	int lucky_range;
 
 	//Used to crossover the chosen parents.
@@ -78,6 +80,8 @@ public:
 
 	vector<bool> repeated_vertex_f2;
 
+	vector<int> atual_route;
+
 	vector<Individuo> population;
 
 	Genetic(Input *in, int alfa, int beta, int generations, double prob_mutation,
@@ -115,13 +119,15 @@ public:
 	//TODO: Comment
 	void uniformCrossover(Individuo &p1, Individuo &p2,Individuo &f1, Individuo &f2);
 
+	void swapNodeCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2);
+
 	//TODO: Comment
 	void mutationSwap(Individuo &f);
 
 	//The function performs two-Opt heuristics on the individual's route.
 	//It occurs by swapping two nodes and checking if the new route found is better than the previous one.
 	//Finally, the new found route will contain the lowest amount of fitness.
-	void twoOpt(Individuo &f, Individuo &s);
+	void twoOpt(Individuo &f);
 
 	/**
 	 * Realiza a busca local na solucao solution de forma eficiente
@@ -134,6 +140,8 @@ public:
 	//Helper method for twoOpt().
 	//Only exchanges two route nodes.
 	void swapNodes(Individuo &s, int i, int k);
+
+	bool verifySwap(Individuo &s, int i, int k);
 
 	//Randomly chooses an individual
 	//of the population and compares with the child generated.

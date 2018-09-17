@@ -8,6 +8,9 @@
 #include "ga.h"
 
 
+
+int aux;
+
 Genetic::Genetic(Input *in, int alfa, int beta, int generations, double prob_mutation,
 		int size, double lucky_factor, int lucky_range, int mutation_range) {
 
@@ -58,7 +61,7 @@ void Genetic::create(int limit){
 		random_shuffle ( population[i].route.begin() + 1, population[i].route.end() - 1);
 
 		population[i].setFitness();
-		population[i].setIndexes();
+		
 	}
 
 	sortPopulation();
@@ -222,15 +225,29 @@ void Genetic::uniformCrossover(Individuo &p1, Individuo &p2,Individuo &f1, Indiv
 	f1 = p1;
 	f2 = p2;
 
-	random_node1 = rand() % in->num_vertices;
+	for(unsigned int i = 1; i < in->num_vertices - 1; i++){
 
+			aux = f1.route[i];
+			
+			swapNodes(f1,f1.route[i],f2.route[i]);	
+			swapNodes(f2, aux, f2.route[i]);
+
+	}
+
+}
+
+void Genetic::swapNodeCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2){
+
+	f1 = p1;
+	f2 = p2;
+
+	random_node1 = rand() % in->num_vertices;
 	do{
 		random_node1 = rand() % in->num_vertices;
 
 	}while(random_node1 == 0 || random_node1 == in->num_vertices - 1);
 
 	random_node2 = rand() % in->num_vertices;
-	
 	do{
 		random_node2 = rand() % in->num_vertices;
 
@@ -239,25 +256,19 @@ void Genetic::uniformCrossover(Individuo &p1, Individuo &p2,Individuo &f1, Indiv
 
 	swapNodes(f1,random_node1,random_node2);
 
-		random_node1 = rand() % in->num_vertices;
+	random_node1 = rand() % in->num_vertices;
 
 	do{
 		random_node1 = rand() % in->num_vertices;
-
 	}while(random_node1 == 0 || random_node1 == in->num_vertices - 1);
 
 	random_node2 = rand() % in->num_vertices;
-	
+
 	do{
 		random_node2 = rand() % in->num_vertices;
-
 	}while(random_node2 == 0 || random_node1 == in->num_vertices - 1);
 
-
 	swapNodes(f2,random_node1,random_node2);
-
-
-	
 }
 
 void Genetic::mutationSwap(Individuo &f){
@@ -275,7 +286,6 @@ void Genetic::mutationSwap(Individuo &f){
 		random_node2 = rand() % in->num_vertices;
 
 	}while(random_node2 == 0 || random_node1 == in->num_vertices - 1);
-
 
 	swapNodes(f,random_node1,random_node2);
 
@@ -300,46 +310,65 @@ void Genetic::swapNodes(Individuo &s, int i, int k){
 	s.fitness = old_fitness - current_edges_value + new_edges_value;
 }
 
-int Genetic::twoOptLocalSearch(Individuo &solution){
-	bool improvement = true;
+bool Genetic::verifySwap(Individuo &s, int i, int k){
 	
-	//while(improvement){
+	old_fitness = s.getFitness();
+	atual_route = s.route;
 
-		//improvement = false;
-		
-		//repeat = false;
+	current_edges_value = 	in->distance_matrix[s.route[i]][s.route[i+1]]
+							+ in->distance_matrix[s.route[i-1]][s.route[i]]
+							+ in->distance_matrix[s.route[k]][s.route[k+1]]
+							+ in->distance_matrix[s.route[k-1]][s.route[k]];
 
-		//lowest_fitness = f.getFitness();
+	swap(atual_route[i],atual_route[k]);
 
-			//for(int i = 1; i < in->num_vertices - 2; i++){
-			//	for(int k = i + 1; k < in->num_vertices - 1; k++){
+	new_edges_value = 		in->distance_matrix[atual_route[i]][atual_route[i+1]]
+							+ in->distance_matrix[atual_route[i-1]][atual_route[i]]
+							+ in->distance_matrix[atual_route[k]][atual_route[k+1]]
+							+ in->distance_matrix[atual_route[k-1]][atual_route[k]];
 
-					//s.route = f.route;
-					//twoOptSwap(s,i,k);
+	return old_fitness > old_fitness - current_edges_value + new_edges_value;
+}
 
-					//new_fitness = s.getFitness();
+int Genetic::twoOptLocalSearch(Individuo &solution){
+	
+	no_improvement = true;
 
-					//if(new_fitness < lowest_fitness){
-						//f = s;
 
-						//repeat = true;
-						//break;
-			//		}
-			//	}
+	while(no_improvement){
 
-				//if(repeat)
-					//break;
-			//}
+		repeat = false;
 
-			//if(!repeat)
-				//no_improvement = false;
-	//}
+		lowest_fitness = solution.getFitness();
 
-	//s = f;
+			for(int i = 1; i < in->num_vertices - 2; i++){
+				for(int k = i + 1; k < in->num_vertices - 1; k++){
+
+					if(verifySwap(solution,i,k)){
+
+						swapNodes(solution,i,k);
+						new_fitness = solution.getFitness();
+
+						if(new_fitness < lowest_fitness){
+
+							repeat = true;
+							break;
+						}
+					}
+
+				}
+
+				if(repeat)
+					break;
+			}
+
+			if(!repeat)
+				no_improvement = false;
+	}
 
 }
 
-void Genetic::twoOpt(Individuo &f, Individuo &s){
+void Genetic::twoOpt(Individuo &f){
 
 	no_improvement = true;
 
@@ -353,13 +382,10 @@ void Genetic::twoOpt(Individuo &f, Individuo &s){
 			for(int i = 1; i < in->num_vertices - 2; i++){
 				for(int k = i + 1; k < in->num_vertices - 1; k++){
 
-					s = f;
-					swapNodes(s,i,k);
-
-					new_fitness = s.getFitness();
+					swapNodes(f,i,k);
+					new_fitness = f.getFitness();
 
 					if(new_fitness < lowest_fitness){
-						f = s;
 
 						repeat = true;
 						break;
@@ -373,8 +399,6 @@ void Genetic::twoOpt(Individuo &f, Individuo &s){
 			if(!repeat)
 				no_improvement = false;
 	}
-
-	s = f;
 
 }
 
@@ -419,7 +443,6 @@ void Genetic::run(){
 
 	double mutation_number;
 
-
 	Individuo i1(in),
 			  i2(in);
 
@@ -440,9 +463,6 @@ void Genetic::run(){
 
 	init();
 
-	population[0].printRoute();
-	population[0].printIndexes();
-
 	while(generations <= limit){
 
 		cout << "generation " << generations << " - ";
@@ -457,8 +477,7 @@ void Genetic::run(){
 			binaryTour(i1, i2, p1, 0);
 			binaryTour(i1, i2, p2, p1.getFitness());
 
-			//TODO: Change method to crossover routes between p1 and p2
-			uniformCrossover(p1, p2, f1, f2);
+			swapNodeCrossover(p1, p2, f1, f2);
 
 			mutationSwap(f1);
 			mutationSwap(f2);
@@ -467,22 +486,20 @@ void Genetic::run(){
 
 			if(mutation_number < probability){
 
-				twoOpt(f1, s1);
-				twoOpt(f2, s2);
+				//twoOpt(f1);
+				//twoOpt(f2);
+				twoOptLocalSearch(f1);
+				twoOptLocalSearch(f2);
 
 				alfa++;
 			}
-			else{
-				s1 = f1;
-				s2 = f2;
-			}
 
-			if(!searchFitness(s1))
-				acception(s1);
+			if(!searchFitness(f1))
+				acception(f1);
 
 
-			if(!searchFitness(s2))
-				acception(s2);
+			if(!searchFitness(f2))
+				acception(f2);
 
 			sortPopulation();
 
@@ -505,4 +522,5 @@ void Genetic::run(){
 
 	population[0] = best;
 }
+
 
