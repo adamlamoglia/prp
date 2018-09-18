@@ -78,7 +78,6 @@ void Genetic::partialReplacement(){
 	create(cut);
 }
 
-
 void Genetic::binaryTour(Individuo &i1, Individuo &i2, Individuo &p, int previous_fitness){
 
 		lucky_number = rand() % lucky_range;
@@ -471,13 +470,15 @@ void Genetic::run(){
 
 		while(alfa < alfa_max and beta < beta_max){
 
-			best_fitness = population[0].getFitness();
-
+			best = population[0];
 
 			binaryTour(i1, i2, p1, 0);
 			binaryTour(i1, i2, p2, p1.getFitness());
 
-			swapNodeCrossover(p1, p2, f1, f2);
+
+			onePointCrossover(p1, p2, f1, f2);
+			//uniformCrossover(p1, p2, f1, f2);
+			//swapNodeCrossover(p1, p2, f1, f2);
 
 			mutationSwap(f1);
 			mutationSwap(f2);
@@ -497,19 +498,27 @@ void Genetic::run(){
 			if(!searchFitness(f1))
 				acception(f1);
 
-
 			if(!searchFitness(f2))
 				acception(f2);
 
-			sortPopulation();
-
-			if(population[0].getFitness() == best_fitness)
+			if(f1.getFitness() < best.getFitness()){
+				best = f1;
 				beta++;
+			}
+			
+			if(f1.getFitness() < best.getFitness()){
+				best = f2;
+				beta++;
+			}
+
 
 		}
 
+		sortPopulation();
+
 		if(generations == 0)
 			best = population[0];
+
 		else if(population[0].getFitness() < best.getFitness())
 			best = population[0];
 
