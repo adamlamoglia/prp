@@ -147,6 +147,7 @@ void Parametros::Store(int argc, char * argv[ ]) {
 			{ "luckyFactor"			, required_argument, 0,	006 },
 			{ "luckyRange"			, required_argument, 0,	007 },
 			{ "mutationRange"		, required_argument, 0,	010 },
+			{ "probability"			, required_argument, 0,	011 },
 			{ "help", no_argument, 0,						076 },
 			{ "h", no_argument, 0,							076 },
 			{ 0,0, 0, 0 } };
@@ -180,6 +181,9 @@ void Parametros::Store(int argc, char * argv[ ]) {
 			break;
 		case 010:
 			vm["mutationRange"] = string(optarg);
+			break;
+		case 011:
+			vm["probability"] = string(optarg);
 			break;
 		case 076:
 			cout<<"write a help." << endl;

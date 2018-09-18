@@ -123,6 +123,8 @@ public:
 
 	//TODO: Comment
 	void mutationSwap(Individuo &f);
+	void mutationScramble(Individuo &f);
+	void mutationInversion(Individuo &f);
 
 	//The function performs two-Opt heuristics on the individual's route.
 	//It occurs by swapping two nodes and checking if the new route found is better than the previous one.
