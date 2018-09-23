@@ -20,7 +20,8 @@ public:
 	Input *in;
 
 	//Used in twoOpt() to indicate improvement of an individual.
-	bool no_improvement;
+	bool improvement,
+		 global_improvement;
 
 	bool repeat;
 
@@ -70,7 +71,12 @@ public:
 	int current_edges_value;
 
 	int new_edges_value;
-	//TODO: Comment
+
+	//twoOptBestImprovement variables
+	int delta,
+		best_i,
+		best_k,
+		best_delta;
 
 	vector<bool> inserted_vertex_f1;
 
@@ -123,27 +129,23 @@ public:
 
 	//TODO: Comment
 	void mutationSwap(Individuo &f);
+
 	void mutationScramble(Individuo &f);
+	
 	void mutationInversion(Individuo &f);
 
-	//The function performs two-Opt heuristics on the individual's route.
-	//It occurs by swapping two nodes and checking if the new route found is better than the previous one.
-	//Finally, the new found route will contain the lowest amount of fitness.
-	void twoOpt(Individuo &f);
+	int deltaEvaluation(Individuo &s, int i, int k);
 
-	/**
-	 * Realiza a busca local na solucao solution de forma eficiente
-	 * sem a necessidade de realizar de fato as mudancas na solucao
-	 * mas primeiramente, avaliando se a troca sera realmente
-	 * melhorante
-	*/
-	int twoOptLocalSearch(Individuo &solution);
+	// Perform local search in solution efficiently
+	// without make changes in the solution directly,
+	// but first, assessing whether the exchange will really be improver.
+	void twoOptFirstImprovement(Individuo &solution);
+
+	void twoOptBestImprovement(Individuo &solution);
 
 	//Helper method for twoOpt().
 	//Only exchanges two route nodes.
 	void swapNodes(Individuo &s, int i, int k);
-
-	bool verifySwap(Individuo &s, int i, int k);
 
 	//Randomly chooses an individual
 	//of the population and compares with the child generated.

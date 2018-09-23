@@ -292,8 +292,6 @@ void Genetic::mutationSwap(Individuo &f){
 
 void Genetic::swapNodes(Individuo &s, int i, int k){
 
-	old_fitness = s.getFitness();
-
 	current_edges_value = 	in->distance_matrix[s.route[i]][s.route[i+1]]
 							+ in->distance_matrix[s.route[i-1]][s.route[i]]
 							+ in->distance_matrix[s.route[k]][s.route[k+1]]
@@ -306,97 +304,96 @@ void Genetic::swapNodes(Individuo &s, int i, int k){
 							+ in->distance_matrix[s.route[k]][s.route[k+1]]
 							+ in->distance_matrix[s.route[k-1]][s.route[k]];
 
-	s.fitness = old_fitness - current_edges_value + new_edges_value;
+	s.fitness = s.fitness - current_edges_value + new_edges_value;
 }
 
-bool Genetic::verifySwap(Individuo &s, int i, int k){
+int Genetic::deltaEvaluation(Individuo &s, int i, int k){
 	
-	old_fitness = s.getFitness();
-	atual_route = s.route;
-
 	current_edges_value = 	in->distance_matrix[s.route[i]][s.route[i+1]]
 							+ in->distance_matrix[s.route[i-1]][s.route[i]]
 							+ in->distance_matrix[s.route[k]][s.route[k+1]]
 							+ in->distance_matrix[s.route[k-1]][s.route[k]];
 
-	swap(atual_route[i],atual_route[k]);
+	swap(s.route[i],s.route[k]);
 
-	new_edges_value = 		in->distance_matrix[atual_route[i]][atual_route[i+1]]
-							+ in->distance_matrix[atual_route[i-1]][atual_route[i]]
-							+ in->distance_matrix[atual_route[k]][atual_route[k+1]]
-							+ in->distance_matrix[atual_route[k-1]][atual_route[k]];
+	new_edges_value = 		in->distance_matrix[s.route[i]][s.route[i+1]]
+							+ in->distance_matrix[s.route[i-1]][s.route[i]]
+							+ in->distance_matrix[s.route[k]][s.route[k+1]]
+							+ in->distance_matrix[s.route[k-1]][s.route[k]];
+	
+	swap(s.route[i],s.route[k]);
 
-	return old_fitness > old_fitness - current_edges_value + new_edges_value;
+	return new_edges_value - current_edges_value;
 }
 
-int Genetic::twoOptLocalSearch(Individuo &solution){
+void Genetic::twoOptFirstImprovement(Individuo &solution){
 	
-	no_improvement = true;
+	improvement = true;
 
 
-	while(no_improvement){
+	while(improvement){
 
-		repeat = false;
+		improvement = false;
 
 		lowest_fitness = solution.getFitness();
 
-			for(int i = 1; i < in->num_vertices - 2; i++){
-				for(int k = i + 1; k < in->num_vertices - 1; k++){
+		for(int i = 1; i < in->num_vertices - 2; i++){
+				
+			for(int k = i + 1; k < in->num_vertices - 1; k++){
 
-					if(verifySwap(solution,i,k)){
+				if(deltaEvaluation(solution,i,k) < 0){
 
-						swapNodes(solution,i,k);
-						new_fitness = solution.getFitness();
+					swapNodes(solution,i,k);
 
-						if(new_fitness < lowest_fitness){
-
-							repeat = true;
-							break;
-						}
-					}
-
+					if(solution.getFitness() < lowest_fitness)
+						improvement = true;
+						
 				}
 
-				if(repeat)
-					break;
 			}
 
-			if(!repeat)
-				no_improvement = false;
+		}
+
 	}
 
 }
 
-void Genetic::twoOpt(Individuo &f){
+void Genetic::twoOptBestImprovement(Individuo &solution){
+	
+	global_improvement = true;
 
-	no_improvement = true;
+	best_i = best_k = -1;
 
+	while(global_improvement){
 
-	while(no_improvement){
+		best_delta = 0;
 
-		repeat = false;
+		global_improvement = false;
 
-		lowest_fitness = f.getFitness();
+		for(int i = 1; i < in->num_vertices - 2; i++){
+			
+			improvement = false;
 
-			for(int i = 1; i < in->num_vertices - 2; i++){
-				for(int k = i + 1; k < in->num_vertices - 1; k++){
+			for(int k = i + 1; k < in->num_vertices - 1; k++){
+					
+				delta = deltaEvaluation(solution,i,k);
 
-					swapNodes(f,i,k);
-					new_fitness = f.getFitness();
-
-					if(new_fitness < lowest_fitness){
-
-						repeat = true;
-						break;
-					}
+				if(delta < 0 && delta < best_delta){
+						
+					best_delta = delta;
+					best_i = i;
+					best_k = k;
+					improvement =  global_improvement = true;
+				
 				}
 
-				if(repeat)
-					break;
 			}
 
-			if(!repeat)
-				no_improvement = false;
+			if(improvement)
+				swapNodes(solution,best_i,best_k);
+			
+		}
+
 	}
 
 }
@@ -486,11 +483,11 @@ void Genetic::run(){
 			mutation_number = rand() % mutation_range;
 
 			if(mutation_number < probability){
-
-				//twoOpt(f1);
-				//twoOpt(f2);
-				twoOptLocalSearch(f1);
-				twoOptLocalSearch(f2);
+				
+				twoOptBestImprovement(f1);
+				twoOptBestImprovement(f2);
+				//twoOptFirstImprovement(f1);
+				//twoOptFirstImprovement(f2);
 
 				alfa++;
 			}
