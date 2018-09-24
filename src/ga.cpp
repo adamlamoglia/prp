@@ -60,10 +60,6 @@ void Genetic::sortPopulation(){
 	sort(population.begin(), population.end(), lowerFitness);
 }
 
-void Genetic::extractMin(){
-	
-}
-
 void Genetic::minHeapify(unsigned int i){
 
 	l = left(i);
@@ -108,8 +104,7 @@ void Genetic::create(int limit){
 		
 	}
 	
-	//buildMinHeap();
-	sortPopulation();
+	buildMinHeap();
 
 }
 
@@ -451,6 +446,15 @@ void Genetic::acception(Individuo &s){
 		population[random_person] = s;
 }
 
+void Genetic::lastAcception(Individuo &s){
+
+		if(population[population.size() - 1].getFitness() > s.getFitness())
+			population[population.size() - 1] = s;
+		
+		buildMinHeap();
+
+}
+
 bool Genetic::searchFitness(Individuo &s){
 
 	for(unsigned int i = 0; i < population.size(); i++)
@@ -556,7 +560,8 @@ void Genetic::run(){
 
 		}
 
-		sortPopulation();
+		//sortPopulation();
+		buildMinHeap();
 
 		if(generations == 0)
 			best = population[0];

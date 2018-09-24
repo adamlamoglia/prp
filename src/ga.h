@@ -158,6 +158,8 @@ public:
 	//the child enters in population and the other is deleted.
 	void acception(Individuo &s);
 
+	void lastAcception(Individuo &s);
+
 	//This method is used to recreate half of the
 	//the next generation (elitist method).
 	void partialReplacement();
@@ -181,8 +183,6 @@ public:
 	void parent(unsigned int i);
 
 	void buildMinHeap();
-
-	void extractMin();
 
 	void minHeapify(unsigned int i);
 
