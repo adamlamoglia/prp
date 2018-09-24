@@ -77,6 +77,11 @@ public:
 		best_i,
 		best_k,
 		best_delta;
+	
+	//heap variables
+	unsigned int l,
+				 r,
+				 smallest;
 
 	vector<bool> inserted_vertex_f1;
 
@@ -168,6 +173,18 @@ public:
 	void printPopulation();
 
 	void sortPopulation();
+
+	unsigned int left(unsigned int i);
+
+	unsigned int right(unsigned int i);
+
+	void parent(unsigned int i);
+
+	void buildMinHeap();
+
+	void extractMin();
+
+	void minHeapify(unsigned int i);
 
 };
 

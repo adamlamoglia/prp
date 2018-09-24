@@ -45,11 +45,55 @@ bool lowerFitness(Individuo a, Individuo b){
 	return a.getFitness() < b.getFitness();
 }
 
+unsigned int Genetic::left(unsigned int i){
+
+	return 2*i + 1;
+}
+
+unsigned int Genetic::right(unsigned int i){
+
+	return 2*i + 2;
+}
+
 void Genetic::sortPopulation(){
 
 	sort(population.begin(), population.end(), lowerFitness);
 }
 
+void Genetic::extractMin(){
+	
+}
+
+void Genetic::minHeapify(unsigned int i){
+
+	l = left(i);
+	r = right(i);
+
+	if(l < population.size() && population[l].getFitness() < population[i].getFitness())
+		smallest = l;
+
+	else 
+		smallest = i;
+	
+	if(r < population.size() && population[r].getFitness() < population[smallest].getFitness())
+		smallest = r;
+
+	if(smallest != i){
+
+		swap(population[i],population[smallest]);
+		minHeapify(smallest);
+	}
+
+	
+	
+}
+
+void Genetic::buildMinHeap(){
+
+	for(int i = floor(population.size()/2); i >= 0; i--)
+		minHeapify(i);
+	
+}
 
 void Genetic::create(int limit){
 
@@ -63,7 +107,8 @@ void Genetic::create(int limit){
 		population[i].setFitness();
 		
 	}
-
+	
+	//buildMinHeap();
 	sortPopulation();
 
 }
