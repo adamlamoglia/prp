@@ -63,8 +63,8 @@ void Output::printFitness(){
 
 void Output::printArray2d(){
 	cout << "[" << endl;
-	for(int i = 1; i <= in->num_vertices; i++){
-		for(int j = 1; j <= in->num_vertices; j++){
+	for(unsigned int i = 1; i <= in->num_vertices; i++){
+		for(unsigned int j = 1; j <= in->num_vertices; j++){
 			if(i != j){
 					cout << i << "," << j << ",";
 			}

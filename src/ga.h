@@ -36,9 +36,9 @@ public:
 
 	int	random_person;
 
-	int random_node1;
+	unsigned int random_node1;
 
-	int random_node2;
+	unsigned int random_node2;
 
 	int random_index;
 
@@ -156,9 +156,9 @@ public:
 	//of the population and compares with the child generated.
 	//If this has the fitness smaller than the chosen individual
 	//the child enters in population and the other is deleted.
-	void acception(Individuo &s);
+	void randomInsertion(Individuo &s);
 
-	void lastAcception(Individuo &s);
+	void elitistInsertion(Individuo &s);
 
 	//This method is used to recreate half of the
 	//the next generation (elitist method).

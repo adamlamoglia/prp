@@ -93,7 +93,7 @@ void Genetic::buildMinHeap(){
 
 void Genetic::create(int limit){
 
-	for(int i = limit; i < population.size(); i++){
+	for(unsigned int i = limit; i < population.size(); i++){
 
 		for(unsigned int index = 1; index < in->num_vertices; index++)
 			population[i].setRoute(index,index);
@@ -147,8 +147,10 @@ void Genetic::binaryTour(Individuo &i1, Individuo &i2, Individuo &p, int previou
 
 void Genetic::removeRepeatedNodes(Individuo &f1, Individuo &f2){
 
-	for(int i = 1; i < in->num_vertices; i++){
+	for(unsigned int i = 1; i < in->num_vertices; i++){
+
 		int a =  f1.route[i];
+		
 		if(repeated_vertex_f1[a]){
 
 			f1.route[i] = -1;
@@ -159,8 +161,10 @@ void Genetic::removeRepeatedNodes(Individuo &f1, Individuo &f2){
 	}
 
 
-	for(int i = 1; i < in->num_vertices; i++){
+	for(unsigned int i = 1; i < in->num_vertices; i++){
+
 		int a =  f2.route[i];
+		
 		if(repeated_vertex_f2[a]){
 
 			f2.route[i] = -1;
@@ -173,10 +177,11 @@ void Genetic::removeRepeatedNodes(Individuo &f1, Individuo &f2){
 
 void Genetic::insertNodes(Individuo &f1, Individuo &f2){
 
-	for(int i = 1; i < in->num_vertices; i++){
+	for(unsigned int i = 1; i < in->num_vertices; i++){
 
 			if(f1.route[i] == -1){
-				for(int j = 1; j < in->num_vertices; j++){
+				
+				for(unsigned int j = 1; j < in->num_vertices; j++){
 
 					if(!inserted_vertex_f1[j]){
 
@@ -189,20 +194,23 @@ void Genetic::insertNodes(Individuo &f1, Individuo &f2){
 
 	}
 
-	for(int i = 1; i < in->num_vertices; i++){
+	for(unsigned int i = 1; i < in->num_vertices; i++){
 
 			if(f2.route[i] == -1){
 
-				for(int j = 1; j < in->num_vertices; j++){
+				for(unsigned int j = 1; j < in->num_vertices; j++){
 
 					if(!inserted_vertex_f2[j]){
+
 						f2.route[i] = j;
+						
 						inserted_vertex_f2[j] = true;
+						
 						break;
 					}
 				}
 			}
-
+			
 	}
 
 }
@@ -213,7 +221,7 @@ void Genetic::onePointCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Ind
 		f2 = p2;
 
 
-		for(int i = cut_size; i < in->num_vertices; i++){
+		for(unsigned int i = cut_size; i < in->num_vertices; i++){
 			inserted_vertex_f1[f1.route[i]] = true;
 			inserted_vertex_f2[f2.route[i]] = true;
 		}
@@ -250,7 +258,7 @@ void Genetic::onePointCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Ind
 		f1.setFitness();
 		f2.setFitness();
 
-		for(int i = 1; i < in->num_vertices; i++){
+		for(unsigned int i = 1; i < in->num_vertices; i++){
 			inserted_vertex_f1[i] = false;
 			inserted_vertex_f2[i] = false;
 			repeated_vertex_f1[i] = false;
@@ -377,9 +385,9 @@ void Genetic::twoOptFirstImprovement(Individuo &solution){
 
 		lowest_fitness = solution.getFitness();
 
-		for(int i = 1; i < in->num_vertices - 2; i++){
+		for(unsigned int i = 1; i < in->num_vertices - 2; i++){
 				
-			for(int k = i + 1; k < in->num_vertices - 1; k++){
+			for(unsigned int k = i + 1; k < in->num_vertices - 1; k++){
 
 				if(deltaEvaluation(solution,i,k) < 0){
 
@@ -410,11 +418,11 @@ void Genetic::twoOptBestImprovement(Individuo &solution){
 
 		global_improvement = false;
 
-		for(int i = 1; i < in->num_vertices - 2; i++){
+		for(unsigned int i = 1; i < in->num_vertices - 2; i++){
 			
 			improvement = false;
 
-			for(int k = i + 1; k < in->num_vertices - 1; k++){
+			for(unsigned int k = i + 1; k < in->num_vertices - 1; k++){
 					
 				delta = deltaEvaluation(solution,i,k);
 
@@ -438,7 +446,7 @@ void Genetic::twoOptBestImprovement(Individuo &solution){
 
 }
 
-void Genetic::acception(Individuo &s){
+void Genetic::randomInsertion(Individuo &s){
 
 	random_person = rand() % population.size()/2 + population.size()/2;
 
@@ -446,12 +454,12 @@ void Genetic::acception(Individuo &s){
 		population[random_person] = s;
 }
 
-void Genetic::lastAcception(Individuo &s){
+void Genetic::elitistInsertion(Individuo &s){
 
 		if(population[population.size() - 1].getFitness() > s.getFitness())
 			population[population.size() - 1] = s;
 		
-		buildMinHeap();
+		minHeapify(population.size() - 1);
 
 }
 
@@ -483,8 +491,7 @@ void Genetic::run(){
 
 	int generations = 0,
 		alfa = 0,
-		beta = 0,
-		best_fitness;
+		beta = 0;
 
 	double mutation_number;
 
@@ -522,9 +529,9 @@ void Genetic::run(){
 			binaryTour(i1, i2, p2, p1.getFitness());
 
 
-			onePointCrossover(p1, p2, f1, f2);
+			//onePointCrossover(p1, p2, f1, f2);
 			//uniformCrossover(p1, p2, f1, f2);
-			//swapNodeCrossover(p1, p2, f1, f2);
+			swapNodeCrossover(p1, p2, f1, f2);
 
 			mutationSwap(f1);
 			mutationSwap(f2);
@@ -535,32 +542,33 @@ void Genetic::run(){
 				
 				twoOptBestImprovement(f1);
 				twoOptBestImprovement(f2);
-				//twoOptFirstImprovement(f1);
-				//twoOptFirstImprovement(f2);
 
 				alfa++;
 			}
 
 			if(!searchFitness(f1))
-				acception(f1);
+				randomInsertion(f1);
 
 			if(!searchFitness(f2))
-				acception(f2);
+				randomInsertion(f2);
 
 			if(f1.getFitness() < best.getFitness()){
+				
 				best = f1;
+				
 				beta++;
 			}
 			
-			if(f1.getFitness() < best.getFitness()){
+			if(f2.getFitness() < best.getFitness()){
+				
 				best = f2;
+				
 				beta++;
 			}
 
 
 		}
 
-		//sortPopulation();
 		buildMinHeap();
 
 		if(generations == 0)
