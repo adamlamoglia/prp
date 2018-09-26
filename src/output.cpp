@@ -27,8 +27,7 @@ void Output::printDistanceMatrix(){
 	for(unsigned int i = 0; i < in->distance_matrix.size(); i++){
 		for(unsigned int j = 0; j < in->distance_matrix.size(); j++){
 
-			if(i != j)
-				cout << fixed << setprecision(0) << in->distance_matrix[i][j] << ",";
+				cout  << in->distance_matrix[i][j] << ",";
 
 		}
 

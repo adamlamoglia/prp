@@ -210,7 +210,7 @@ void Genetic::insertNodes(Individuo &f1, Individuo &f2){
 					}
 				}
 			}
-			
+
 	}
 
 }
@@ -371,6 +371,28 @@ int Genetic::deltaEvaluation(Individuo &s, int i, int k){
 	
 	swap(s.route[i],s.route[k]);
 
+	/*if(new_edges_value != in->distance_matrix[s.route[k]][s.route[i+1]]
+							+ in->distance_matrix[s.route[i-1]][s.route[k]]
+							+ in->distance_matrix[s.route[i]][s.route[k+1]]
+							+ in->distance_matrix[s.route[k-1]][s.route[i]]){
+	cout << new_edges_value << " " << in->distance_matrix[s.route[k]][s.route[i+1]]
+							+ in->distance_matrix[s.route[i-1]][s.route[k]]
+							+ in->distance_matrix[s.route[i]][s.route[k+1]]
+							+ in->distance_matrix[s.route[k-1]][s.route[i]] <<  " " << i << " " << k <<endl;
+
+							}
+	if(k == i+1){
+		new_edges_value = 		in->distance_matrix[s.route[k]][s.route[i]]
+							+ in->distance_matrix[s.route[i-1]][s.route[k]]
+							+ in->distance_matrix[s.route[k+1]][s.route[i]];
+	}
+	else{
+		new_edges_value = 		in->distance_matrix[s.route[k]][s.route[i+1]]
+							+ in->distance_matrix[s.route[i-1]][s.route[k]]
+							+ in->distance_matrix[s.route[i]][s.route[k+1]]
+							+ in->distance_matrix[s.route[k-1]][s.route[i]];
+	}*/
+
 	return new_edges_value - current_edges_value;
 }
 
@@ -389,9 +411,14 @@ void Genetic::twoOptFirstImprovement(Individuo &solution){
 				
 			for(unsigned int k = i + 1; k < in->num_vertices - 1; k++){
 
-				if(deltaEvaluation(solution,i,k) < 0){
-
-					swapNodes(solution,i,k);
+				delta = deltaEvaluation(solution,i,k);
+				
+				if(delta < 0){
+					
+					//swapNodes(solution,i,k);
+					swap(solution.route[i],solution.route[k]);
+					
+					solution.fitness += delta;
 
 					if(solution.getFitness() < lowest_fitness)
 						improvement = true;
@@ -540,17 +567,17 @@ void Genetic::run(){
 
 			if(mutation_number < probability){
 				
-				twoOptBestImprovement(f1);
-				twoOptBestImprovement(f2);
+				twoOptFirstImprovement(f1);
+				twoOptFirstImprovement(f2);
 
 				alfa++;
 			}
 
 			if(!searchFitness(f1))
-				randomInsertion(f1);
+				elitistInsertion(f1);
 
 			if(!searchFitness(f2))
-				randomInsertion(f2);
+				elitistInsertion(f2);
 
 			if(f1.getFitness() < best.getFitness()){
 				

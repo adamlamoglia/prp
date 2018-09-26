@@ -92,7 +92,7 @@ void Input::load(string name){
 						file >> num_vertices;
 
 						coordinates.resize( num_vertices );
-						distance_matrix.resize( num_vertices, vector<double>(num_vertices) );
+						distance_matrix.resize( num_vertices, vector<int>(num_vertices) );
 					}
 
 					if(reader == "EDGE_WEIGHT_TYPE"){
