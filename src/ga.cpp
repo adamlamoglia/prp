@@ -8,7 +8,6 @@
 #include "ga.h"
 
 
-
 int aux;
 
 Genetic::Genetic(Input *in, int alfa, int beta, int generations, double prob_mutation,
@@ -58,6 +57,22 @@ unsigned int Genetic::right(unsigned int i){
 void Genetic::sortPopulation(){
 
 	sort(population.begin(), population.end(), lowerFitness);
+}
+
+unsigned int Genetic::father(unsigned int i){
+	if( i%2 == 0 )
+		return i/2-1;
+	return i/2;
+		
+	
+}
+
+void Genetic::heapFix(unsigned int i){
+	int k=i;
+	while( k > 0 && population[father(k)].getFitness() > population[k].getFitness()){
+		swap(population[k],population[father(k)]);
+		k = father(k);
+	}
 }
 
 void Genetic::minHeapify(unsigned int i){
@@ -362,36 +377,20 @@ int Genetic::deltaEvaluation(Individuo &s, int i, int k){
 							+ in->distance_matrix[s.route[k]][s.route[k+1]]
 							+ in->distance_matrix[s.route[k-1]][s.route[k]];
 
-	swap(s.route[i],s.route[k]);
+	if(abs(k-i)==1){
 
-	new_edges_value = 		in->distance_matrix[s.route[i]][s.route[i+1]]
-							+ in->distance_matrix[s.route[i-1]][s.route[i]]
-							+ in->distance_matrix[s.route[k]][s.route[k+1]]
-							+ in->distance_matrix[s.route[k-1]][s.route[k]];
-	
-	swap(s.route[i],s.route[k]);
-
-	/*if(new_edges_value != in->distance_matrix[s.route[k]][s.route[i+1]]
+		new_edges_value = 	in->distance_matrix[s.route[k]][s.route[i]]
 							+ in->distance_matrix[s.route[i-1]][s.route[k]]
 							+ in->distance_matrix[s.route[i]][s.route[k+1]]
-							+ in->distance_matrix[s.route[k-1]][s.route[i]]){
-	cout << new_edges_value << " " << in->distance_matrix[s.route[k]][s.route[i+1]]
-							+ in->distance_matrix[s.route[i-1]][s.route[k]]
-							+ in->distance_matrix[s.route[i]][s.route[k+1]]
-							+ in->distance_matrix[s.route[k-1]][s.route[i]] <<  " " << i << " " << k <<endl;
-
-							}
-	if(k == i+1){
-		new_edges_value = 		in->distance_matrix[s.route[k]][s.route[i]]
-							+ in->distance_matrix[s.route[i-1]][s.route[k]]
-							+ in->distance_matrix[s.route[k+1]][s.route[i]];
+							+ in->distance_matrix[s.route[k]][s.route[i]];
 	}
 	else{
-		new_edges_value = 		in->distance_matrix[s.route[k]][s.route[i+1]]
+
+		new_edges_value = 	in->distance_matrix[s.route[k]][s.route[i+1]]
 							+ in->distance_matrix[s.route[i-1]][s.route[k]]
 							+ in->distance_matrix[s.route[i]][s.route[k+1]]
 							+ in->distance_matrix[s.route[k-1]][s.route[i]];
-	}*/
+	}
 
 	return new_edges_value - current_edges_value;
 }
@@ -415,10 +414,7 @@ void Genetic::twoOptFirstImprovement(Individuo &solution){
 				
 				if(delta < 0){
 					
-					//swapNodes(solution,i,k);
-					swap(solution.route[i],solution.route[k]);
-					
-					solution.fitness += delta;
+					swapNodes(solution,i,k);
 
 					if(solution.getFitness() < lowest_fitness)
 						improvement = true;
@@ -441,12 +437,14 @@ void Genetic::twoOptBestImprovement(Individuo &solution){
 
 	while(global_improvement){
 
-		best_delta = 0;
-
 		global_improvement = false;
+
+		lowest_fitness = solution.getFitness();
 
 		for(unsigned int i = 1; i < in->num_vertices - 2; i++){
 			
+			best_delta = 0;
+
 			improvement = false;
 
 			for(unsigned int k = i + 1; k < in->num_vertices - 1; k++){
@@ -458,14 +456,19 @@ void Genetic::twoOptBestImprovement(Individuo &solution){
 					best_delta = delta;
 					best_i = i;
 					best_k = k;
-					improvement =  global_improvement = true;
+					improvement = true;
 				
 				}
 
 			}
 
-			if(improvement)
+			if(improvement){
+
 				swapNodes(solution,best_i,best_k);
+
+				if(solution.getFitness() < lowest_fitness)
+					global_improvement = true;
+			}
 			
 		}
 
@@ -483,11 +486,10 @@ void Genetic::randomInsertion(Individuo &s){
 
 void Genetic::elitistInsertion(Individuo &s){
 
-		if(population[population.size() - 1].getFitness() > s.getFitness())
-			population[population.size() - 1] = s;
-		
-		minHeapify(population.size() - 1);
-
+		if(population[population.size() - 1].getFitness() > s.getFitness()){
+			population[population.size() - 1] = s;			
+			heapFix(population.size() - 1);
+		}		
 }
 
 bool Genetic::searchFitness(Individuo &s){
@@ -567,8 +569,8 @@ void Genetic::run(){
 
 			if(mutation_number < probability){
 				
-				twoOptFirstImprovement(f1);
-				twoOptFirstImprovement(f2);
+				twoOptBestImprovement(f1);
+				twoOptBestImprovement(f2);
 
 				alfa++;
 			}
@@ -596,7 +598,7 @@ void Genetic::run(){
 
 		}
 
-		buildMinHeap();
+		//buildMinHeap();
 
 		if(generations == 0)
 			best = population[0];
@@ -612,6 +614,7 @@ void Genetic::run(){
 	}
 
 	population[0] = best;
+
 }
 
 

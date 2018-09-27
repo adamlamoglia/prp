@@ -180,11 +180,15 @@ public:
 
 	unsigned int right(unsigned int i);
 
+	unsigned int father(unsigned int i);
+
 	void parent(unsigned int i);
 
 	void buildMinHeap();
 
 	void minHeapify(unsigned int i);
+
+	void heapFix(unsigned int i);
 
 };
 
