@@ -34,6 +34,11 @@ public:
 	//Represents the limit of generations of populations (stop criterion).
 	int	limit;
 
+	unsigned int selection_type,
+				 crossover_type,
+				 mutation_type,
+				 insertion_type;
+
 	int	random_person;
 
 	unsigned int random_node1;
@@ -44,13 +49,13 @@ public:
 
 	int lucky_range;
 
-	//Used to crossover the chosen parents.
-	//A size of cut is chosen and the split of chromosomes occurs
-	//at the point indicated by the cut size.
+	//Used to crossomutationScramble(Individuo &f)ents.
+	//A size of cut mutationScramble(Individuo &f)split of chromosomes occurs
+	//at the point imutationScramble(Individuo &f)t size.
 	int	cut_size;
 
-	//Used in partial replacement.
-	//New individuals are created from cut to population->size.
+	//Used in partiamutationScramble(Individuo &f)
+	//New individualmutationScramble(Individuo &f) cut to population->size.
 	int	cut;
 
 	//TODO: Comment
@@ -117,22 +122,28 @@ public:
 	//Variables such as alpha_max and beta_max are also present to finalize a generation of individuals.
 	void run();
 
+	//TODO: Comment
+	void selection(Individuo &i1, Individuo &i2, Individuo &p, int previous_fitness);
+
 	//Selects parents p1 and p2 for Crossover.
 	//The function randomly chooses two pairs of individuals,
 	//and each pair competes with each other for Crossover selection.
 	void binaryTour(Individuo &i1, Individuo &i2, Individuo &p, int previous_fitness);
 
+	//TODO: Comment
+	void crossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2);
 	//With value of the cut_size variable,
 	//the method switches part of the routes from p1 to p2,
 	//and these generate 2 new children f1 and f2.
 	void onePointCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2);
 
-	//TODO: Comment
-	void uniformCrossover(Individuo &p1, Individuo &p2,Individuo &f1, Individuo &f2);
+	void uniformCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2);
 
 	void swapNodeCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2);
 
 	//TODO: Comment
+	void mutation(Individuo &f);
+
 	void mutationSwap(Individuo &f);
 
 	void mutationScramble(Individuo &f);
@@ -151,6 +162,10 @@ public:
 	//Helper method for twoOpt().
 	//Only exchanges two route nodes.
 	void swapNodes(Individuo &s, int i, int k);
+
+
+	//TODO: Comment
+	void insertion(Individuo &s, Individuo &best, int &beta);
 
 	//Randomly chooses an individual
 	//of the population and compares with the child generated.

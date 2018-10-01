@@ -21,6 +21,8 @@ class Parametros {
 		static double getLuckyFactor();
 		static int getLuckyRange();
 		static int getMutationRange();
+		static int getCrossoverType();
+		static int getMutationType();
 		static double GetSeed();
 
 		

@@ -14,7 +14,7 @@ using namespace std;
 
 int main( int argc, char ** argv ) {
 
-	srand(time(NULL));
+	srand(5);
 
 	if(argc > 1){
 

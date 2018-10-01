@@ -133,6 +133,7 @@ void Genetic::partialReplacement(){
 	create(cut);
 }
 
+
 void Genetic::binaryTour(Individuo &i1, Individuo &i2, Individuo &p, int previous_fitness){
 
 		lucky_number = rand() % lucky_range;
@@ -228,6 +229,81 @@ void Genetic::insertNodes(Individuo &f1, Individuo &f2){
 
 	}
 
+}
+
+void Genetic::selection(Individuo &i1, Individuo &i2, Individuo &p, int previous_fitness){
+	
+	switch(selection_type){
+
+		case 1:
+			binaryTour(i1, i2, p, previous_fitness);
+		
+		default:
+			binaryTour(i1, i2, p, previous_fitness);
+	}
+	
+}
+
+void Genetic::crossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2){
+
+	switch(crossover_type){
+
+		case 1:
+			uniformCrossover(p1, p2, f1, f2);
+		
+		case 2:
+			swapNodeCrossover(p1, p2, f1, f2);
+		
+		case 3:
+			onePointCrossover(p1, p2, f1, f2);
+		
+		default:
+			swapNodeCrossover(p1, p2, f1, f2);
+	}
+}
+
+void Genetic::mutation(Individuo &f){
+
+	switch(mutation_type){
+
+		case 1:
+			mutationSwap(f);
+		
+		case 2:
+			mutationScramble(f);
+		
+		case 3:
+			mutationInversion(f);
+		
+		default:
+			mutationSwap(f);
+	}
+}
+
+void Genetic::insertion(Individuo &s, Individuo &best, int &beta){
+
+	if(!searchFitness(s)){
+		
+		switch(insertion_type){
+
+			case 1:
+				randomInsertion(s);
+			
+			case 2:
+				elitistInsertion(s);
+			
+			default:
+				elitistInsertion(s);
+		}
+
+		if(s.getFitness() < best.getFitness()){
+					
+			best = s;
+					
+			beta++;
+		}
+	}
+	
 }
 
 void Genetic::onePointCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2){
@@ -351,6 +427,12 @@ void Genetic::mutationSwap(Individuo &f){
 
 	swapNodes(f,random_node1,random_node2);
 
+}
+
+void Genetic::mutationScramble(Individuo &f){
+}
+
+void Genetic::mutationInversion(Individuo &f){	
 }
 
 void Genetic::swapNodes(Individuo &s, int i, int k){
@@ -534,11 +616,7 @@ void Genetic::run(){
 	// Sons of parents p1 and p2
 	Individuo f1(in),
 			  f2(in);
-	
-	// Sons after mutation
-	Individuo s1(in),
-			  s2(in);
-			  
+				  
 	// Best solution
 	Individuo  best(in);
 
@@ -554,16 +632,14 @@ void Genetic::run(){
 
 			best = population[0];
 
-			binaryTour(i1, i2, p1, 0);
-			binaryTour(i1, i2, p2, p1.getFitness());
+			selection(i1, i2, p1, 0);
+			selection(i1, i2, p2, p1.getFitness());
 
 
-			//onePointCrossover(p1, p2, f1, f2);
-			//uniformCrossover(p1, p2, f1, f2);
-			swapNodeCrossover(p1, p2, f1, f2);
+			crossover(p1, p2, f1, f2);
 
-			mutationSwap(f1);
-			mutationSwap(f2);
+			mutation(f1);
+			mutation(f2);
 
 			mutation_number = rand() % mutation_range;
 
@@ -575,36 +651,10 @@ void Genetic::run(){
 				alfa++;
 			}
 
-			if(!searchFitness(f1))
-				elitistInsertion(f1);
-
-			if(!searchFitness(f2))
-				elitistInsertion(f2);
-
-			if(f1.getFitness() < best.getFitness()){
-				
-				best = f1;
-				
-				beta++;
-			}
-			
-			if(f2.getFitness() < best.getFitness()){
-				
-				best = f2;
-				
-				beta++;
-			}
-
+			insertion(f1, best, beta);
+			insertion(f2, best, beta);
 
 		}
-
-		//buildMinHeap();
-
-		if(generations == 0)
-			best = population[0];
-
-		else if(population[0].getFitness() < best.getFitness())
-			best = population[0];
 
 		generations++;
 

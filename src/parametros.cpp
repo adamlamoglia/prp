@@ -68,33 +68,33 @@ double Parametros::getBetaMax(){
 int Parametros::getGenerations(){
 
 	try {
-		return stoi(vm["generations"]);
+		return stoi(vm["gens"]);
 	} catch (exception& e) {
 		cout << "error: " << e.what() << endl;
-		vm["generations"] = "100";
-		return stoi( vm["generations"]);
+		vm["gens"] = "100";
+		return stoi( vm["gens"]);
 	}
 }
 
 double Parametros::getProbability(){
 
 	try {
-		return stod(vm["probability"]);
+		return stod(vm["prob"]);
 	} catch (exception& e) {
 		cout << "error: " << e.what() << endl;
-		vm["probability"] = "25.4";
-		return stod( vm["probability"]);
+		vm["prob"] = "25.4";
+		return stod( vm["prob"]);
 	}
 }
 
 int Parametros::getPopulationSize(){
 
 	try {
-		return stod(vm["popSize"]);
+		return stod(vm["psize"]);
 	} catch (exception& e) {
 		cout << "error: " << e.what() << endl;
-		vm["popSize"] = "30";
-		return stod( vm["popSize"]);
+		vm["psize"] = "30";
+		return stod( vm["psize"]);
 	}
 }
 
@@ -143,11 +143,11 @@ void Parametros::Store(int argc, char * argv[ ]) {
 			{ "seed", required_argument, 0,					002 },
 			{ "alpha", required_argument, 0,				003 },
 			{ "beta"		, required_argument, 0,			004 },
-			{ "popSize"			, required_argument, 0,		005 },
+			{ "psize"			, required_argument, 0,		005 },
 			{ "luckyFactor"			, required_argument, 0,	006 },
 			{ "luckyRange"			, required_argument, 0,	007 },
 			{ "mutationRange"		, required_argument, 0,	010 },
-			{ "probability"			, required_argument, 0,	011 },
+			{ "prob"			, required_argument, 0,	011 },
 			{ "help", no_argument, 0,						076 },
 			{ "h", no_argument, 0,							076 },
 			{ 0,0, 0, 0 } };
@@ -171,7 +171,7 @@ void Parametros::Store(int argc, char * argv[ ]) {
 			vm["beta"] = string(optarg);
 			break;
 		case 005:
-			vm["popSize"] = string(optarg);
+			vm["psize"] = string(optarg);
 			break;
 		case 006:
 			vm["luckyFactor"] = string(optarg);
@@ -183,7 +183,7 @@ void Parametros::Store(int argc, char * argv[ ]) {
 			vm["mutationRange"] = string(optarg);
 			break;
 		case 011:
-			vm["probability"] = string(optarg);
+			vm["prob"] = string(optarg);
 			break;
 		case 076:
 			cout<<"write a help." << endl;
