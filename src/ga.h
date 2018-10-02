@@ -101,7 +101,9 @@ public:
 	vector<Individuo> population;
 
 	Genetic(Input *in, int alfa, int beta, int generations, double prob_mutation,
-			int num_individuals, double lucky_factor, int lucky_range, int mutation_range);
+			int num_individuals, double lucky_factor, int lucky_range, 
+			int mutation_range,int stype, int ctype, int mtype, int itype);
+
 	~Genetic();
 
 	//Initializes a new population according to the limit of individuals.
@@ -129,6 +131,10 @@ public:
 	//The function randomly chooses two pairs of individuals,
 	//and each pair competes with each other for Crossover selection.
 	void binaryTour(Individuo &i1, Individuo &i2, Individuo &p, int previous_fitness);
+
+	void rankSelection(Individuo &i1, Individuo &i2, Individuo &p, int previous_fitness);
+
+	void randomSelection(Individuo &p);
 
 	//TODO: Comment
 	void crossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2);

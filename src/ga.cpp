@@ -11,7 +11,8 @@
 int aux;
 
 Genetic::Genetic(Input *in, int alfa, int beta, int generations, double prob_mutation,
-		int size, double lucky_factor, int lucky_range, int mutation_range) {
+		int size, double lucky_factor, int lucky_range, int mutation_range,
+		int stype, int ctype, int mtype, int itype) {
 
 	this->in = in;
 
@@ -134,6 +135,89 @@ void Genetic::partialReplacement(){
 }
 
 
+
+
+void Genetic::selection(Individuo &i1, Individuo &i2, Individuo &p, int previous_fitness){
+	
+	switch(selection_type){
+
+		case 1:
+			binaryTour(i1, i2, p, previous_fitness);
+		
+		case 2:
+			randomSelection(p);
+		
+		case 3:
+			rankSelection(i1, i2, p, previous_fitness);
+		
+		default:
+			binaryTour(i1, i2, p, previous_fitness);
+	}
+	
+}
+
+void Genetic::crossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2){
+
+	switch(crossover_type){
+
+		case 1:
+			swapNodeCrossover(p1, p2, f1, f2);
+		
+		case 2:
+			uniformCrossover(p1, p2, f1, f2);
+		
+		case 3:
+			onePointCrossover(p1, p2, f1, f2);
+		
+		default:
+			swapNodeCrossover(p1, p2, f1, f2);
+	}
+}
+
+void Genetic::mutation(Individuo &f){
+
+	switch(mutation_type){
+
+		case 1:
+			mutationSwap(f);
+		
+		case 2:
+			mutationScramble(f);
+		
+		case 3:
+			mutationInversion(f);
+		
+		default:
+			mutationSwap(f);
+	}
+}
+
+void Genetic::insertion(Individuo &s, Individuo &best, int &beta){
+
+	if(!searchFitness(s)){
+		
+		switch(insertion_type){
+
+			case 1:
+				elitistInsertion(s);
+				
+			case 2:
+				randomInsertion(s);
+			
+			default:
+				elitistInsertion(s);
+		}
+
+		if(s.getFitness() < best.getFitness()){
+					
+			best = s;
+					
+			beta++;
+		}
+	}
+	
+}
+
 void Genetic::binaryTour(Individuo &i1, Individuo &i2, Individuo &p, int previous_fitness){
 
 		lucky_number = rand() % lucky_range;
@@ -158,6 +242,67 @@ void Genetic::binaryTour(Individuo &i1, Individuo &i2, Individuo &p, int previou
 
 		else
 			p = i2;
+
+}
+
+void Genetic::rankSelection(Individuo &i1, Individuo &i2, Individuo &p, int previous_fitness){
+
+}
+
+void Genetic::randomSelection(Individuo &p){
+
+	p = population[ rand() % population.size() ];
+}
+
+void Genetic::onePointCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2){
+
+		f1 = p1;
+		f2 = p2;
+
+
+		for(unsigned int i = cut_size; i < in->num_vertices; i++){
+			inserted_vertex_f1[f1.route[i]] = true;
+			inserted_vertex_f2[f2.route[i]] = true;
+		}
+
+
+		for(int i = 1; i < cut_size; i++){
+
+			if(inserted_vertex_f1[p2.route[i]])
+				repeated_vertex_f1[p2.route[i]] = true;
+			else
+				inserted_vertex_f1[p2.route[i]] = true;
+
+
+			f1.route[i] = p2.route[i];
+		}
+
+
+		for(int i = 1; i < cut_size; i++){
+
+			if(inserted_vertex_f2[p1.route[i]])
+				repeated_vertex_f2[p1.route[i]] = true;
+			else
+				inserted_vertex_f2[p1.route[i]] = true;
+
+
+			f2.route[i] = p1.route[i];
+		}
+
+
+
+		removeRepeatedNodes(f1,f2);
+		insertNodes(f1,f2);
+
+		f1.setFitness();
+		f2.setFitness();
+
+		for(unsigned int i = 1; i < in->num_vertices; i++){
+			inserted_vertex_f1[i] = false;
+			inserted_vertex_f2[i] = false;
+			repeated_vertex_f1[i] = false;
+			repeated_vertex_f2[i] = false;
+		}
 
 }
 
@@ -228,133 +373,6 @@ void Genetic::insertNodes(Individuo &f1, Individuo &f2){
 			}
 
 	}
-
-}
-
-void Genetic::selection(Individuo &i1, Individuo &i2, Individuo &p, int previous_fitness){
-	
-	switch(selection_type){
-
-		case 1:
-			binaryTour(i1, i2, p, previous_fitness);
-		
-		default:
-			binaryTour(i1, i2, p, previous_fitness);
-	}
-	
-}
-
-void Genetic::crossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2){
-
-	switch(crossover_type){
-
-		case 1:
-			uniformCrossover(p1, p2, f1, f2);
-		
-		case 2:
-			swapNodeCrossover(p1, p2, f1, f2);
-		
-		case 3:
-			onePointCrossover(p1, p2, f1, f2);
-		
-		default:
-			swapNodeCrossover(p1, p2, f1, f2);
-	}
-}
-
-void Genetic::mutation(Individuo &f){
-
-	switch(mutation_type){
-
-		case 1:
-			mutationSwap(f);
-		
-		case 2:
-			mutationScramble(f);
-		
-		case 3:
-			mutationInversion(f);
-		
-		default:
-			mutationSwap(f);
-	}
-}
-
-void Genetic::insertion(Individuo &s, Individuo &best, int &beta){
-
-	if(!searchFitness(s)){
-		
-		switch(insertion_type){
-
-			case 1:
-				randomInsertion(s);
-			
-			case 2:
-				elitistInsertion(s);
-			
-			default:
-				elitistInsertion(s);
-		}
-
-		if(s.getFitness() < best.getFitness()){
-					
-			best = s;
-					
-			beta++;
-		}
-	}
-	
-}
-
-void Genetic::onePointCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2){
-
-		f1 = p1;
-		f2 = p2;
-
-
-		for(unsigned int i = cut_size; i < in->num_vertices; i++){
-			inserted_vertex_f1[f1.route[i]] = true;
-			inserted_vertex_f2[f2.route[i]] = true;
-		}
-
-
-		for(int i = 1; i < cut_size; i++){
-
-			if(inserted_vertex_f1[p2.route[i]])
-				repeated_vertex_f1[p2.route[i]] = true;
-			else
-				inserted_vertex_f1[p2.route[i]] = true;
-
-
-			f1.route[i] = p2.route[i];
-		}
-
-
-		for(int i = 1; i < cut_size; i++){
-
-			if(inserted_vertex_f2[p1.route[i]])
-				repeated_vertex_f2[p1.route[i]] = true;
-			else
-				inserted_vertex_f2[p1.route[i]] = true;
-
-
-			f2.route[i] = p1.route[i];
-		}
-
-
-
-		removeRepeatedNodes(f1,f2);
-		insertNodes(f1,f2);
-
-		f1.setFitness();
-		f2.setFitness();
-
-		for(unsigned int i = 1; i < in->num_vertices; i++){
-			inserted_vertex_f1[i] = false;
-			inserted_vertex_f2[i] = false;
-			repeated_vertex_f1[i] = false;
-			repeated_vertex_f2[i] = false;
-		}
 
 }
 
@@ -435,46 +453,26 @@ void Genetic::mutationScramble(Individuo &f){
 void Genetic::mutationInversion(Individuo &f){	
 }
 
-void Genetic::swapNodes(Individuo &s, int i, int k){
+void Genetic::randomInsertion(Individuo &s){
 
-	current_edges_value = 	in->distance_matrix[s.route[i]][s.route[i+1]]
-							+ in->distance_matrix[s.route[i-1]][s.route[i]]
-							+ in->distance_matrix[s.route[k]][s.route[k+1]]
-							+ in->distance_matrix[s.route[k-1]][s.route[k]];
+	random_person = rand() % population.size()/2 + population.size()/2;
 
-	swap(s.route[i],s.route[k]);
-
-	new_edges_value = 		in->distance_matrix[s.route[i]][s.route[i+1]]
-							+ in->distance_matrix[s.route[i-1]][s.route[i]]
-							+ in->distance_matrix[s.route[k]][s.route[k+1]]
-							+ in->distance_matrix[s.route[k-1]][s.route[k]];
-
-	s.fitness = s.fitness - current_edges_value + new_edges_value;
+	if(population[random_person].getFitness() > s.getFitness()){
+		
+		population[random_person] = s;
+		
+		heapFix(random_person);
+	}
 }
 
-int Genetic::deltaEvaluation(Individuo &s, int i, int k){
-	
-	current_edges_value = 	in->distance_matrix[s.route[i]][s.route[i+1]]
-							+ in->distance_matrix[s.route[i-1]][s.route[i]]
-							+ in->distance_matrix[s.route[k]][s.route[k+1]]
-							+ in->distance_matrix[s.route[k-1]][s.route[k]];
+void Genetic::elitistInsertion(Individuo &s){
 
-	if(abs(k-i)==1){
-
-		new_edges_value = 	in->distance_matrix[s.route[k]][s.route[i]]
-							+ in->distance_matrix[s.route[i-1]][s.route[k]]
-							+ in->distance_matrix[s.route[i]][s.route[k+1]]
-							+ in->distance_matrix[s.route[k]][s.route[i]];
-	}
-	else{
-
-		new_edges_value = 	in->distance_matrix[s.route[k]][s.route[i+1]]
-							+ in->distance_matrix[s.route[i-1]][s.route[k]]
-							+ in->distance_matrix[s.route[i]][s.route[k+1]]
-							+ in->distance_matrix[s.route[k-1]][s.route[i]];
-	}
-
-	return new_edges_value - current_edges_value;
+		if(population[population.size() - 1].getFitness() > s.getFitness()){
+			
+			population[population.size() - 1] = s;			
+			
+			heapFix(population.size() - 1);
+		}		
 }
 
 void Genetic::twoOptFirstImprovement(Individuo &solution){
@@ -558,21 +556,48 @@ void Genetic::twoOptBestImprovement(Individuo &solution){
 
 }
 
-void Genetic::randomInsertion(Individuo &s){
+void Genetic::swapNodes(Individuo &s, int i, int k){
 
-	random_person = rand() % population.size()/2 + population.size()/2;
+	current_edges_value = 	in->distance_matrix[s.route[i]][s.route[i+1]]
+							+ in->distance_matrix[s.route[i-1]][s.route[i]]
+							+ in->distance_matrix[s.route[k]][s.route[k+1]]
+							+ in->distance_matrix[s.route[k-1]][s.route[k]];
 
-	if(population[random_person].getFitness() > s.getFitness())
-		population[random_person] = s;
+	swap(s.route[i],s.route[k]);
+
+	new_edges_value = 		in->distance_matrix[s.route[i]][s.route[i+1]]
+							+ in->distance_matrix[s.route[i-1]][s.route[i]]
+							+ in->distance_matrix[s.route[k]][s.route[k+1]]
+							+ in->distance_matrix[s.route[k-1]][s.route[k]];
+
+	s.fitness = s.fitness - current_edges_value + new_edges_value;
 }
 
-void Genetic::elitistInsertion(Individuo &s){
+int Genetic::deltaEvaluation(Individuo &s, int i, int k){
+	
+	current_edges_value = 	in->distance_matrix[s.route[i]][s.route[i+1]]
+							+ in->distance_matrix[s.route[i-1]][s.route[i]]
+							+ in->distance_matrix[s.route[k]][s.route[k+1]]
+							+ in->distance_matrix[s.route[k-1]][s.route[k]];
 
-		if(population[population.size() - 1].getFitness() > s.getFitness()){
-			population[population.size() - 1] = s;			
-			heapFix(population.size() - 1);
-		}		
+	if(abs(k-i)==1){
+
+		new_edges_value = 	in->distance_matrix[s.route[k]][s.route[i]]
+							+ in->distance_matrix[s.route[i-1]][s.route[k]]
+							+ in->distance_matrix[s.route[i]][s.route[k+1]]
+							+ in->distance_matrix[s.route[k]][s.route[i]];
+	}
+	else{
+
+		new_edges_value = 	in->distance_matrix[s.route[k]][s.route[i+1]]
+							+ in->distance_matrix[s.route[i-1]][s.route[k]]
+							+ in->distance_matrix[s.route[i]][s.route[k+1]]
+							+ in->distance_matrix[s.route[k-1]][s.route[i]];
+	}
+
+	return new_edges_value - current_edges_value;
 }
+
 
 bool Genetic::searchFitness(Individuo &s){
 
