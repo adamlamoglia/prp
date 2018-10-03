@@ -104,8 +104,6 @@ public:
 			int num_individuals, double lucky_factor, int lucky_range, 
 			int mutation_range,int stype, int ctype, int mtype, int itype);
 
-	~Genetic();
-
 	//Initializes a new population according to the limit of individuals.
 	//The function creates individuals from limit to population.size,
 	//and replaces any solution that where in population before.

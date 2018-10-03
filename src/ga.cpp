@@ -37,10 +37,6 @@ Genetic::Genetic(Input *in, int alfa, int beta, int generations, double prob_mut
 
 }
 
-Genetic::~Genetic(){
-
-}
-
 bool lowerFitness(Individuo a, Individuo b){
 	return a.getFitness() < b.getFitness();
 }
