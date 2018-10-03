@@ -134,9 +134,6 @@ void Genetic::partialReplacement(){
 	create(cut);
 }
 
-
-
-
 void Genetic::selection(Individuo &i1, Individuo &i2, Individuo &p, int previous_fitness){
 	
 	switch(selection_type){
@@ -246,7 +243,6 @@ void Genetic::binaryTour(Individuo &i1, Individuo &i2, Individuo &p, int previou
 }
 
 void Genetic::rankSelection(Individuo &i1, Individuo &i2, Individuo &p, int previous_fitness){
-
 }
 
 void Genetic::randomSelection(Individuo &p){
@@ -448,9 +444,43 @@ void Genetic::mutationSwap(Individuo &f){
 }
 
 void Genetic::mutationScramble(Individuo &f){
+
+	Individuo antigo(in);
+
+	antigo = f;
+
+	do{
+		random_node1 = rand() % in->num_vertices;
+
+	}while( random_node1 > in->num_vertices - 4 );
+	
+	//TODO: Determine number of nodes to be scrambled 
+	random_shuffle ( f.route.begin() + random_node1, f.route.begin() + random_node1 + 4 );
+
+	//TODO: Do the rest of method
+
 }
 
 void Genetic::mutationInversion(Individuo &f){	
+
+	do{
+
+		random_node1 = rand() % in->num_vertices;
+
+	}while( random_node1 > in->num_vertices - 4 );
+	
+	//TODO: Determine number of nodes to be inversed
+	reverse ( f.route.begin() + random_node1, f.route.begin() + random_node1 + 4 );
+	
+	int end = random_node1 + 3;
+		
+	for(unsigned int i = random_node1; i < random_node1 + 4; i++){
+			
+		f.fitness += deltaEvaluation(f, i, end);
+
+		end--;
+	}
+			
 }
 
 void Genetic::randomInsertion(Individuo &s){
@@ -597,7 +627,6 @@ int Genetic::deltaEvaluation(Individuo &s, int i, int k){
 
 	return new_edges_value - current_edges_value;
 }
-
 
 bool Genetic::searchFitness(Individuo &s){
 
