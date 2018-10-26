@@ -472,7 +472,7 @@ void Genetic::mutationInversion(Individuo &f){
 		
 	for(unsigned int i = random_node1; i < random_node1 + 4; i++){
 			
-		f.fitness += deltaEvaluation(f, i, end);
+		f.fitness_set(f.fitness_get() + deltaEvaluation(f, i, end));
 
 		end--;
 	}
@@ -596,7 +596,8 @@ void Genetic::swapNodes(Individuo &s, int i, int k){
 							+ in->distance_matrix[s.route[k]][s.route[k+1]]
 							+ in->distance_matrix[s.route[k-1]][s.route[k]];
 
-	s.fitness = s.fitness - current_edges_value + new_edges_value;
+	//s.fitness = s.fitness - current_edges_value + new_edges_value;
+	s.fitness_set(s.fitness_get() - current_edges_value + new_edges_value);	
 }
 
 int Genetic::deltaEvaluation(Individuo &s, int i, int k){

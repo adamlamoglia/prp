@@ -25,7 +25,7 @@ class Parametros {
 		static int getCrossoverType();
 		static int getMutationType();
 		static int getInsertionType();
-		static double GetSeed();
+		static double getSeed();
 
 		
 

@@ -23,9 +23,6 @@ public:
 	//Sequence of indexes related to vehicle route
 	vector<int> index;
 
-	//Represents the value of route.
-	int fitness;
-
 	Output(Input *in);
 
 	void printDistanceMatrix();
@@ -38,7 +35,12 @@ public:
 
 	void printArray2d();
 
+	void fitness_set(int f);
 
+	int fitness_get();
+private:
+	//Represents the value of route.
+	int fitness;
 };
 
 #endif /* OUTPUT_H_ */

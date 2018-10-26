@@ -10,7 +10,7 @@ debug: dbg clean
 prp: $(CPPSOURCES:.cpp=.o)
 	@g++ $(CPPFLAGS) -o $@ $^
 
-dbg: CPPFLAGS += -pg -Wall
+dbg: CPPFLAGS += -g -Wall
 dbg: $(CPPSOURCES:.cpp=.o)
 	@g++ $(CPPFLAGS) -o debug $^
 

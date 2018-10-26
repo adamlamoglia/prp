@@ -16,6 +16,7 @@ class Genetic{
 
 public:
 
+	int seed;
     //Represents a pointer to class Input, that contains size of graph and distance matrix.
 	Input *in;
 

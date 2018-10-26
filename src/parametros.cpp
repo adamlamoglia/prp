@@ -32,7 +32,7 @@ string Parametros::getInstance(){
 	}
 }
 
-double Parametros::GetSeed(){
+double Parametros::getSeed(){
 
 	try {
 		return stod(vm["seed"]);

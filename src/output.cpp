@@ -6,7 +6,7 @@
  */
 
 #include "output.h"
-
+#include <cassert>
 
 
 Output::Output(Input *in) {
@@ -45,6 +45,19 @@ void Output::printRoute(){
 
 }
 
+void Output::fitness_set(int f){
+	if(f < 0){
+		cout<<"erro"<<endl;
+		exit(0);
+	}
+	
+	this->fitness =  f;
+}
+
+int Output::fitness_get(){
+	return this->fitness;
+}
+
 void Output::printIndexes(){
 
 	for(unsigned int i = 0; i < in->num_vertices; i++)
@@ -57,8 +70,6 @@ void Output::printIndexes(){
 void Output::printFitness(){
 
 	std::cout << "Best " << fitness << std::endl;
-
-	//cout << fitness << endl;
 
 }
 

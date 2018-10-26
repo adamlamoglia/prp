@@ -14,7 +14,8 @@ using namespace std;
 
 int main( int argc, char ** argv ) {
 
-	srand(time(NULL));
+	int seed = time(NULL);
+	srand(seed);
 
 	if(argc > 1){
 
@@ -40,6 +41,7 @@ int main( int argc, char ** argv ) {
 			Parametros::getMutationType(),		// Standard: 1
 			Parametros::getInsertionType()); 	// Standard: 1
 
+		cout << seed << endl;
 		ga.run();
 		ga.showResult();
 	}

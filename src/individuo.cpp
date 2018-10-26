@@ -13,15 +13,16 @@ Individuo::Individuo(Input *in) : Output(in) {
 }
 
 void Individuo::setFitness(){
-	fitness = 0;
+
+	fitness_set(0);
 
 	for(unsigned int i = 0; i < route.size() - 1; i++)
-		fitness += in->distance_matrix[route[i]][route[i+1]];
+		fitness_set( fitness_get() + in->distance_matrix[route[i]][route[i+1]]);
 
 }
 
 int Individuo::getFitness(){
-	return fitness;
+	return fitness_get();
 }
 
 void Individuo::setRoute(unsigned int id, unsigned int vertex){
