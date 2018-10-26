@@ -24,7 +24,7 @@ int main( int argc, char ** argv ) {
 
 		in.load(Parametros::getInstance());
 
-		cout << "GA for one vehicle, " << Parametros::getGenerations() << " generations" << endl;
+		//cout << "GA for one vehicle, " << Parametros::getGenerations() << " generations" << endl;
 
 		Genetic ga(&in, 
 			Parametros::getAlphaMax(),			// Standard: 300

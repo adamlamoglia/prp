@@ -635,7 +635,7 @@ bool Genetic::searchFitness(Individuo &s){
 
 void Genetic::showResult(){
 
-	population[0].printRoute();
+	//population[0].printRoute();
 	population[0].printFitness();
 
 }
@@ -674,7 +674,7 @@ void Genetic::run(){
 
 	while(generations <= limit){
 
-		cout << "generation " << generations << " - ";
+		//cout << "generation " << generations << " - "<<flush;
 
 		alfa = beta = 0;
 
@@ -708,7 +708,7 @@ void Genetic::run(){
 
 		generations++;
 
-		cout << "best fitness: " << best.getFitness() << endl;
+		//cout << "best fitness: " << best.getFitness() << endl;
 
 		partialReplacement();
 	}

@@ -56,7 +56,9 @@ void Output::printIndexes(){
 
 void Output::printFitness(){
 
-	cout << fitness << endl;
+	std::cout << "Best " << fitness << std::endl;
+
+	//cout << fitness << endl;
 
 }
 

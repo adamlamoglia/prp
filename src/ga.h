@@ -112,7 +112,6 @@ public:
 	//Initializes init() with the limit parameter.
 	void create(int limit);
 
-
 	int generateRandom();
 
 	//This function is the Genetic Algorithm.
@@ -210,6 +209,5 @@ public:
 	void heapFix(unsigned int i);
 
 };
-
 
 #endif /* GA_H_ */
