@@ -110,12 +110,8 @@ public:
 	//and replaces any solution that where in population before.
 	void init();
 
-	void init2();
-	
 	//Initializes init() with the limit parameter.
 	void create(int limit);
-
-	void create2(int limit);
 
 	int generateRandom();
 

@@ -92,8 +92,6 @@ void Genetic::minHeapify(unsigned int i){
 		minHeapify(smallest);
 	}
 
-	
-	
 }
 
 void Genetic::buildMinHeap(){
@@ -107,10 +105,13 @@ void Genetic::create(int limit){
 
 	for(unsigned int i = limit; i < population.size(); i++){
 
-		for(unsigned int index = 1; index < in->num_vertices; index++)
-			population[i].setRoute(index,index);
+		for(unsigned int index = 0; index < population[i].route.size(); index++)
+			population[i].setRoute(index, index + 1);
 
-		random_shuffle ( population[i].route.begin() + 1, population[i].route.end() - 1);
+		random_shuffle ( population[i].route.begin(), population[i].route.end() );
+
+		population[i].setStart(population[i].route[0]);
+		population[i].setEnd(population[i].route[population[i].route.size() - 1]);
 
 		population[i].setFitness();
 		
@@ -120,28 +121,9 @@ void Genetic::create(int limit){
 
 }
 
-void Genetic::create2(int limit){
-
-	for(unsigned int i = limit; i < population.size(); i++){
-
-		for(unsigned int index = 1; index < in->num_vertices - 1; index++)
-			population[i].setNewRoute(index - 1,index);
-
-		random_shuffle ( population[i].route.begin(), population[i].route.end());
-
-		population[i].setNewFitness();
-		
-	}
-}
-
 void Genetic::init(){
 
 	create(0);
-}
-
-void Genetic::init2(){
-
-	create2(0);
 }
 
 void Genetic::partialReplacement(){
@@ -602,6 +584,23 @@ void Genetic::twoOptBestImprovement(Individuo &solution){
 }
 
 void Genetic::swapNodes(Individuo &s, int i, int k){
+	
+	if(i == 0){
+		current_edges_value += 	in->distance_matrix[0][s.route[i]]
+								+ in->distance_matrix[s.route[i]][s.route[i+1]];
+	}
+	if( i == s.route.size() - 1){
+		current_edges_value += 	in->distance_matrix[s.route[i-1]][s.route[i]]
+								+ in->distance_matrix[s.route[i]][0];
+	}
+	if(k == 0){
+		current_edges_value += 	in->distance_matrix[0][s.route[k]]
+								+ in->distance_matrix[s.route[k]][s.route[k+1]];
+	}
+	if( k == s.route.size() - 1){
+		current_edges_value += 	in->distance_matrix[s.route[k-1]][s.route[k]]
+								+ in->distance_matrix[s.route[k]][0];
+	}
 
 	current_edges_value = 	in->distance_matrix[s.route[i]][s.route[i+1]]
 							+ in->distance_matrix[s.route[i-1]][s.route[i]]
@@ -615,7 +614,6 @@ void Genetic::swapNodes(Individuo &s, int i, int k){
 							+ in->distance_matrix[s.route[k]][s.route[k+1]]
 							+ in->distance_matrix[s.route[k-1]][s.route[k]];
 
-	//s.fitness = s.fitness - current_edges_value + new_edges_value;
 	s.fitness_set(s.fitness_get() - current_edges_value + new_edges_value);	
 }
 
@@ -690,6 +688,8 @@ void Genetic::run(){
 	Individuo  best(in);
 
 	init();
+
+	exit(0);
 
 	while(generations <= limit){
 

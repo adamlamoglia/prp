@@ -19,15 +19,9 @@ public:
 
 	int getFitness();
 
-	int getNewFitness();
-
 	void setFitness();
 
-	void setNewFitness();
-
 	void setRoute(unsigned int id, unsigned int vertex);
-
-	void setNewRoute(unsigned int id, unsigned int vertex);
 
 	void setIndexes();
 

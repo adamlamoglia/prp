@@ -20,8 +20,6 @@ public:
 	//Used to output a sequence of nodes representing the vertex of graph that was visited.
 	vector<int> route;
 
-	vector<int> new_route;
-
 	//Indicates the beginning and end of a route from a vehicle 
 	pair<int,int> vehicle;
 
@@ -42,10 +40,6 @@ public:
 
 	void fitness_set(int f);
 
-	void newFitnessSet(int f);
-
-	int newFitnessGet();
-
 	int fitness_get();
 
 	void setStart(int index_start);
@@ -55,7 +49,6 @@ public:
 private:
 	//Represents the value of route.
 	int fitness;
-	int new_fitness;
 };
 
 #endif /* OUTPUT_H_ */

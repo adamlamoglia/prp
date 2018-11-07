@@ -14,9 +14,7 @@ Output::Output(Input *in) {
 	this->in = in;
 
 	//o tamanho da rota tem um valor a mais, pois sempre ha o retorno para o deposito
-	route.resize(in->num_vertices + 1, 0);
-
-	new_route.resize(in->num_vertices - 1, 0);
+	route.resize(in->num_vertices - 1, 0);
 	
 	index.resize(in->num_vertices, 0);
 	
@@ -45,7 +43,7 @@ void Output::printDistanceMatrix(){
 void Output::printRoute(){
 
 	for(unsigned int i = 0; i < route.size(); i++)
-		cout << route[i]+1 << " ";
+		cout << route[i] << " ";
 
 	cout << endl;
 
@@ -54,15 +52,6 @@ void Output::printRoute(){
 void Output::fitness_set(int f){
 		
 	this->fitness =  f;
-}
-
-void Output::newFitnessSet(int f){
-
-	this->new_fitness = f;
-}
-
-int Output::newFitnessGet(){
-	return new_fitness;
 }
 
 int Output::fitness_get(){
