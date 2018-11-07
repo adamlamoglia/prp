@@ -40,8 +40,7 @@ int main( int argc, char ** argv ) {
 			Parametros::getCrossoverType(),		// Standard: 1
 			Parametros::getMutationType(),		// Standard: 1
 			Parametros::getInsertionType()); 	// Standard: 1
-
-		cout << seed << endl;
+			
 		ga.run();
 		ga.showResult();
 	}
