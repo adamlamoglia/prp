@@ -1,0 +1,31 @@
+
+1 parametro = /home/turin-turambar/Dropbox/Bruno/irace/exemplo/brkga-ig/bin/brkga-igb-netbeans
+2 parametro = --tries
+3 parametro = 1
+4 parametro = --quiet
+5 parametro = -i
+6 parametro = /home/turin-turambar/Dropbox/Bruno/irace/exemplo/brkga-ig/Instances/brock200_1.clq
+7 parametro = --seed
+8 parametro = 1636326408
+9 parametro = --n
+10 parametro = 98
+11 parametro = --pe
+12 parametro = 0.25
+13 parametro = --pm
+14 parametro = 0.22
+15 parametro = --rhoe
+p = 98
+pe = 0.25
+pm = 0.22
+rhoe = 0.51
+Instancia = /home/turin-turambar/Dropbox/Bruno/irace/exemplo/brkga-ig/Instances/brock200_1.clq
+
+Semente = 1636326408
+
+
+/home/turin-turambar/Dropbox/Bruno/irace/exemplo/brkga-ig/Instances/brock200_1.clq
+vertices: 200
+arestas: 14834
+densidade: 0.800000
+
+Tempo para Carregar a Instância: 0.003819

@@ -1,0 +1,59 @@
+# Caminho para o executável do seu programa:
+# Pode colocar o endereçamento direto: EXE=~/bin/program, mas no meu caso tive problema
+EXE=/home/adamlamoglia/prp
+
+# Fixed parameters that should be always passed to software.
+# The time to be used is always 5 seconds, and we want only one run:
+# FIXED_PARAMS=" --tries 1 --quiet "
+FIXED_PARAMS= " "
+
+CONFIG_ID="$1"
+INSTANCE_ID="$2"
+SEED="$3"
+INSTANCE="$4"
+# All other parameters are the candidate parameters to be passed to program
+shift 4 || error "Not enough parameters to $0"
+CONFIG_PARAMS=$*
+
+STDOUT=c${CONFIG_ID}-${INSTANCE_ID}.stdout
+STDERR=c${CONFIG_ID}-${INSTANCE_ID}.stderr
+
+# In case of error, we print the current time:
+error() {
+    echo "`TZ=UTC date`: error: $@" >&2
+    exit 1
+}
+
+if [ ! -x "${EXE}" ]; then
+    error "${EXE}: not found or not executable (pwd: $(pwd))"
+fi
+
+# Now we can call software by building a command line with all parameters for it
+# no meu caso, o IRACE gerava, como exemplo, a seguinte linha de comando para o meu 
+# programa: ./brkga --tries 1 --quiet -i /home/bruno/R/irace/examples/brkga/Instances//keller5.clq –# seed 100 --n 86 --pe 0.15 --pm 0.13 --rhoe 0.62
+$EXE ${FIXED_PARAMS} --i $INSTANCE ${CONFIG_PARAMS} 1> $STDOUT 2> $STDERR
+
+# O código abaixo verifica se o arquivo STDOUT foi criado, se não existir gera um erro.
+# Erros comuns: Endereçamento incorreto, ou falta de algum dos arquivos necessários(STDOUT, 
+# ou seu programa).
+if [ ! -s "${STDOUT}" ]; then
+    error "${STDOUT}: No such file or directory"
+fi
+
+# Se o arquivo existe, significa que seu programa deve ter impresso os resultados nele.
+# O formato padrão é ter uma linha com o resultado obtido, no formato
+# Best numero, exemplo : “Best 100”.
+# Pode imprimir qualquer coisa na saída do programa, o importante é ter uma linha neste formato.
+# Se não existir, o Irace dará o erro  “Output is not a number”
+COST=$(cat ${STDOUT} | grep -o -E 'Best [-+0-9.e]+' | cut -d ' ' -f2)
+if ! [[ "$COST" =~ ^[-+0-9.e]+$ ]] ; then
+    error "${STDOUT}: Output is not a number"
+fi
+
+# Imprime o valor encontrado!
+echo "$COST"
+
+# Apaga os arquivos e finaliza com sucesso.
+#rm -f "${STDOUT}" "${STDERR}"
+rm -f best.* stat.* cmp.*
+exit 0

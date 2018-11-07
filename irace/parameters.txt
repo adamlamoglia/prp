@@ -1,0 +1,10 @@
+### Arquivo de Parâmetros para o software GA-PRP
+
+# name		    switch		     type	        values			
+
+
+alpha     	    "--alpha "     	     r  	(100, 10000)
+beta     	    "--beta "     	     r  	(100, 10000)
+probability     "--prob "     	     r  	(0.001, 100)
+popSize   	    "--psize "     	     i  	(10, 100)
+generations	    "--gens "	         i		(30,200)

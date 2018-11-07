@@ -1,0 +1,31 @@
+## Arquivo que contém a descrição dos parâmetros, o mesmo nome do arquivo apresentado 
+## anteriormente neste documento.
+parameterFile = "./parameters.txt"
+
+## Diretório onde os programas serão executados.
+execDir = "./prp"
+
+## Pasta onde estão as instâncias.
+trainInstancesDir = "./instances/tsp/euclidian2d"
+
+## O número máximo de execuções do Irace, cada execução o Irace irá selecionar uma ##configuração de parâmetros e uma instância. O valor mínimo possível é 300.
+maxExperiments = 1000
+
+## Indicates the number of decimal places to be considered for the
+## real parameters.
+digits = 2
+
+## Number of calls to targetRunner to execute in parallel. Less than 2
+## means calls to targetRunner are sequentially executed.
+parallel = 4
+
+## Seed of the random number generator (must be a positive integer, NA
+## means use a random seed).
+seed = 1
+
+## A value of 0 silences all debug messages. Higher values provide
+## more verbose debug messages.
+# debugLevel = 0
+
+## END of scenario file
+############################################################################
