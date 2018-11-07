@@ -120,9 +120,28 @@ void Genetic::create(int limit){
 
 }
 
+void Genetic::create2(int limit){
+
+	for(unsigned int i = limit; i < population.size(); i++){
+
+		for(unsigned int index = 1; index < in->num_vertices - 1; index++)
+			population[i].setNewRoute(index - 1,index);
+
+		random_shuffle ( population[i].route.begin(), population[i].route.end());
+
+		population[i].setNewFitness();
+		
+	}
+}
+
 void Genetic::init(){
 
 	create(0);
+}
+
+void Genetic::init2(){
+
+	create2(0);
 }
 
 void Genetic::partialReplacement(){
@@ -636,7 +655,6 @@ bool Genetic::searchFitness(Individuo &s){
 
 void Genetic::showResult(){
 
-	//population[0].printRoute();
 	population[0].printFitness();
 
 }

@@ -15,14 +15,20 @@ Output::Output(Input *in) {
 
 	//o tamanho da rota tem um valor a mais, pois sempre ha o retorno para o deposito
 	route.resize(in->num_vertices + 1, 0);
-	index.resize(in->num_vertices, 0);
 
+	new_route.resize(in->num_vertices - 1, 0);
+	
+	index.resize(in->num_vertices, 0);
+	
 	fitness = 0;
 
+	vehicle.first = 0;
+	vehicle.second = 0;
 }
 
 
 void Output::printDistanceMatrix(){
+
 	cout << "[";
 	for(unsigned int i = 0; i < in->distance_matrix.size(); i++){
 		for(unsigned int j = 0; j < in->distance_matrix.size(); j++){
@@ -46,12 +52,17 @@ void Output::printRoute(){
 }
 
 void Output::fitness_set(int f){
-	if(f < 0){
-		cout<<"erro"<<endl;
-		exit(0);
-	}
-	
+		
 	this->fitness =  f;
+}
+
+void Output::newFitnessSet(int f){
+
+	this->new_fitness = f;
+}
+
+int Output::newFitnessGet(){
+	return new_fitness;
 }
 
 int Output::fitness_get(){
@@ -73,16 +84,13 @@ void Output::printFitness(){
 
 }
 
-void Output::printArray2d(){
-	cout << "[" << endl;
-	for(unsigned int i = 1; i <= in->num_vertices; i++){
-		for(unsigned int j = 1; j <= in->num_vertices; j++){
-			if(i != j){
-					cout << i << "," << j << ",";
-			}
+void Output::setStart(int index_start){
 
-		}
-	}
-	cout << "]);" << endl;
+	vehicle.first = index_start;
+}
+
+void Output::setEnd(int index_end){
+
+	vehicle.second = index_end;
 }
 
