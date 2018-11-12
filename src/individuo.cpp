@@ -14,12 +14,10 @@ Individuo::Individuo(Input *in) : Output(in) {
 
 void Individuo::setFitness(){
 
-	fitness_set(fitness_get() + in->distance_matrix[0][vehicle.first]);
+	fitness_set(0);
 
 	for(unsigned int i = 0; i < route.size() - 1; i++)
 		fitness_set( fitness_get() + in->distance_matrix[route[i]][route[i+1]]);
-
-	fitness_set(fitness_get() + in->distance_matrix[vehicle.second][0]);
 
 }
 
