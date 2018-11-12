@@ -693,8 +693,7 @@ void Genetic::run(){
 
 			mutation_number = rand() % mutation_range;
 			
-			twoOptBestImprovement(f1);
-			twoOptBestImprovement(f2);
+
 
 			if(mutation_number < probability){
 				
@@ -703,6 +702,9 @@ void Genetic::run(){
 
 				alfa++;
 			}
+
+			twoOptBestImprovement(f1);
+			twoOptBestImprovement(f2);
 
 			insertion(f1, best, beta);
 			insertion(f2, best, beta);
