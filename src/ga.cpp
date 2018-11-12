@@ -689,15 +689,17 @@ void Genetic::run(){
 
 			crossover(p1, p2, f1, f2);
 
-			mutation(f1);
-			mutation(f2);
+
 
 			mutation_number = rand() % mutation_range;
+			
+			twoOptBestImprovement(f1);
+			twoOptBestImprovement(f2);
 
 			if(mutation_number < probability){
 				
-				twoOptBestImprovement(f1);
-				twoOptBestImprovement(f2);
+				mutation(f1);
+				mutation(f2);
 
 				alfa++;
 			}
