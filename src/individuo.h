@@ -23,7 +23,9 @@ public:
 
 	void setRoute(unsigned int id, unsigned int vertex);
 
-	void setIndexes();
+	void setVehicle(unsigned int vertex, unsigned int truck);
+
+	//void setNumberVehicles(int num);
 
 
 };

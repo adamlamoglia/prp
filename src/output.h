@@ -21,7 +21,9 @@ public:
 	vector<int> route;
 
 	//Sequence of indexes related to vehicle route
-	vector<int> index;
+	vector<int> vehicle;
+
+	//int number_vehicles;
 
 	Output(Input *in);
 
@@ -29,7 +31,7 @@ public:
 
 	void printRoute();
 
-	void printIndexes();
+	void printVehicles();
 
 	void printFitness();
 

@@ -12,7 +12,7 @@ int aux;
 
 Genetic::Genetic(Input *in, int alfa, int beta, int generations, double prob_mutation,
 		int size, double lucky_factor, int lucky_range, int mutation_range,
-		int stype, int ctype, int mtype, int itype) {
+		int stype, int ctype, int mtype, int itype, int number_vehicles) {
 
 	this->in = in;
 
@@ -24,6 +24,8 @@ Genetic::Genetic(Input *in, int alfa, int beta, int generations, double prob_mut
 	this->lucky_factor = lucky_factor;
 	this->lucky_range = lucky_range;
 	this->mutation_range = mutation_range;
+	this->number_vehicles = number_vehicles;
+
 	cut_size = in->num_vertices/2;
 
 	cut = size/2;
@@ -106,9 +108,13 @@ void Genetic::buildMinHeap(){
 void Genetic::create(int limit){
 
 	for(unsigned int i = limit; i < population.size(); i++){
-
-		for(unsigned int index = 1; index < in->num_vertices; index++)
+		
+		for(unsigned int index = 1; index < in->num_vertices; index++){
 			population[i].setRoute(index,index);
+			
+			//starts with just 1 vehicle
+			population[i].setVehicle(index, number_vehicles/number_vehicles);
+		}
 
 		random_shuffle ( population[i].route.begin() + 1, population[i].route.end() - 1);
 

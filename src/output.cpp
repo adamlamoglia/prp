@@ -15,7 +15,7 @@ Output::Output(Input *in) {
 
 	//o tamanho da rota tem um valor a mais, pois sempre ha o retorno para o deposito
 	route.resize(in->num_vertices + 1, 0);
-	index.resize(in->num_vertices, 0);
+	vehicle.resize(in->num_vertices + 1, -1);
 
 	fitness = 0;
 
@@ -58,10 +58,10 @@ int Output::fitness_get(){
 	return this->fitness;
 }
 
-void Output::printIndexes(){
+void Output::printVehicles(){
 
-	for(unsigned int i = 0; i < in->num_vertices; i++)
-		cout << index[i] << " ";
+	for(unsigned int i = 0; i < vehicle.size(); i++)
+		cout << vehicle[i] << " ";
 
 	cout << endl;
 

@@ -25,6 +25,7 @@ class Parametros {
 		static int getCrossoverType();
 		static int getMutationType();
 		static int getInsertionType();
+		static int getNumberVehicles();
 		static double getSeed();
 
 		

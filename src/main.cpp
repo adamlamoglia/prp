@@ -39,7 +39,8 @@ int main( int argc, char ** argv ) {
 			Parametros::getSelectionType(), 	// Standard: 1
 			Parametros::getCrossoverType(),		// Standard: 1
 			Parametros::getMutationType(),		// Standard: 1
-			Parametros::getInsertionType()); 	// Standard: 1
+			Parametros::getInsertionType(), 	// Standard: 1
+			Parametros::getNumberVehicles());   // Standard: 2
 			
 		ga.run();
 		ga.showResult();

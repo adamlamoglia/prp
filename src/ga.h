@@ -78,6 +78,8 @@ public:
 
 	int new_edges_value;
 
+	int number_vehicles;
+
 	//twoOptBestImprovement variables
 	int delta,
 		best_i,
@@ -103,7 +105,7 @@ public:
 
 	Genetic(Input *in, int alfa, int beta, int generations, double prob_mutation,
 			int num_individuals, double lucky_factor, int lucky_range, 
-			int mutation_range,int stype, int ctype, int mtype, int itype);
+			int mutation_range,int stype, int ctype, int mtype, int itype, int number_vehicles);
 
 	//Initializes a new population according to the limit of individuals.
 	//The function creates individuals from limit to population.size,

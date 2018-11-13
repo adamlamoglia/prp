@@ -176,6 +176,17 @@ int Parametros::getMutationType(){
 	}
 }
 
+int Parametros::getNumberVehicles(){
+	
+	try {
+		return stoi(vm["vehicles"]);
+	} catch (exception& e) {
+		//cout << "error: " << e.what() << endl;
+		vm["vehicles"] = "2";
+		return stoi( vm["vehicles"]);
+	}
+}
+
 
 
 void Parametros::Store(int argc, char * argv[ ]) {
@@ -198,6 +209,7 @@ void Parametros::Store(int argc, char * argv[ ]) {
 			{ "ctype"				, required_argument, 0,	013 },
 			{ "mtype"				, required_argument, 0,	014 },
 			{ "itype"				, required_argument, 0,	015 },
+			{ "vehicles" 			, required_argument, 0, 016	},
 			{ "help", no_argument, 0,						076 },
 			{ "h", no_argument, 0,							076 },
 			{ 0,0, 0, 0 } };
@@ -246,6 +258,9 @@ void Parametros::Store(int argc, char * argv[ ]) {
 			break;
 		case 015:
 			vm["itype"] = string(optarg);
+			break;
+		case 016:
+			vm["vehicles"] = string(optarg);
 			break;
 		case 076:
 			cout<<"write a help." << endl;

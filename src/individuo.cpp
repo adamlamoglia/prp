@@ -30,11 +30,14 @@ void Individuo::setRoute(unsigned int id, unsigned int vertex){
 	route[id] = vertex;
 }
 
-void Individuo::setIndexes(){
+void Individuo::setVehicle(unsigned int vertex, unsigned int truck){
 
-	for(unsigned int i = 1; i < route.size() - 1; i++){
-		index[route[i]] = i;
-	}
+	vehicle[vertex] = truck;
 }
+
+/*void Individuo::setNumberVehicles(int num){
+	
+	number_vehicles = num;
+}*/
 
 
