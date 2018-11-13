@@ -112,11 +112,21 @@ void Genetic::create(int limit){
 		for(unsigned int index = 1; index < in->num_vertices; index++){
 			population[i].setRoute(index,index);
 			
-			//starts with just 1 vehicle
-			population[i].setVehicle(index, number_vehicles/number_vehicles);
 		}
 
 		random_shuffle ( population[i].route.begin() + 1, population[i].route.end() - 1);
+
+		//// TODO: MAYBE WILL BE A FUNCTION ////
+		for(unsigned int num = 0; num < number_vehicles; num++){
+			
+			random_index = rand() % in->num_vertices;
+
+			while(population[i].isStopIndex(random_index))
+				random_index = rand() % in->num_vertices;
+
+			population[i].setStopIndex(random_index);
+		}
+		//////////////////////////////////////////////////
 
 		population[i].setFitness();
 		
@@ -651,6 +661,7 @@ void Genetic::printPopulation(){
 
 	for(unsigned int i = 0; i < population.size(); i++){
 		population[i].printRoute();
+		population[i].printStopIndexes();
 		population[i].printFitness();
 	}
 }
@@ -678,6 +689,10 @@ void Genetic::run(){
 	Individuo  best(in);
 
 	init();
+
+	printPopulation();
+
+	exit(0);
 
 	while(generations <= limit){
 

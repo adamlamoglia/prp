@@ -23,7 +23,9 @@ public:
 
 	void setRoute(unsigned int id, unsigned int vertex);
 
-	void setVehicle(unsigned int vertex, unsigned int truck);
+	void setStopIndex(unsigned int vertex);
+
+	bool isStopIndex(unsigned int vertex);
 
 	//void setNumberVehicles(int num);
 
