@@ -117,14 +117,16 @@ void Genetic::create(int limit){
 		random_shuffle ( population[i].route.begin() + 1, population[i].route.end() - 1);
 
 		//// TODO: MAYBE WILL BE A FUNCTION ////
-		for(unsigned int num = 0; num < number_vehicles; num++){
+		if(limit == 0){
+			for(unsigned int num = 0; num < number_vehicles; num++){
 			
-			random_index = rand() % in->num_vertices;
-
-			while(population[i].isStopIndex(random_index))
 				random_index = rand() % in->num_vertices;
 
-			population[i].setStopIndex(random_index);
+				while(population[i].isStopIndex(random_index))
+					random_index = rand() % in->num_vertices;
+								
+				population[i].setStopIndex(random_index);
+			}
 		}
 		//////////////////////////////////////////////////
 
@@ -598,21 +600,56 @@ void Genetic::twoOptBestImprovement(Individuo &solution){
 
 }
 
-void Genetic::swapNodes(Individuo &s, int i, int k){
+int Genetic::calculatePartialRoute(Individuo &s, int i, int k){
 
-	current_edges_value = 	in->distance_matrix[s.route[i]][s.route[i+1]]
+	//2 vertex is stop indexes
+	if(s.isStopIndex(s.route[i]) && s.isStopIndex(s.route[k])){
+		
+		return 				in->distance_matrix[s.route[i-1]][s.route[i]]
+							+ in->distance_matrix[s.route[i]][s.route[0]]
+							+ in->distance_matrix[s.route[0]][s.route[i+1]]
+							+ in->distance_matrix[s.route[k-1]][s.route[k]]
+							+ in->distance_matrix[s.route[k]][s.route[0]]
+							+ in->distance_matrix[s.route[0]][s.route[k+1]];
+	}
+	
+	//the vertex route[i] is stop index
+	if(s.isStopIndex(s.route[i])){
+				
+		return 				in->distance_matrix[s.route[i-1]][s.route[i]]
+							+ in->distance_matrix[s.route[i]][s.route[0]]
+							+ in->distance_matrix[s.route[0]][s.route[i+1]]
+							+ in->distance_matrix[s.route[k-1]][s.route[k]]
+							+ in->distance_matrix[s.route[k]][s.route[k+1]];
+	}
+
+	//the vertex route[k] is stop index
+	if(s.isStopIndex(s.route[k])){
+				
+		return 				in->distance_matrix[s.route[i-1]][s.route[i]]
+							+ in->distance_matrix[s.route[i]][s.route[i+1]]
+							+ in->distance_matrix[s.route[k-1]][s.route[k]]
+							+ in->distance_matrix[s.route[k]][s.route[0]]
+							+ in->distance_matrix[s.route[0]][s.route[k+1]];
+	}
+
+	//none vertex is stop index
+	return 					in->distance_matrix[s.route[i]][s.route[i+1]]
 							+ in->distance_matrix[s.route[i-1]][s.route[i]]
 							+ in->distance_matrix[s.route[k]][s.route[k+1]]
 							+ in->distance_matrix[s.route[k-1]][s.route[k]];
+
+
+}
+
+void Genetic::swapNodes(Individuo &s, int i, int k){
+
+	current_edges_value = calculatePartialRoute(s,i,k);
 
 	swap(s.route[i],s.route[k]);
 
-	new_edges_value = 		in->distance_matrix[s.route[i]][s.route[i+1]]
-							+ in->distance_matrix[s.route[i-1]][s.route[i]]
-							+ in->distance_matrix[s.route[k]][s.route[k+1]]
-							+ in->distance_matrix[s.route[k-1]][s.route[k]];
+	new_edges_value = calculatePartialRoute(s,i,k);
 
-	//s.fitness = s.fitness - current_edges_value + new_edges_value;
 	s.fitness_set(s.fitness_get() - current_edges_value + new_edges_value);	
 }
 
@@ -652,7 +689,8 @@ bool Genetic::searchFitness(Individuo &s){
 
 void Genetic::showResult(){
 
-	//population[0].printRoute();
+	population[0].printRoute();
+	population[0].printStopIndexes();
 	population[0].printFitness();
 
 }
@@ -690,23 +728,16 @@ void Genetic::run(){
 
 	init();
 
-	printPopulation();
-
-	exit(0);
-
 	while(generations <= limit){
-
-		//cout << "generation " << generations << " - "<<flush;
 
 		alfa = beta = 0;
 
 		while(alfa < alfa_max and beta < beta_max){
-
+			
 			best = population[0];
 
 			selection(i1, i2, p1, 0);
 			selection(i1, i2, p2, p1.getFitness());
-
 
 			crossover(p1, p2, f1, f2);
 
@@ -719,12 +750,14 @@ void Genetic::run(){
 
 				alfa++;
 			}
-
-			twoOptBestImprovement(f1);
-			twoOptBestImprovement(f2);
+			
+			//twoOptBestImprovement(f1);
+			//twoOptBestImprovement(f2);
 
 			insertion(f1, best, beta);
 			insertion(f2, best, beta);
+
+			
 
 		}
 

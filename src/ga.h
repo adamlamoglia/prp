@@ -169,6 +169,8 @@ public:
 	//Only exchanges two route nodes.
 	void swapNodes(Individuo &s, int i, int k);
 
+	int calculatePartialRoute(Individuo &s, int i, int k);
+
 
 	//TODO: Comment
 	void insertion(Individuo &s, Individuo &best, int &beta);

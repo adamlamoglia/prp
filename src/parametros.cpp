@@ -182,7 +182,7 @@ int Parametros::getNumberVehicles(){
 		return stoi(vm["vehicles"]);
 	} catch (exception& e) {
 		//cout << "error: " << e.what() << endl;
-		vm["vehicles"] = "2";
+		vm["vehicles"] = "3";
 		return stoi( vm["vehicles"]);
 	}
 }
