@@ -39,7 +39,7 @@ void Output::printDistanceMatrix(){
 void Output::printRoute(){
 
 	for(unsigned int i = 0; i < route.size(); i++)
-		cout << route[i]+1 << " ";
+		cout << route[i] << " ";
 
 	cout << endl;
 

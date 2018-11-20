@@ -27,6 +27,10 @@ public:
 
 	bool isStopIndex(unsigned int vertex);
 
+	int returnVertex(unsigned int vertex);
+
+	int verifyPrecedent(unsigned int index, unsigned int real);
+
 	//void setNumberVehicles(int num);
 
 

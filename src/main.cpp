@@ -14,7 +14,9 @@ using namespace std;
 
 int main( int argc, char ** argv ) {
 
-	int seed = time(NULL);
+	//int seed = time(NULL);
+	int seed = 3;
+
 	srand(seed);
 
 	if(argc > 1){

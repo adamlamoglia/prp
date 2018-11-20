@@ -182,7 +182,7 @@ int Parametros::getNumberVehicles(){
 		return stoi(vm["vehicles"]);
 	} catch (exception& e) {
 		//cout << "error: " << e.what() << endl;
-		vm["vehicles"] = "3";
+		vm["vehicles"] = "2";
 		return stoi( vm["vehicles"]);
 	}
 }
@@ -210,6 +210,7 @@ void Parametros::Store(int argc, char * argv[ ]) {
 			{ "mtype"				, required_argument, 0,	014 },
 			{ "itype"				, required_argument, 0,	015 },
 			{ "vehicles" 			, required_argument, 0, 016	},
+			{ "gens" 				, required_argument, 0, 017	},
 			{ "help", no_argument, 0,						076 },
 			{ "h", no_argument, 0,							076 },
 			{ 0,0, 0, 0 } };
@@ -261,6 +262,9 @@ void Parametros::Store(int argc, char * argv[ ]) {
 			break;
 		case 016:
 			vm["vehicles"] = string(optarg);
+			break;
+		case 017:
+			vm["gens"] = string(optarg);
 			break;
 		case 076:
 			cout<<"write a help." << endl;
