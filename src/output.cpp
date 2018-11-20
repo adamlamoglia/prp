@@ -30,10 +30,10 @@ void Output::printDistanceMatrix(){
 				cout  << in->distance_matrix[i][j] << ",";
 
 		}
-
+		cout << endl;
 	}
 
-	cout << "]";
+	cout << "]" << endl;
 }
 
 void Output::printRoute(){

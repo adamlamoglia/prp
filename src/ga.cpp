@@ -417,7 +417,7 @@ void Genetic::swapNodeCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Ind
 	do{
 		random_node2 = rand() % in->num_vertices;
 
-	}while(random_node2 == 0 || random_node1 == in->num_vertices - 1);
+	}while(random_node2 == 0 || random_node2 == in->num_vertices - 1 || random_node1 == random_node2);
 
 
 	if(random_node1 < random_node2)
@@ -436,7 +436,7 @@ void Genetic::swapNodeCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Ind
 
 	do{
 		random_node2 = rand() % in->num_vertices;
-	}while(random_node2 == 0 || random_node1 == in->num_vertices - 1);
+	}while(random_node2 == 0 || random_node2 == in->num_vertices - 1 || random_node1 == random_node2);
 
 	if(random_node1 < random_node2)
 		swapNodes(f2,random_node1,random_node2);
@@ -694,10 +694,10 @@ int Genetic::calculatePartialRoute(Individuo &s, int i, int k){
 							+ in->distance_matrix[s.route[k]][s.route[0]];
 	}*/
 
-	cout << s.verifyPrecedent(i-1,i-1) << endl;
-	cout << s.verifyPrecedent(i,i+1) << endl;
-	cout << s.verifyPrecedent(k-1,k-1) << endl;
-	cout << s.verifyPrecedent(k,k+1) << endl;
+	//cout << s.verifyPrecedent(i-1,i-1) << endl;
+	//cout << s.verifyPrecedent(i,i+1) << endl;
+	//cout << s.verifyPrecedent(k-1,k-1) << endl;
+	//cout << s.verifyPrecedent(k,k+1) << endl;
 
 	//CASO 1
 	return 					in->distance_matrix[s.verifyPrecedent(i-1,i-1)][s.route[i]]
@@ -725,25 +725,25 @@ void Genetic::verifyStopIndex(Individuo &s, int v1, int v2){
 
 void Genetic::swapNodes(Individuo &s, int i, int k){
 
-	s.printRoute();
-	s.printStopIndexes();
-	cout << "rota[i]: " << s.route[i] << endl;
-	cout << "rota[k]: " << s.route[k] << endl;
+	//s.printRoute();
+	//s.printStopIndexes();
+	//cout << "rota[i]: " << s.route[i] << endl;
+	//cout << "rota[k]: " << s.route[k] << endl;
 	current_edges_value = calculatePartialRoute(s,i,k);
 	
 
 
-	cout <<"current: " << current_edges_value << endl;
+	//cout <<"current: " << current_edges_value << endl;
 	swap(s.route[i],s.route[k]);
 	
 	//verifyStopIndex(s, s.route[i],s.route[k]);
 
 	new_edges_value = calculatePartialRoute(s,i,k);
 
-	cout << "new: " << new_edges_value << endl;
+	//cout << "new: " << new_edges_value << endl;
 	//cout << endl;
-
-	cout << "fitness old: " << s.fitness_get() << endl;
+	//s.setFitness();
+	//cout << "fitness old: " << s.getFitness() << endl;
 	s.fitness_set(s.fitness_get() - current_edges_value + new_edges_value);	
 	//s.setFitness();
 
@@ -822,6 +822,7 @@ void Genetic::printPopulation(){
 
 void Genetic::run(){
 
+	
 	int generations = 0,
 		alfa = 0,
 		beta = 0;
@@ -843,6 +844,8 @@ void Genetic::run(){
 	Individuo  best(in);
 
 	init();
+
+	//population[0].printDistanceMatrix();
 
 	while(generations <= limit){
 
