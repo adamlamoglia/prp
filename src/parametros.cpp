@@ -26,7 +26,6 @@ string Parametros::getInstance(){
 	try {
 		return vm["instance"];
 	} catch (exception& e) {
-		//cout << "error: " << e.what() << endl;
 		vm["instance"] = "0";
 		return vm["instance"];
 	}
@@ -37,7 +36,6 @@ double Parametros::getSeed(){
 	try {
 		return stod(vm["seed"]);
 	} catch (exception& e) {
-		//cout << "error: " << e.what() << endl;
 		vm["seed"] = "0";
 		return stod( vm["seed"]);
 	}
@@ -48,7 +46,6 @@ double Parametros::getAlphaMax(){
 	try {
 		return stod(vm["alpha"]);
 	} catch (exception& e) {
-		//cout << "error: " << e.what() << endl;
 		vm["alpha"] = "300";
 		return stod( vm["alpha"]);
 	}
@@ -59,7 +56,6 @@ double Parametros::getBetaMax(){
 	try {
 		return stod(vm["beta"]);
 	} catch (exception& e) {
-		//cout << "error: " << e.what() << endl;
 		vm["beta"] = "3000";
 		return stod( vm["beta"]);
 	}
@@ -70,7 +66,6 @@ int Parametros::getGenerations(){
 	try {
 		return stoi(vm["gens"]);
 	} catch (exception& e) {
-		//cout << "error: " << e.what() << endl;
 		vm["gens"] = "100";
 		return stoi( vm["gens"]);
 	}
@@ -81,7 +76,6 @@ double Parametros::getProbability(){
 	try {
 		return stod(vm["prob"]);
 	} catch (exception& e) {
-		//cout << "error: " << e.what() << endl;
 		vm["prob"] = "25.4";
 		return stod( vm["prob"]);
 	}
@@ -92,7 +86,6 @@ int Parametros::getPopulationSize(){
 	try {
 		return stod(vm["psize"]);
 	} catch (exception& e) {
-		//cout << "error: " << e.what() << endl;
 		vm["psize"] = "30";
 		return stod( vm["psize"]);
 	}
@@ -103,7 +96,6 @@ double Parametros::getLuckyFactor(){
 	try {
 		return stod(vm["luckyFactor"]);
 	} catch (exception& e) {
-		//cout << "error: " << e.what() << endl;
 		vm["luckyFactor"] = "997";
 		return stod( vm["luckyFactor"]);
 	}
@@ -114,7 +106,6 @@ int Parametros::getLuckyRange(){
 	try {
 		return stoi(vm["luckyRange"]);
 	} catch (exception& e) {
-		//cout << "error: " << e.what() << endl;
 		vm["luckyRange"] = "1000";
 		return stoi( vm["luckyRange"]);
 	}
@@ -125,7 +116,6 @@ int Parametros::getMutationRange(){
 	try {
 		return stoi(vm["mutationRange"]);
 	} catch (exception& e) {
-		//cout << "error: " << e.what() << endl;
 		vm["mutationRange"] = "100";
 		return stoi( vm["mutationRange"]);
 	}
@@ -136,7 +126,6 @@ int Parametros::getSelectionType(){
 	try {
 		return stoi(vm["stype"]);
 	} catch (exception& e) {
-		//cout << "error: " << e.what() << endl;
 		vm["stype"] = "1";
 		return stoi( vm["stype"]);
 	}
@@ -148,7 +137,6 @@ int Parametros::getCrossoverType(){
 	try {
 		return stoi(vm["ctype"]);
 	} catch (exception& e) {
-		//cout << "error: " << e.what() << endl;
 		vm["ctype"] = "1";
 		return stoi( vm["ctype"]);
 	}
@@ -159,7 +147,6 @@ int Parametros::getInsertionType(){
 	try {
 		return stoi(vm["itype"]);
 	} catch (exception& e) {
-		//cout << "error: " << e.what() << endl;
 		vm["itype"] = "1";
 		return stoi( vm["itype"]);
 	}
@@ -170,7 +157,6 @@ int Parametros::getMutationType(){
 	try {
 		return stoi(vm["mtype"]);
 	} catch (exception& e) {
-		//cout << "error: " << e.what() << endl;
 		vm["mtype"] = "1";
 		return stoi( vm["mtype"]);
 	}
@@ -181,8 +167,7 @@ int Parametros::getNumberVehicles(){
 	try {
 		return stoi(vm["vehicles"]);
 	} catch (exception& e) {
-		//cout << "error: " << e.what() << endl;
-		vm["vehicles"] = "2";
+		vm["vehicles"] = "3";
 		return stoi( vm["vehicles"]);
 	}
 }

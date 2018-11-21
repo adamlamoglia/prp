@@ -171,8 +171,6 @@ public:
 	//Only exchanges two route nodes.
 	void swapNodes(Individuo &s, int i, int k);
 
-	void verifyStopIndex(Individuo &s, int v1, int v2);
-
 	int calculatePartialRoute(Individuo &s, int i, int k);
 
 	//TODO: Comment
