@@ -686,25 +686,35 @@ void Genetic::swapNodes(Individuo &s, int i, int k){
 
 int Genetic::deltaEvaluation(Individuo &s, int i, int k){
 	
-	current_edges_value = 	in->distance_matrix[s.route[i]][s.route[i+1]]
+	/*current_edges_value = 	in->distance_matrix[s.route[i]][s.route[i+1]]
 							+ in->distance_matrix[s.route[i-1]][s.route[i]]
 							+ in->distance_matrix[s.route[k]][s.route[k+1]]
-							+ in->distance_matrix[s.route[k-1]][s.route[k]];
+							+ in->distance_matrix[s.route[k-1]][s.route[k]];*/
+
+	current_edges_value = calculatePartialRoute(s,i,k);
+
+	swap(s.route[i],s.route[k]);
 
 	if(abs(k-i)==1){
 
-		new_edges_value = 	in->distance_matrix[s.route[k]][s.route[i]]
+		/*new_edges_value = 	in->distance_matrix[s.route[k]][s.route[i]]
 							+ in->distance_matrix[s.route[i-1]][s.route[k]]
 							+ in->distance_matrix[s.route[i]][s.route[k+1]]
-							+ in->distance_matrix[s.route[k]][s.route[i]];
+							+ in->distance_matrix[s.route[k]][s.route[i]];*/
+		
+		current_edges_value = calculatePartialRoute(s,i,k);
 	}
 	else{
 
-		new_edges_value = 	in->distance_matrix[s.route[k]][s.route[i+1]]
+		/*new_edges_value = 	in->distance_matrix[s.route[k]][s.route[i+1]]
 							+ in->distance_matrix[s.route[i-1]][s.route[k]]
 							+ in->distance_matrix[s.route[i]][s.route[k+1]]
-							+ in->distance_matrix[s.route[k-1]][s.route[i]];
+							+ in->distance_matrix[s.route[k-1]][s.route[i]];*/
+							
+		current_edges_value = calculatePartialRoute(s,i,k);
 	}
+
+	swap(s.route[i],s.route[k]);
 
 	return new_edges_value - current_edges_value;
 }
@@ -783,8 +793,8 @@ void Genetic::run(){
 				alfa++;
 			}
 			
-			//twoOptBestImprovement(f1);
-			//twoOptBestImprovement(f2);
+			twoOptBestImprovement(f1);
+			twoOptBestImprovement(f2);
 
 			insertion(f1, best, beta);
 			insertion(f2, best, beta);

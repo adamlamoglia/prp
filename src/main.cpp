@@ -14,8 +14,8 @@ using namespace std;
 
 int main( int argc, char ** argv ) {
 
-	//int seed = time(NULL);
-	int seed = 3;
+	int seed = time(NULL);
+	//int seed = 3;
 
 	srand(seed);
 
@@ -42,7 +42,7 @@ int main( int argc, char ** argv ) {
 			Parametros::getCrossoverType(),		// Standard: 1
 			Parametros::getMutationType(),		// Standard: 1
 			Parametros::getInsertionType(), 	// Standard: 1
-			Parametros::getNumberVehicles());   // Standard: 2
+			Parametros::getNumberVehicles());   // Standard: 3
 			
 		ga.run();
 		ga.showResult();
