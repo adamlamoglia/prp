@@ -608,6 +608,7 @@ void Genetic::twoOptBestImprovement(Individuo &solution){
 			
 		}
 
+		//cout << solution.getFitness() << endl;
 	}
 
 }
@@ -616,7 +617,7 @@ int Genetic::calculatePartialRoute(Individuo &s, int i, int k){
 	
 	//CASE 1
 	//subsequent vertices in route
-	if(abs(i-k) == 1){
+	/*if(abs(i-k) == 1){
 
 
 		if(s.isStopIndex(i)){
@@ -643,6 +644,11 @@ int Genetic::calculatePartialRoute(Individuo &s, int i, int k){
 	//2.1 -> i and k are stop indexes
 	//2.2 -> just i is stop index
 	//2.3 -> just k is stop index
+	return 					in->distance_matrix[s.verifyPrecedent(i-1,i-1)][s.route[i]]
+							+ in->distance_matrix[s.route[i]][s.verifyPrecedent(i,i+1)]
+							+ in->distance_matrix[s.verifyPrecedent(k-1,k-1)][s.route[k]]
+							+ in->distance_matrix[s.route[k]][s.verifyPrecedent(k,k+1)];*/
+
 	return 					in->distance_matrix[s.verifyPrecedent(i-1,i-1)][s.route[i]]
 							+ in->distance_matrix[s.route[i]][s.verifyPrecedent(i,i+1)]
 							+ in->distance_matrix[s.verifyPrecedent(k-1,k-1)][s.route[k]]
@@ -686,33 +692,33 @@ void Genetic::swapNodes(Individuo &s, int i, int k){
 
 int Genetic::deltaEvaluation(Individuo &s, int i, int k){
 	
-	/*current_edges_value = 	in->distance_matrix[s.route[i]][s.route[i+1]]
-							+ in->distance_matrix[s.route[i-1]][s.route[i]]
-							+ in->distance_matrix[s.route[k]][s.route[k+1]]
-							+ in->distance_matrix[s.route[k-1]][s.route[k]];*/
+	/*current_edges_value = 	in->distance_matrix[s.route[i-1]][s.route[i]]
+							+ in->distance_matrix[s.route[i]][s.route[i+1]]
+							+ in->distance_matrix[s.route[k-1]][s.route[k]]
+							+ in->distance_matrix[s.route[k]][s.route[k+1]];*/
 
 	current_edges_value = calculatePartialRoute(s,i,k);
 
 	swap(s.route[i],s.route[k]);
 
-	if(abs(k-i)==1){
+	//if(abs(k-i)==1){
 
-		/*new_edges_value = 	in->distance_matrix[s.route[k]][s.route[i]]
-							+ in->distance_matrix[s.route[i-1]][s.route[k]]
-							+ in->distance_matrix[s.route[i]][s.route[k+1]]
+		/*new_edges_value = 	in->distance_matrix[s.verifyPrecedent(i-1,i-1)][s.route[k]]
+							+ in->distance_matrix[s.route[k]][s.route[i]]
+							+ in->distance_matrix[s.route[i]][s.verifyPrecedent(k,k+1)]
 							+ in->distance_matrix[s.route[k]][s.route[i]];*/
 		
-		current_edges_value = calculatePartialRoute(s,i,k);
-	}
-	else{
+		//current_edges_value = calculatePartialRoute(s,i,k);
+	//}
+	//else{
 
-		/*new_edges_value = 	in->distance_matrix[s.route[k]][s.route[i+1]]
-							+ in->distance_matrix[s.route[i-1]][s.route[k]]
-							+ in->distance_matrix[s.route[i]][s.route[k+1]]
-							+ in->distance_matrix[s.route[k-1]][s.route[i]];*/
+		/*new_edges_value = 	in->distance_matrix[s.verifyPrecedent(i-1,i-1)][s.route[k]]
+							+ in->distance_matrix[s.route[k]][s.verifyPrecedent(i,i+1)]
+							+ in->distance_matrix[s.verifyPrecedent(k-1,k-1)][s.route[i]]
+							+ in->distance_matrix[s.route[i]][s.verifyPrecedent(k,k+1)];*/
 							
-		current_edges_value = calculatePartialRoute(s,i,k);
-	}
+		new_edges_value = calculatePartialRoute(s,i,k);
+	//}
 
 	swap(s.route[i],s.route[k]);
 
@@ -799,7 +805,8 @@ void Genetic::run(){
 			insertion(f1, best, beta);
 			insertion(f2, best, beta);
 
-			
+			//cout << alfa << " " << alfa_max << endl;
+			//cout << beta << " " << beta_max << endl;
 
 		}
 
