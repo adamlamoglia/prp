@@ -24,7 +24,7 @@ Genetic::Genetic(Input *in, int alfa, int beta, int generations, double prob_mut
 	this->lucky_factor = lucky_factor;
 	this->lucky_range = lucky_range;
 	this->mutation_range = mutation_range;
-	this->number_vehicles = number_vehicles;
+	this->number_vehicles = number_vehicles - 1;
 
 	cut_size = in->num_vertices/2;
 
@@ -116,7 +116,6 @@ void Genetic::create(int limit){
 
 		random_shuffle ( population[i].route.begin() + 1, population[i].route.end() - 1);
 
-		//// TODO: MAYBE WILL BE A FUNCTION ////
 		if(limit == 0){
 			for(unsigned int num = 0; num < number_vehicles; num++){
 			
@@ -128,7 +127,6 @@ void Genetic::create(int limit){
 				population[i].setStopIndex(random_index);
 			}
 		}
-		//////////////////////////////////////////////////
 
 		population[i].setFitness();
 		
@@ -608,46 +606,11 @@ void Genetic::twoOptBestImprovement(Individuo &solution){
 			
 		}
 
-		//cout << solution.getFitness() << endl;
 	}
 
 }
 
 int Genetic::calculatePartialRoute(Individuo &s, int i, int k){
-	
-	//CASE 1
-	//subsequent vertices in route
-	/*if(abs(i-k) == 1){
-
-
-		if(s.isStopIndex(i)){
-
-			//CASE 1.1
-			//i is a stop index
-			return	in->distance_matrix[s.verifyPrecedent(i-1,i-1)][s.route[i]]
-					+ in->distance_matrix[s.route[i]][0]
-					+ in->distance_matrix[s.route[0]][s.route[k]]
-					+ in->distance_matrix[s.route[k]][s.verifyPrecedent(k,k+1)];
-		}		
-		
-
-		//CASE 1.2
-		//1.2.1 -> k is a stop index
-		//1.2.2 -> none vertex is stop index
-		return	in->distance_matrix[s.verifyPrecedent(i-1,i-1)][s.route[i]]
-					+ in->distance_matrix[s.route[i]][s.route[k]]
-					+ in->distance_matrix[s.route[k]][s.verifyPrecedent(k,k+1)];
-	}
-
-	//CASE 2
-	//vertices are not subsequents
-	//2.1 -> i and k are stop indexes
-	//2.2 -> just i is stop index
-	//2.3 -> just k is stop index
-	return 					in->distance_matrix[s.verifyPrecedent(i-1,i-1)][s.route[i]]
-							+ in->distance_matrix[s.route[i]][s.verifyPrecedent(i,i+1)]
-							+ in->distance_matrix[s.verifyPrecedent(k-1,k-1)][s.route[k]]
-							+ in->distance_matrix[s.route[k]][s.verifyPrecedent(k,k+1)];*/
 
 	return 					in->distance_matrix[s.verifyPrecedent(i-1,i-1)][s.route[i]]
 							+ in->distance_matrix[s.route[i]][s.verifyPrecedent(i,i+1)]
@@ -668,7 +631,7 @@ void Genetic::swapNodes(Individuo &s, int i, int k){
 	s.fitness_set(s.fitness_get() - current_edges_value + new_edges_value);	
 	
 	
-	#ifdef DEBUG_SWAP
+	/*#ifdef DEBUG_SWAP
 	// Valor do fitness apos a execucao de swapnodes
 	int old_fitness = s.fitness_get();
 
@@ -687,38 +650,16 @@ void Genetic::swapNodes(Individuo &s, int i, int k){
 
 	// Continua com o valor computado por esta função
 	s.fitness_set(old_fitness);
-	#endif
+	#endif*/
 }
 
 int Genetic::deltaEvaluation(Individuo &s, int i, int k){
 	
-	/*current_edges_value = 	in->distance_matrix[s.route[i-1]][s.route[i]]
-							+ in->distance_matrix[s.route[i]][s.route[i+1]]
-							+ in->distance_matrix[s.route[k-1]][s.route[k]]
-							+ in->distance_matrix[s.route[k]][s.route[k+1]];*/
-
 	current_edges_value = calculatePartialRoute(s,i,k);
 
 	swap(s.route[i],s.route[k]);
-
-	//if(abs(k-i)==1){
-
-		/*new_edges_value = 	in->distance_matrix[s.verifyPrecedent(i-1,i-1)][s.route[k]]
-							+ in->distance_matrix[s.route[k]][s.route[i]]
-							+ in->distance_matrix[s.route[i]][s.verifyPrecedent(k,k+1)]
-							+ in->distance_matrix[s.route[k]][s.route[i]];*/
-		
-		//current_edges_value = calculatePartialRoute(s,i,k);
-	//}
-	//else{
-
-		/*new_edges_value = 	in->distance_matrix[s.verifyPrecedent(i-1,i-1)][s.route[k]]
-							+ in->distance_matrix[s.route[k]][s.verifyPrecedent(i,i+1)]
-							+ in->distance_matrix[s.verifyPrecedent(k-1,k-1)][s.route[i]]
-							+ in->distance_matrix[s.route[i]][s.verifyPrecedent(k,k+1)];*/
 							
-		new_edges_value = calculatePartialRoute(s,i,k);
-	//}
+	new_edges_value = calculatePartialRoute(s,i,k);
 
 	swap(s.route[i],s.route[k]);
 
@@ -804,9 +745,6 @@ void Genetic::run(){
 
 			insertion(f1, best, beta);
 			insertion(f2, best, beta);
-
-			//cout << alfa << " " << alfa_max << endl;
-			//cout << beta << " " << beta_max << endl;
 
 		}
 
