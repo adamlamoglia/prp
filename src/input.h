@@ -24,7 +24,7 @@ public:
 
 	unsigned int num_vertices;
 
-    int degree;
+    int deg;
 
 	double q1,
 		   q2,

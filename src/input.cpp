@@ -35,10 +35,10 @@ double Input::geo(double x1, double y1, double x2, double y2){
 
 double Input::computeGeo(double a){
 
-	degree = a;
-	min = a - degree;
+	deg = (int) a;
+	min = a - deg;
 
-	return (pi * (degree + 5 * min / 3) / 180);
+	return (pi * (deg + 5 * min / 3) / 180);
 }
 
 void Input::addCoordenates(int id, double x, double y){
@@ -59,19 +59,41 @@ void Input::build(){
 
 	pair<double,double> v1,v2;
 
+	if(type == "EUC_2D"){
+
+			for(unsigned int i = 0; i < num_vertices; i++){
+				for(unsigned int j = 0; j < num_vertices; j++){
+					v1 = coordinates[i];
+					v2 = coordinates[j];
+
+					distance_matrix[i][j] = 
+					distance_matrix[j][i] = round(setBuild(v1.first, v1.second,
+													v2.first, v2.second));
+						
+				}
+			}
+
+			return;
+	}
+
+	if(type == "GEO"){
 
 		for(unsigned int i = 0; i < num_vertices; i++){
 			for(unsigned int j = 0; j < num_vertices; j++){
 				v1 = coordinates[i];
 				v2 = coordinates[j];
 
-				distance_matrix[i][j] = 
-				distance_matrix[j][i] =
-										round(setBuild(v1.first, v1.second,
-												v2.first, v2.second));
-				
+				distance_matrix[i][j] = (int) setBuild(v1.first, v1.second,
+												v2.first, v2.second);
+												
+				distance_matrix[j][i] = (int) setBuild(v2.first, v2.second,
+												v1.first, v1.second);
 			}
 		}
+
+		return;
+	}
+
 
 }
 
