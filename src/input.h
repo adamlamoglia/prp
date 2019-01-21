@@ -46,7 +46,8 @@ public:
 
 	string reader;
 
-	string type;
+	string type,
+		   edge_type;
 
 	Input();
 
@@ -62,7 +63,9 @@ public:
 
 	void addCoordenates(int id, double x, double y);
 
-	void build();
+	void buildTsp();
+
+	void buildAtsp();
 
 	friend ostream& operator>>(ostream& os, ifstream& file);
 

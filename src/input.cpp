@@ -49,17 +49,17 @@ void Input::addCoordenates(int id, double x, double y){
 
 double Input::setBuild(double x1, double y1, double x2, double y2){
 
-	if(type == "EUC_2D")
+	if(edge_type == "EUC_2D")
 		return euclidian2D(x1,y1,x2,y2);
 
 	return geo(x1,y1,x2,y2);
 }
 
-void Input::build(){
+void Input::buildTsp(){
 
 	pair<double,double> v1,v2;
 
-	if(type == "EUC_2D"){
+	if(edge_type == "EUC_2D"){
 
 			for(unsigned int i = 0; i < num_vertices; i++){
 				for(unsigned int j = 0; j < num_vertices; j++){
@@ -76,7 +76,7 @@ void Input::build(){
 			return;
 	}
 
-	if(type == "GEO"){
+	if(edge_type == "GEO"){
 
 		for(unsigned int i = 0; i < num_vertices; i++){
 			for(unsigned int j = 0; j < num_vertices; j++){
@@ -97,6 +97,10 @@ void Input::build(){
 
 }
 
+void Input::buildAtsp(){
+
+}
+
 
 
 void Input::load(string name){
@@ -107,6 +111,12 @@ void Input::load(string name){
 	if( file.is_open() ){
 
 		while(file >> reader){
+
+					if(reader == "TYPE"){
+						
+						file >> reader; // :
+						file >> type;
+					}
 
 					if(reader == "DIMENSION"){
 
@@ -120,25 +130,47 @@ void Input::load(string name){
 					if(reader == "EDGE_WEIGHT_TYPE"){
 
 						file >> reader; // :
-						file >> type;
+						file >> edge_type;
 
 					}
 
-					if(reader == "NODE_COORD_SECTION"){
-						int id;
-						double x,
-							   y;
+					if(reader == "NODE_COORD_SECTION" || reader == "EDGE_WEIGHT_SECTION"){
 
-						for(unsigned int i = 0; i < num_vertices; i++){
+						if(type == "FULL_MATRIX"){
+							
+							for(unsigned int i = 0; i < num_vertices; i++){
+								for(unsigned int j = 0; j < num_vertices; j++){
 
-							file >> id >> x >> y;
+									if(i == j)
+										distance_matrix[i][j] = 0;
+									else
+										file >> distance_matrix[i][j];
+
+								}
+							}
+						}
+						
+						else{
+							int id;
+							double x,
+								y;
+
+							for(unsigned int i = 0; i < num_vertices; i++){
+
+								file >> id >> x >> y;
 
 
-							addCoordenates(id-1,x,y);
+								addCoordenates(id-1,x,y);
 
+							}
 						}
 
-						build();
+
+						if(type == "TSP" && type != "FULL_MATRIX")
+							buildTsp();
+						
+						else if(type == "ATSP" && type != "FULL_MATRIX")
+							buildAtsp();
 					}
 
 
