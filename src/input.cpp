@@ -134,23 +134,25 @@ void Input::load(string name){
 
 					}
 
-					if(reader == "NODE_COORD_SECTION" || reader == "EDGE_WEIGHT_SECTION"){
+					if(reader == "EDGE_WEIGHT_FORMAT"){
 
-						if(type == "FULL_MATRIX"){
-							
+						file >> reader; // :
+						file >> edge_format;
+					}
+
+					if(reader == "NODE_COORD_SECTION" || reader == "EDGE_WEIGHT_SECTION"){
+						
+						if(edge_format == "FULL_MATRIX"){
+						
 							for(unsigned int i = 0; i < num_vertices; i++){
 								for(unsigned int j = 0; j < num_vertices; j++){
-
-									if(i == j)
-										distance_matrix[i][j] = 0;
-									else
 										file >> distance_matrix[i][j];
-
 								}
 							}
 						}
 						
 						else{
+							
 							int id;
 							double x,
 								y;

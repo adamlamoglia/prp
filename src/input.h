@@ -47,7 +47,8 @@ public:
 	string reader;
 
 	string type,
-		   edge_type;
+		   edge_type,
+		   edge_format;
 
 	Input();
 

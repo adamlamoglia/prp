@@ -612,6 +612,14 @@ void Genetic::twoOptBestImprovement(Individuo &solution){
 
 int Genetic::calculatePartialRoute(Individuo &s, int i, int k){
 
+	if( i == k+1 || i == k-1){
+
+		return 				in->distance_matrix[s.verifyPrecedent(i-1,i-1)][s.route[i]]
+							+ in->distance_matrix[s.verifyPrecedent(k-1,k-1)][s.route[k]]
+							+ in->distance_matrix[s.route[k]][s.verifyPrecedent(k,k+1)];
+
+	}
+
 	return 					in->distance_matrix[s.verifyPrecedent(i-1,i-1)][s.route[i]]
 							+ in->distance_matrix[s.route[i]][s.verifyPrecedent(i,i+1)]
 							+ in->distance_matrix[s.verifyPrecedent(k-1,k-1)][s.route[k]]
@@ -632,24 +640,29 @@ void Genetic::swapNodes(Individuo &s, int i, int k){
 	
 	
 	/*#ifdef DEBUG_SWAP
-	// Valor do fitness apos a execucao de swapnodes
-	int old_fitness = s.fitness_get();
 
-	// Calcula o fitness do zero
+		// Calcula o fitness do zero
 	s.setFitness();
 
 	// Pega o novo valor do fitness
 	int new_fitness = s.getFitness();
 
+   	new_edges_value = calculatePartialRoute(s,i,k);
+
+	s.fitness_set(s.fitness_get() - current_edges_value + new_edges_value);	
+
+	// Valor do fitness apos a execucao de swapnodes
+	int old_fitness = s.fitness_get();
+
 	// Verifica se existe divergencia
 	if(old_fitness != new_fitness){
-		cout << "fitness otimizado: " << old_fitness << endl;
-		cout << "fitness normal: " << new_fitness << endl;
+		cout << "fitness apos swap: " << old_fitness << endl;
+		cout << "fitness calculado: " << new_fitness << endl;
 	}
 		
 
 	// Continua com o valor computado por esta função
-	s.fitness_set(old_fitness);
+	//s.fitness_set(old_fitness);
 	#endif*/
 }
 
@@ -745,7 +758,6 @@ void Genetic::run(){
 
 			insertion(f1, best, beta);
 			insertion(f2, best, beta);
-
 		}
 
 		generations++;
