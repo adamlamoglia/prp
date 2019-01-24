@@ -236,7 +236,6 @@ void Genetic::binaryTour(Individuo &i1, Individuo &i2, Individuo &p, int previou
 
 			random_person = rand() % population.size();
 			i1 = population[random_person];
-
 		}while(i1.getFitness() == previous_fitness);
 
 		do{
@@ -614,10 +613,39 @@ int Genetic::calculatePartialRoute(Individuo &s, int i, int k){
 
 	if( i == k+1 || i == k-1){
 
-		return 				in->distance_matrix[s.verifyPrecedent(i-1,i-1)][s.route[i]]
+		// i is a stop index, k is not a stop index
+		if(s.verifyPrecedent(i,i) == 0 && s.verifyPrecedent(k,k) != 0){
+
+					return 	  in->distance_matrix[s.verifyPrecedent(i-1,i-1)][s.route[i]]
+							+ in->distance_matrix[s.route[i]][s.verifyPrecedent(i,i+1)]
 							+ in->distance_matrix[s.verifyPrecedent(k-1,k-1)][s.route[k]]
 							+ in->distance_matrix[s.route[k]][s.verifyPrecedent(k,k+1)];
 
+		}
+
+		
+
+		// i is not a stop index, k is a stop index
+		if(s.verifyPrecedent(i,i) != 0 && s.verifyPrecedent(k,k) == 0){
+
+					return 	  in->distance_matrix[s.verifyPrecedent(i-1,i-1)][s.route[i]]
+							+ in->distance_matrix[s.verifyPrecedent(k-1,k-1)][s.route[k]]
+							+ in->distance_matrix[s.route[k]][s.verifyPrecedent(k,k+1)];
+		}
+
+		// i is a stop index, k is a stop index
+		if(s.verifyPrecedent(i,i) == 0 && s.verifyPrecedent(k,k) == 0){
+
+					return 	  in->distance_matrix[s.verifyPrecedent(i-1,i-1)][s.route[i]]
+							+ in->distance_matrix[s.route[i]][s.verifyPrecedent(i,i+1)]
+							+ in->distance_matrix[s.verifyPrecedent(k-1,k-1)][s.route[k]]
+							+ in->distance_matrix[s.route[k]][s.verifyPrecedent(k,k+1)];
+		}
+
+
+		return 	  in->distance_matrix[s.verifyPrecedent(i-1,i-1)][s.route[i]]
+				+ in->distance_matrix[s.verifyPrecedent(k-1,k-1)][s.route[k]]
+				+ in->distance_matrix[s.route[k]][s.verifyPrecedent(k,k+1)];		
 	}
 
 	return 					in->distance_matrix[s.verifyPrecedent(i-1,i-1)][s.route[i]]
@@ -729,6 +757,12 @@ void Genetic::run(){
 	Individuo  best(in);
 
 	init();
+	
+	//printPopulation();
+
+	//i1.printDistanceMatrix();
+
+	//exit(0);
 
 	while(generations <= limit){
 

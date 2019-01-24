@@ -168,7 +168,7 @@ void Input::load(string name){
 						}
 
 
-						if(type == "TSP" && type != "FULL_MATRIX")
+						if(type == "TSP" || type == "CVRP")
 							buildTsp();
 						
 						else if(type == "ATSP" && type != "FULL_MATRIX")

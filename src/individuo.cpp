@@ -22,6 +22,8 @@ void Individuo::setFitness(){
 			fitness_set( fitness_get() + in->distance_matrix[route[i]][route[0]] + in->distance_matrix[route[0]][route[i+1]]);
 		else
 			fitness_set( fitness_get() + in->distance_matrix[route[i]][route[i+1]]);
+
+		//cout << in->distance_matrix[route[i]][route[i+1]] << endl;
 	}
 		
 

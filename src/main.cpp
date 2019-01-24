@@ -14,8 +14,8 @@ using namespace std;
 
 int main( int argc, char ** argv ) {
 
-	//int seed = time(NULL);
-	int seed = 10;
+	int seed = time(NULL);
+	//int seed = 10;
 
 	srand(seed);
 
