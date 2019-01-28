@@ -24,7 +24,8 @@ public:
 
 	unsigned int num_vertices;
 
-    int deg;
+    int deg,
+		capacity;
 
 	double q1,
 		   q2,
@@ -40,6 +41,8 @@ public:
 
 
 	vector<vector<int> > distance_matrix;
+
+	vector<int> demand;
 
 	//Represents the euclidian2D or geo coordinates of vertex i.
 	vector<pair<double,double> > coordinates;

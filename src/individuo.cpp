@@ -16,6 +16,9 @@ void Individuo::setFitness(){
 
 	fitness_set(0);
 
+	vector<int> route_demand;
+	route_demand.resize(in->num_vertices);
+
 	for(unsigned int i = 0; i < route.size() - 1; i++){
 		
 		if(isStopIndex(i))
@@ -24,6 +27,10 @@ void Individuo::setFitness(){
 			fitness_set( fitness_get() + in->distance_matrix[route[i]][route[i+1]]);
 
 		//cout << in->distance_matrix[route[i]][route[i+1]] << endl;
+	}
+
+	for(unsigned int i = 0; i < route.size(); i++ ){
+
 	}
 		
 

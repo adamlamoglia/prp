@@ -25,6 +25,8 @@ Genetic::Genetic(Input *in, int alfa, int beta, int generations, double prob_mut
 	this->lucky_range = lucky_range;
 	this->mutation_range = mutation_range;
 	this->number_vehicles = number_vehicles - 1;
+	inserted.resize(in->num_vertices + 1, false);
+	inserted[0] = inserted[inserted.size() - 1] = true;
 
 	cut_size = in->num_vertices/2;
 
@@ -107,12 +109,15 @@ void Genetic::buildMinHeap(){
 
 void Genetic::create(int limit){
 
-	for(unsigned int i = limit; i < population.size(); i++){
+	/*for(unsigned int i = limit; i < population.size(); i++){
 		
-		for(unsigned int index = 1; index < in->num_vertices; index++){
-			population[i].setRoute(index,index);
+		//if(limit == 0){
+			for(unsigned int index = 1; index < in->num_vertices; index++){
+				population[i].setRoute(index,index);
 			
-		}
+			}
+		//}
+
 
 		random_shuffle ( population[i].route.begin() + 1, population[i].route.end() - 1);
 
@@ -126,6 +131,46 @@ void Genetic::create(int limit){
 								
 				population[i].setStopIndex(random_index);
 			}
+		}
+
+		population[i].setFitness();
+		
+	}*/
+
+	for(unsigned int i = limit; i < population.size(); i++){
+
+		int atual_index = 1;
+
+		int cumulate_capacity = 0;
+
+		int random_client;
+
+		for(unsigned int j = 1; j < inserted.size() - 1; j++)
+			inserted[j] = false;
+
+
+		while(atual_index < in->num_vertices){
+			
+			random_client = rand() % in->num_vertices;
+
+			while(inserted[random_client])
+				random_client = rand() % in->num_vertices;
+
+			if(in->demand[random_client] + cumulate_capacity < in->capacity){
+
+				population[i].setRoute(atual_index,random_client);
+				
+				cumulate_capacity += in->demand[random_client];
+				inserted[random_client] = true;
+
+				atual_index++; 
+
+			}
+			else{
+				population[i].setStopIndex(atual_index);
+				cumulate_capacity = 0;
+			}
+
 		}
 
 		population[i].setFitness();
@@ -716,6 +761,10 @@ bool Genetic::searchFitness(Individuo &s){
 	return false;
 }
 
+bool Genetic::verifyCapacity(int node1, int node2){
+
+}
+
 void Genetic::showResult(){
 
 	population[0].printRoute();
@@ -757,12 +806,8 @@ void Genetic::run(){
 	Individuo  best(in);
 
 	init();
-	
-	//printPopulation();
 
-	//i1.printDistanceMatrix();
-
-	//exit(0);
+	exit(0);
 
 	while(generations <= limit){
 

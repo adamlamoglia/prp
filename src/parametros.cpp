@@ -174,6 +174,7 @@ int Parametros::getNumberVehicles(){
 
 
 
+
 void Parametros::Store(int argc, char * argv[ ]) {
 
 	char optstring[] = "i:a:t:vr:dcq";

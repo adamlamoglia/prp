@@ -103,6 +103,8 @@ public:
 
 	vector<int> atual_route;
 
+	vector<bool>inserted;
+
 	vector<Individuo> population;
 
 	Genetic(Input *in, int alfa, int beta, int generations, double prob_mutation,
@@ -213,6 +215,8 @@ public:
 	void minHeapify(unsigned int i);
 
 	void heapFix(unsigned int i);
+
+	bool verifyCapacity(int node1, int node2);
 
 };
 

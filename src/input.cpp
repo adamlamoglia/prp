@@ -12,6 +12,7 @@
 Input::Input() {
 
 	num_vertices = 0;
+	capacity = 9999999;
 }
 
 
@@ -125,6 +126,13 @@ void Input::load(string name){
 
 						coordinates.resize( num_vertices );
 						distance_matrix.resize( num_vertices, vector<int>(num_vertices) );
+						demand.resize( num_vertices, 0 ); 
+					}
+
+					if(reader == "CAPACITY"){
+
+						file >> reader; // :
+						file >> capacity;
 					}
 
 					if(reader == "EDGE_WEIGHT_TYPE"){
@@ -173,6 +181,19 @@ void Input::load(string name){
 						
 						else if(type == "ATSP" && type != "FULL_MATRIX")
 							buildAtsp();
+					}
+
+					if(reader == "DEMAND_SECTION"){
+
+						int id,
+							client_demand;
+
+						for(unsigned int i = 0; i < num_vertices; i++){
+							file >> id >> client_demand;
+
+							demand[id - 1] = client_demand;
+						}
+						
 					}
 
 
