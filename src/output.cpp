@@ -8,27 +8,45 @@
 #include "output.h"
 #include <cassert>
 
-
-Output::Output(Input *in) {
+Output::Output(Input *in)
+{
 
 	this->in = in;
 
 	//o tamanho da rota tem um valor a mais, pois sempre ha o retorno para o deposito
 	route.resize(in->num_vertices + 1, 0);
 	stop_index.resize(in->num_vertices + 1, false);
+	vehicle_associated.resize(in->num_vertices + 1, 0);
+	capacity_final.resize(in->num_vertices + 1, 0);
 
 	fitness = 0;
-
 }
 
+void Output::printVehicles()
+{
+	for (unsigned int i = 0; i < vehicle_associated.size(); i++)
+		cout << vehicle_associated[i] << " ";
 
-void Output::printDistanceMatrix(){
+	cout << endl;
+}
+
+void Output::printCapacities(){
+
+		for (unsigned int i = 0; i < vehicle_associated.size(); i++)
+			cout << capacity_final[i] << " ";
+
+		cout << endl;
+}
+
+void Output::printDistanceMatrix()
+{
 	cout << "[";
-	for(unsigned int i = 0; i < in->distance_matrix.size(); i++){
-		for(unsigned int j = 0; j < in->distance_matrix.size(); j++){
+	for (unsigned int i = 0; i < in->distance_matrix.size(); i++)
+	{
+		for (unsigned int j = 0; j < in->distance_matrix.size(); j++)
+		{
 
-				cout  << in->distance_matrix[i][j] << ",";
-
+			cout << in->distance_matrix[i][j] << ",";
 		}
 		cout << endl;
 	}
@@ -36,56 +54,61 @@ void Output::printDistanceMatrix(){
 	cout << "]" << endl;
 }
 
-void Output::printRoute(){
+void Output::printRoute()
+{
 
-	for(unsigned int i = 0; i < route.size(); i++)
+	for (unsigned int i = 0; i < route.size(); i++)
 		cout << route[i] << " ";
 
 	cout << endl;
-
 }
 
-void Output::fitness_set(int f){
-	if(f < 0){
-		cout<<"erro"<<endl;
+void Output::fitness_set(int f)
+{
+	if (f < 0)
+	{
+		cout << "erro" << endl;
 		exit(0);
 	}
-	
-	this->fitness =  f;
+
+	this->fitness = f;
 }
 
-int Output::fitness_get(){
+int Output::fitness_get()
+{
 	return this->fitness;
 }
 
-void Output::printStopIndexes(){
+void Output::printStopIndexes()
+{
 
-	for(unsigned int i = 0; i < stop_index.size(); i++)
-		if(stop_index[i])
+	for (unsigned int i = 0; i < stop_index.size(); i++)
+		if (stop_index[i])
 			cout << i << " ";
 		else
 			cout << stop_index[i] << " ";
 
 	cout << endl;
-
 }
 
-void Output::printFitness(){
+void Output::printFitness()
+{
 
 	std::cout << "Best " << fitness << std::endl;
-
 }
 
-void Output::printArray2d(){
+void Output::printArray2d()
+{
 	cout << "[" << endl;
-	for(unsigned int i = 1; i <= in->num_vertices; i++){
-		for(unsigned int j = 1; j <= in->num_vertices; j++){
-			if(i != j){
-					cout << i << "," << j << ",";
+	for (unsigned int i = 1; i <= in->num_vertices; i++)
+	{
+		for (unsigned int j = 1; j <= in->num_vertices; j++)
+		{
+			if (i != j)
+			{
+				cout << i << "," << j << ",";
 			}
-
 		}
 	}
 	cout << "]);" << endl;
 }
-

@@ -101,8 +101,6 @@ public:
 
 	vector<bool> repeated_vertex_f2;
 
-	vector<int> atual_route;
-
 	vector<bool>inserted;
 
 	vector<Individuo> population;

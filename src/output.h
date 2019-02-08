@@ -22,6 +22,10 @@ public:
 
 	vector<bool> stop_index;
 
+	vector<int> vehicle_associated;
+
+	vector<int> capacity_final;
+
 	//int number_vehicles;
 
 	Output(Input *in);
@@ -37,6 +41,10 @@ public:
 	void printArray2d();
 
 	void fitness_set(int f);
+
+	void printVehicles();
+
+	void printCapacities();
 
 	int fitness_get();
 private:

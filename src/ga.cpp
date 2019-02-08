@@ -140,6 +140,8 @@ void Genetic::create(int limit){
 	for(unsigned int i = limit; i < population.size(); i++){
 
 		int atual_index = 1;
+		int atual_vehicle = 1;
+		int atual_vehicle_index = 1;
 
 		int cumulate_capacity = 0;
 
@@ -159,16 +161,21 @@ void Genetic::create(int limit){
 			if(in->demand[random_client] + cumulate_capacity < in->capacity){
 
 				population[i].setRoute(atual_index,random_client);
-				
+				population[i].vehicle_associated[atual_vehicle_index] = atual_vehicle;
+
 				cumulate_capacity += in->demand[random_client];
 				inserted[random_client] = true;
 
 				atual_index++; 
+				atual_vehicle_index++;
 
 			}
 			else{
 				population[i].setStopIndex(atual_index);
+				population[i].capacity_final[atual_vehicle] = in->capacity - cumulate_capacity;
 				cumulate_capacity = 0;
+				
+				atual_vehicle++;
 			}
 
 		}
@@ -777,8 +784,11 @@ void Genetic::printPopulation(){
 
 	for(unsigned int i = 0; i < population.size(); i++){
 		population[i].printRoute();
+		population[i].printVehicles();
+		population[i].printCapacities();
 		population[i].printStopIndexes();
 		population[i].printFitness();
+
 	}
 }
 
@@ -806,6 +816,8 @@ void Genetic::run(){
 	Individuo  best(in);
 
 	init();
+
+	printPopulation();
 
 	exit(0);
 
