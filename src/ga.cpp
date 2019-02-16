@@ -170,7 +170,7 @@ void Genetic::create(int limit){
 				atual_vehicle_index++;
 
 			}
-			else{
+			if(in->demand[random_client] + cumulate_capacity >= in->capacity || atual_index == in->num_vertices){
 				population[i].setStopIndex(atual_index);
 				population[i].capacity_final[atual_vehicle] = in->capacity - cumulate_capacity;
 				cumulate_capacity = 0;
