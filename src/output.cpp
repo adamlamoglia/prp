@@ -17,7 +17,7 @@ Output::Output(Input *in)
 	route.resize(in->num_vertices + 1, 0);
 	stop_index.resize(in->num_vertices + 1, false);
 	vehicle_associated.resize(in->num_vertices + 1, 0);
-	capacity_final.resize(in->num_vertices + 1, 0);
+	atual_capacity.resize(in->num_vertices + 1, 0);
 
 	fitness = 0;
 }
@@ -33,7 +33,7 @@ void Output::printVehicles()
 void Output::printCapacities(){
 
 		for (unsigned int i = 0; i < vehicle_associated.size(); i++)
-			cout << capacity_final[i] << " ";
+			cout << atual_capacity[i] << " ";
 
 		cout << endl;
 }

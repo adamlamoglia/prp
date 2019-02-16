@@ -24,7 +24,7 @@ public:
 
 	vector<int> vehicle_associated;
 
-	vector<int> capacity_final;
+	vector<int> atual_capacity;
 
 	//int number_vehicles;
 

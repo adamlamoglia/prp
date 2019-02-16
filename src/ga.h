@@ -214,7 +214,9 @@ public:
 
 	void heapFix(unsigned int i);
 
-	bool verifyCapacity(int node1, int node2);
+	bool capacityIsSatisfied(Individuo &s, int node1, int node2);
+
+	void chooseNodes(Individuo &s);
 
 };
 
