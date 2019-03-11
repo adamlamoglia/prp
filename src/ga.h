@@ -224,6 +224,8 @@ public:
 
 	void swapVehicles(Individuo &s, int vehicle1, int vehicle2);
 
+	bool capacityRemovingIsSatisfied(Individuo &s, int node1, int node2);
+
 };
 
 #endif /* GA_H_ */

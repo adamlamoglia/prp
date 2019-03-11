@@ -40,18 +40,23 @@ void Output::printCapacities(){
 
 void Output::printDistanceMatrix()
 {
-	cout << "[";
+	cout << "   ";
+	for(int i = 0; i < in->distance_matrix.size(); i++){
+		cout << i << " ";
+	}
+	cout << endl;
 	for (unsigned int i = 0; i < in->distance_matrix.size(); i++)
 	{
+		cout << i << "| ";
+
 		for (unsigned int j = 0; j < in->distance_matrix.size(); j++)
 		{
 
-			cout << in->distance_matrix[i][j] << ",";
+			cout << in->distance_matrix[i][j] << " ";
 		}
 		cout << endl;
 	}
 
-	cout << "]" << endl;
 }
 
 void Output::printRoute()

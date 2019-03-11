@@ -135,7 +135,7 @@ void Genetic::create(int limit)
 			while (inserted[random_client])
 				random_client = rand() % in->num_vertices;
 
-			if (in->demand[random_client] + cumulate_capacity < in->capacity)
+			if (in->demand[random_client] + cumulate_capacity <= in->capacity)
 			{
 
 				population[i].setRoute(atual_index, random_client);
@@ -147,9 +147,9 @@ void Genetic::create(int limit)
 				atual_index++;
 				atual_vehicle_index++;
 			}
-			if (in->demand[random_client] + cumulate_capacity >= in->capacity || atual_index == in->num_vertices)
+			if (in->demand[random_client] + cumulate_capacity > in->capacity || atual_index == in->num_vertices)
 			{
-				population[i].setStopIndex(atual_index);
+				population[i].setStopIndex(atual_index - 1);
 				population[i].atual_capacity[atual_vehicle] = in->capacity - cumulate_capacity;
 
 				cumulate_capacity = 0;
@@ -236,6 +236,9 @@ void Genetic::mutation(Individuo &f)
 	default:
 		mutationSwap(f);
 	}
+
+	//removeVertexFromVehicle(f);
+					
 }
 
 void Genetic::insertion(Individuo &s, Individuo &best, int &beta)
@@ -447,7 +450,7 @@ void Genetic::uniformCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Indi
 
 void Genetic::chooseNodes(Individuo &s)
 {
-
+	
 	do
 	{
 		random_node1 = rand() % in->num_vertices;
@@ -464,6 +467,8 @@ void Genetic::chooseNodes(Individuo &s)
 
 		} while (random_node2 == 0 || random_node2 == in->num_vertices - 1 || random_node1 == random_node2);
 	} while (!capacityIsSatisfied(s, random_node1, random_node2));
+
+	
 }
 
 bool Genetic::capacityIsSatisfied(Individuo &s, int node1, int node2)
@@ -488,6 +493,27 @@ bool Genetic::capacityIsSatisfied(Individuo &s, int node1, int node2)
 	}
 
 	return false;
+}
+
+bool Genetic::capacityRemovingIsSatisfied(Individuo &s, int node1, int node2){
+
+	int vehicle1, vehicle2, capacity1, capacity2;
+
+	vehicle1 = s.vehicle_associated[node1];
+	vehicle2 = s.vehicle_associated[node2];
+
+	capacity1 = s.atual_capacity[vehicle1];
+	capacity2 = s.atual_capacity[vehicle2];
+
+	if (capacity2 - in->demand[s.route[node1]] >= 0)
+	{
+
+		return true;
+	}
+
+	return false;
+
+
 }
 
 void Genetic::swapNodeCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2)
@@ -588,7 +614,7 @@ void Genetic::removeVertexFromVehicle(Individuo &s)
 
 		
 		
-	}while(!capacityIsSatisfied(s, random_node1, random_node2));
+	}while(!capacityRemovingIsSatisfied(s, random_node1, random_node2));
 
 	
 	vehicle1 = s.vehicle_associated[random_node1];
@@ -728,27 +754,40 @@ int Genetic::calculatePartialRoute(Individuo &s, int i, int k)
 		if (s.verifyPrecedent(i, i) == 0 && s.verifyPrecedent(k, k) != 0)
 		{
 
-			return in->distance_matrix[s.verifyPrecedent(i - 1, i - 1)][s.route[i]] + in->distance_matrix[s.route[i]][s.verifyPrecedent(i, i + 1)] + in->distance_matrix[s.verifyPrecedent(k - 1, k - 1)][s.route[k]] + in->distance_matrix[s.route[k]][s.verifyPrecedent(k, k + 1)];
+			return in->distance_matrix[s.verifyPrecedent(i - 1, i - 1)][s.route[i]] 
+			+ in->distance_matrix[s.route[i]][s.verifyPrecedent(i, i + 1)] 
+			+ in->distance_matrix[s.verifyPrecedent(k - 1, k - 1)][s.route[k]] 
+			+ in->distance_matrix[s.route[k]][s.verifyPrecedent(k, k + 1)];
 		}
 
 		// i is not a stop index, k is a stop index
 		if (s.verifyPrecedent(i, i) != 0 && s.verifyPrecedent(k, k) == 0)
 		{
 
-			return in->distance_matrix[s.verifyPrecedent(i - 1, i - 1)][s.route[i]] + in->distance_matrix[s.verifyPrecedent(k - 1, k - 1)][s.route[k]] + in->distance_matrix[s.route[k]][s.verifyPrecedent(k, k + 1)];
+			return in->distance_matrix[s.verifyPrecedent(i - 1, i - 1)][s.route[i]] 
+			+ in->distance_matrix[s.verifyPrecedent(k - 1, k - 1)][s.route[k]] 
+			+ in->distance_matrix[s.route[k]][s.verifyPrecedent(k, k + 1)];
 		}
 
 		// i is a stop index, k is a stop index
 		if (s.verifyPrecedent(i, i) == 0 && s.verifyPrecedent(k, k) == 0)
 		{
 
-			return in->distance_matrix[s.verifyPrecedent(i - 1, i - 1)][s.route[i]] + in->distance_matrix[s.route[i]][s.verifyPrecedent(i, i + 1)] + in->distance_matrix[s.verifyPrecedent(k - 1, k - 1)][s.route[k]] + in->distance_matrix[s.route[k]][s.verifyPrecedent(k, k + 1)];
+			return in->distance_matrix[s.verifyPrecedent(i - 1, i - 1)][s.route[i]] 
+			+ in->distance_matrix[s.route[i]][s.verifyPrecedent(i, i + 1)] 
+			+ in->distance_matrix[s.verifyPrecedent(k - 1, k - 1)][s.route[k]] 
+			+ in->distance_matrix[s.route[k]][s.verifyPrecedent(k, k + 1)];
 		}
 
-		return in->distance_matrix[s.verifyPrecedent(i - 1, i - 1)][s.route[i]] + in->distance_matrix[s.verifyPrecedent(k - 1, k - 1)][s.route[k]] + in->distance_matrix[s.route[k]][s.verifyPrecedent(k, k + 1)];
+		return in->distance_matrix[s.verifyPrecedent(i - 1, i - 1)][s.route[i]] 
+		+ in->distance_matrix[s.verifyPrecedent(k - 1, k - 1)][s.route[k]] 
+		+ in->distance_matrix[s.route[k]][s.verifyPrecedent(k, k + 1)];
 	}
 
-	return in->distance_matrix[s.verifyPrecedent(i - 1, i - 1)][s.route[i]] + in->distance_matrix[s.route[i]][s.verifyPrecedent(i, i + 1)] + in->distance_matrix[s.verifyPrecedent(k - 1, k - 1)][s.route[k]] + in->distance_matrix[s.route[k]][s.verifyPrecedent(k, k + 1)];
+	return in->distance_matrix[s.verifyPrecedent(i - 1, i - 1)][s.route[i]] 
+	+ in->distance_matrix[s.route[i]][s.verifyPrecedent(i, i + 1)] 
+	+ in->distance_matrix[s.verifyPrecedent(k - 1, k - 1)][s.route[k]] 
+	+ in->distance_matrix[s.route[k]][s.verifyPrecedent(k, k + 1)];
 }
 
 void Genetic::swapNodes(Individuo &s, int i, int k)
@@ -774,31 +813,29 @@ void Genetic::swapNodes(Individuo &s, int i, int k)
 
 	s.fitness_set(s.fitness_get() - current_edges_value + new_edges_value);
 
-	/*#ifdef DEBUG_SWAP
+		/*#ifdef DEBUG_SWAP
+
+		// Valor do fitness apos a execucao de swapnodes
+		int old_fitness = s.fitness_get();
 
 		// Calcula o fitness do zero
-	s.setFitness();
+		s.setFitness();
 
-	// Pega o novo valor do fitness
-	int new_fitness = s.getFitness();
+		// Pega o novo valor do fitness
+		int new_fitness = s.getFitness();
 
-   	new_edges_value = calculatePartialRoute(s,i,k);
+		// Verifica se existe divergencia
+		if(old_fitness != new_fitness){
+			cout << "fitness apos swap: " << old_fitness << endl;
+			cout << "fitness calculado: " << new_fitness << endl;
+		}
+			
 
-	s.fitness_set(s.fitness_get() - current_edges_value + new_edges_value);	
+		// Continua com o valor computado por esta função
+		s.fitness_set(old_fitness);
+		#endif*/
+	
 
-	// Valor do fitness apos a execucao de swapnodes
-	int old_fitness = s.fitness_get();
-
-	// Verifica se existe divergencia
-	if(old_fitness != new_fitness){
-		cout << "fitness apos swap: " << old_fitness << endl;
-		cout << "fitness calculado: " << new_fitness << endl;
-	}
-		
-
-	// Continua com o valor computado por esta função
-	//s.fitness_set(old_fitness);
-	#endif*/
 }
 
 int Genetic::deltaEvaluation(Individuo &s, int i, int k)
@@ -833,6 +870,7 @@ void Genetic::showResult()
 	population[0].printCapacities();
 	population[0].printStopIndexes();
 	population[0].printFitness();
+	//population[0].printDistanceMatrix();
 }
 
 void Genetic::printPopulation()
@@ -845,6 +883,7 @@ void Genetic::printPopulation()
 		population[i].printCapacities();
 		population[i].printStopIndexes();
 		population[i].printFitness();
+		
 	}
 }
 
@@ -873,9 +912,10 @@ void Genetic::run()
 
 	init();
 
-	//printPopulation();
+	//showResult();
 
 	//exit(0);
+
 
 	while (generations <= limit)
 	{
@@ -900,10 +940,10 @@ void Genetic::run()
 				mutation(f1);
 				mutation(f2);
 
-				if(mutation_number < probability + 10){
-					removeVertexFromVehicle(f1);
-					removeVertexFromVehicle(f2);
-				}
+				
+				removeVertexFromVehicle(f1);
+				removeVertexFromVehicle(f2);
+				
 
 				alfa++;
 			}

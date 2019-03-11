@@ -199,6 +199,7 @@ void Input::load(string name){
 
 		}
 
+
 		file.close();
 	}
 
