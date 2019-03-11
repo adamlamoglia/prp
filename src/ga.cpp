@@ -113,34 +113,6 @@ void Genetic::buildMinHeap()
 void Genetic::create(int limit)
 {
 
-	/*for(unsigned int i = limit; i < population.size(); i++){
-		
-		//if(limit == 0){
-			for(unsigned int index = 1; index < in->num_vertices; index++){
-				population[i].setRoute(index,index);
-			
-			}
-		//}
-
-
-		random_shuffle ( population[i].route.begin() + 1, population[i].route.end() - 1);
-
-		if(limit == 0){
-			for(unsigned int num = 0; num < number_vehicles; num++){
-			
-				random_index = rand() % in->num_vertices;
-
-				while(population[i].isStopIndex(random_index))
-					random_index = rand() % in->num_vertices;
-								
-				population[i].setStopIndex(random_index);
-			}
-		}
-
-		population[i].setFitness();
-		
-	}*/
-
 	for (unsigned int i = limit; i < population.size(); i++)
 	{
 
@@ -257,6 +229,9 @@ void Genetic::mutation(Individuo &f)
 
 	case 3:
 		mutationInversion(f);
+
+	case 4:
+		removeVertexFromVehicle(f);
 
 	default:
 		mutationSwap(f);
@@ -470,7 +445,8 @@ void Genetic::uniformCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Indi
 	}
 }
 
-void Genetic::chooseNodes(Individuo &s){
+void Genetic::chooseNodes(Individuo &s)
+{
 
 	do
 	{
@@ -498,20 +474,18 @@ bool Genetic::capacityIsSatisfied(Individuo &s, int node1, int node2)
 	vehicle1 = s.vehicle_associated[node1];
 	vehicle2 = s.vehicle_associated[node2];
 
-	if(vehicle1 == vehicle2)
+	if (vehicle1 == vehicle2)
 		return true;
 
 	capacity1 = s.atual_capacity[vehicle1];
 	capacity2 = s.atual_capacity[vehicle2];
 
 	if (capacity1 + in->demand[s.route[node1]] - in->demand[s.route[node2]] >= 0 &&
-		capacity2 + in->demand[s.route[node2]] - in->demand[s.route[node1]] >= 0){
-		//cout << "prediction1: " << capacity1 - in->demand[s.route[node1]] + in->demand[s.route[node2]] << endl;
-		//cout << "prediction2: " << capacity2 - in->demand[s.route[node2]] + in->demand[s.route[node1]] << endl;
+		capacity2 + in->demand[s.route[node2]] - in->demand[s.route[node1]] >= 0)
+	{
 
 		return true;
 	}
-	
 
 	return false;
 }
@@ -527,7 +501,8 @@ void Genetic::swapNodeCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Ind
 	if (random_node1 < random_node2)
 		swapNodes(f1, random_node1, random_node2);
 
-	else swapNodes(f1, random_node2, random_node1);
+	else
+		swapNodes(f1, random_node2, random_node1);
 
 	chooseNodes(f2);
 
@@ -591,6 +566,46 @@ void Genetic::mutationInversion(Individuo &f)
 
 		end--;
 	}
+}
+
+void Genetic::swapVehicles(Individuo &s, int vehicle1, int vehicle2)
+{
+}
+
+void Genetic::removeVertexFromVehicle(Individuo &s)
+{
+
+	int vehicle1, vehicle2, capacity1, capacity2;
+
+	do
+	{
+		random_node1 = rand() % in->num_vertices;
+
+		do
+		{
+			random_node2 = rand() % in->num_vertices;
+		} while (s.vehicle_associated[random_node1] == s.vehicle_associated[random_node2]);
+
+		
+		
+	}while(!capacityIsSatisfied(s, random_node1, random_node2));
+
+	
+	vehicle1 = s.vehicle_associated[random_node1];
+	vehicle2 = s.vehicle_associated[random_node2];
+
+	capacity1 = s.atual_capacity[vehicle1];
+	capacity2 = s.atual_capacity[vehicle2];
+
+	s.vehicle_associated[random_node1] = s.vehicle_associated[random_node2];
+
+	s.atual_capacity[vehicle2] = s.atual_capacity[vehicle2] - in->demand[s.route[random_node1]];
+	s.atual_capacity[vehicle1] = s.atual_capacity[vehicle1] + in->demand[s.route[random_node1]];
+
+}
+
+void Genetic::addVertexForVehicle(Individuo &s)
+{
 }
 
 void Genetic::randomInsertion(Individuo &s)
@@ -677,7 +692,6 @@ void Genetic::twoOptBestImprovement(Individuo &solution)
 			for (unsigned int k = i + 1; k < in->num_vertices - 1; k++)
 			{
 
-				
 				delta = deltaEvaluation(solution, i, k);
 
 				if (delta < 0 && delta < best_delta)
@@ -692,13 +706,13 @@ void Genetic::twoOptBestImprovement(Individuo &solution)
 
 			if (improvement)
 			{
-				if(capacityIsSatisfied(solution,best_i,best_k)){
+				if (capacityIsSatisfied(solution, best_i, best_k))
+				{
 					swapNodes(solution, best_i, best_k);
 
 					if (solution.getFitness() < lowest_fitness)
 						global_improvement = true;
 				}
-					
 			}
 		}
 	}
@@ -745,12 +759,12 @@ void Genetic::swapNodes(Individuo &s, int i, int k)
 	vehicle1 = s.vehicle_associated[i];
 	vehicle2 = s.vehicle_associated[k];
 
-	if(vehicle1 != vehicle2){
+	if (vehicle1 != vehicle2)
+	{
 
 		s.atual_capacity[vehicle1] = s.atual_capacity[vehicle1] + in->demand[s.route[i]] - in->demand[s.route[k]];
 		s.atual_capacity[vehicle2] = s.atual_capacity[vehicle2] + in->demand[s.route[k]] - in->demand[s.route[i]];
 	}
-
 
 	current_edges_value = calculatePartialRoute(s, i, k);
 
@@ -759,8 +773,6 @@ void Genetic::swapNodes(Individuo &s, int i, int k)
 	new_edges_value = calculatePartialRoute(s, i, k);
 
 	s.fitness_set(s.fitness_get() - current_edges_value + new_edges_value);
-
-
 
 	/*#ifdef DEBUG_SWAP
 
@@ -887,6 +899,11 @@ void Genetic::run()
 
 				mutation(f1);
 				mutation(f2);
+
+				if(mutation_number < probability + 10){
+					removeVertexFromVehicle(f1);
+					removeVertexFromVehicle(f2);
+				}
 
 				alfa++;
 			}

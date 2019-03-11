@@ -218,6 +218,12 @@ public:
 
 	void chooseNodes(Individuo &s);
 
+	void removeVertexFromVehicle(Individuo &s);
+
+	void addVertexForVehicle(Individuo &s);
+
+	void swapVehicles(Individuo &s, int vehicle1, int vehicle2);
+
 };
 
 #endif /* GA_H_ */
