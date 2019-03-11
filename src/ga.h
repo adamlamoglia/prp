@@ -226,6 +226,7 @@ public:
 
 	bool capacityRemovingIsSatisfied(Individuo &s, int node1, int node2);
 
+	void lineUpRoute(Individuo &s, int vehicle, int node);
 };
 
 #endif /* GA_H_ */
