@@ -87,6 +87,9 @@ public:
 		best_i,
 		best_k,
 		best_delta;
+
+	int begin_index,
+		end_index;
 	
 	//heap variables
 	unsigned int l,
@@ -229,6 +232,8 @@ public:
 	void lineUpRouteAdded(Individuo &s, int vehicle, int node);
 
 	void lineUpRouteRemoved(Individuo &s, int vehicle, int node);
+
+	void findIndexes(Individuo &s, int node, int vehicle);
 };
 
 #endif /* GA_H_ */
