@@ -631,41 +631,120 @@ void Genetic::removeVertexFromVehicle(Individuo &s)
 	s.atual_capacity[vehicle2] = s.atual_capacity[vehicle2] - in->demand[s.route[random_node1]];
 	s.atual_capacity[vehicle1] = s.atual_capacity[vehicle1] + in->demand[s.route[random_node1]];
 
-	//lineUpRoute(s, vehicle2, random_node1);
+	//lineUpRouteRemoved(s, vehicle1, random_node1);
+	//lineUpRouteAdded(s, vehicle2, random_node1);
+	
 
 }
 
-void Genetic::lineUpRoute(Individuo &s, int vehicle, int node){
+void Genetic::lineUpRouteAdded(Individuo &s, int vehicle, int node){
 	int begin_index, end_index;
 
 	//find 0 or part of the same route 
 
 	for(int i = node - 1; i >= 0; i--){
 
-		if(s.vehicle_associated[i] == vehicle || s.vehicle_associated[i] == 0)
+		if(s.vehicle_associated[i] == vehicle || s.vehicle_associated[i] == 0){
 			begin_index = i;
+			break;
+		}
 	}
 
 	for(int i = node + 1; i < s.route.size(); i++){
 
-		if(s.vehicle_associated[i] == vehicle || s.vehicle_associated[i] == 0)
+		if(s.vehicle_associated[i] == vehicle || s.vehicle_associated[i] == 0){
 			end_index = i;
+			break;
+		}
 	}
 
+	//line up route of vehicle with add vertex
 
-	if(begin_index == 0 && s.isStopIndex(end_index - 1)){
+	if(begin_index == 0){
 
-		s.fitness_set(s.fitness_get() - in->distance_matrix[s.route[end_index]][0] 
+		s.fitness_set(s.fitness_get() - in->distance_matrix[0][s.route[end_index]] 
 					+ in->distance_matrix[0][s.route[node]]
 					+ in->distance_matrix[s.route[node]][s.route[end_index]]);
+
 	}
 
-	else if(end_index == 0 && s.isStopIndex(begin_index - 1)){
+	else if(end_index == 0){
 
 		s.fitness_set(s.fitness_get() - in->distance_matrix[s.route[begin_index]][0] 
 					+ in->distance_matrix[s.route[begin_index]][s.route[node]]
 					+ in->distance_matrix[s.route[node]][0]);
+		
+		s.setStopIndex(node);
+		s.stop_index[begin_index] = 0;
 	}
+
+	else{
+
+		s.fitness_set(s.fitness_get() - in->distance_matrix[s.route[begin_index]][s.route[end_index]] 
+					+ in->distance_matrix[s.route[begin_index]][s.route[node]]
+					+ in->distance_matrix[s.route[node]][s.route[end_index]]);
+
+	}
+
+
+
+}
+
+void Genetic::lineUpRouteRemoved(Individuo &s, int vehicle, int node){
+	int begin_index, end_index;
+
+	//line up route of vehicle with removed vertex
+
+	for(int i = node - 1; i >= 0; i--){
+
+		if(s.vehicle_associated[i] == vehicle || s.vehicle_associated[i] == 0){
+			begin_index = i;
+			break;
+		}
+	}
+
+	for(int i = node + 1; i < s.route.size(); i++){
+
+		if(s.vehicle_associated[i] == vehicle || s.vehicle_associated[i] == 0){
+			end_index = i;
+			break;
+		}
+	}
+
+	//there's no more route
+	if(begin_index == 0 && end_index == 0){
+
+		s.fitness_set(s.fitness_get() - in->distance_matrix[0][s.route[node]] 
+									  - in->distance_matrix[s.route[node]][0]);
+
+		s.stop_index[node] = 0;
+	}
+
+	else if(begin_index == 0){
+
+		s.fitness_set(s.fitness_get() - in->distance_matrix[0][s.route[node]]
+									  - in->distance_matrix[s.route[node]][s.route[end_index]] 
+									  + in->distance_matrix[0][s.route[end_index]]);
+		
+	}
+
+	else if(end_index == 0){
+
+		s.fitness_set(s.fitness_get() - in->distance_matrix[s.route[begin_index]][s.route[node]]
+									  - in->distance_matrix[s.route[node]][0] 
+									  + in->distance_matrix[s.route[begin_index]][0]);
+
+		
+		s.stop_index[node] = 0;
+		s.setStopIndex(begin_index);
+	}
+
+	else{
+		s.fitness_set(s.fitness_get() - in->distance_matrix[s.route[begin_index]][s.route[node]] 
+									  - in->distance_matrix[s.route[node]][s.route[end_index]]
+									  + in->distance_matrix[s.route[begin_index]][s.route[end_index]]);
+	}
+
 
 }
 

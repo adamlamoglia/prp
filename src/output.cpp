@@ -72,8 +72,8 @@ void Output::fitness_set(int f)
 {
 	if (f < 0)
 	{
-		cout << "erro" << endl;
-		exit(0);
+		//cout << "erro" << endl;
+		//exit(0);
 	}
 
 	this->fitness = f;
