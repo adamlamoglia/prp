@@ -233,6 +233,8 @@ public:
 
 	void lineUpRouteRemoved(Individuo &s, int vehicle, int node);
 
+	void lineUp(Individuo &s, int vehicle1, int vehicle2, int node1, int node2);
+
 	void findIndexes(Individuo &s, int node, int vehicle);
 };
 

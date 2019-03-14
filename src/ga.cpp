@@ -619,11 +619,14 @@ void Genetic::removeVertexFromVehicle(Individuo &s)
 		
 	}while(!capacityRemovingIsSatisfied(s, random_node1, random_node2));
 
+	vehicle1 = s.vehicle_associated[random_node1];
+	vehicle2 = s.vehicle_associated[random_node2];
 	//lineUpRouteRemoved(s, vehicle1, random_node1);
 	//lineUpRouteAdded(s, vehicle2, random_node1);
 	
-	vehicle1 = s.vehicle_associated[random_node1];
-	vehicle2 = s.vehicle_associated[random_node2];
+	//lineUp(s, vehicle1, vehicle2, random_node1, random_node2);
+
+
 
 	capacity1 = s.atual_capacity[vehicle1];
 	capacity2 = s.atual_capacity[vehicle2];
@@ -632,7 +635,105 @@ void Genetic::removeVertexFromVehicle(Individuo &s)
 
 	s.atual_capacity[vehicle2] = s.atual_capacity[vehicle2] - in->demand[s.route[random_node1]];
 	s.atual_capacity[vehicle1] = s.atual_capacity[vehicle1] + in->demand[s.route[random_node1]];
+
 	
+	
+
+}
+
+void Genetic::lineUp(Individuo &s, int vehicle1, int vehicle2, int node1, int node2){
+
+	int previous_index_node1, next_index_node1, previous_index_node2, next_index_node2;
+
+	int route_node1, route_node2;
+	
+	for(int i = node1 - 1; i >= 0; i--){
+
+		if(s.vehicle_associated[i] == vehicle1 || i == 0){
+			previous_index_node1 = i;
+			break;
+		}
+	}
+
+	for(int i = node1 + 1; i < s.route.size(); i++){
+
+		if(s.vehicle_associated[i] == vehicle1){
+			next_index_node1 = i;
+			break;
+		}
+
+		else if(i == s.route.size() - 1)
+			next_index_node1 = 0;
+	}
+
+	for(int i = node1 - 1; i >= 0; i--){
+
+		if(s.vehicle_associated[i] == vehicle2 || i == 0){
+			previous_index_node2 = i;
+			break;
+		}
+	}
+
+	for(int i = node1 + 1; i < s.route.size(); i++){
+
+		if(s.vehicle_associated[i] == vehicle2){
+			next_index_node2 = i;
+			break;
+		}
+
+		else if(i == s.route.size() - 1)
+			next_index_node2 = 0;
+	}
+	
+	//route with single client
+	if(previous_index_node1 == 0 && next_index_node1 == 0){
+
+		//cout << "entrou1" << endl;
+
+		s.fitness_set(s.fitness_get() - in->distance_matrix[0][s.route[node1]] 
+									  - in->distance_matrix[s.route[node1]][0]);
+
+		s.stop_index[node1] = 0;
+	}
+
+	else{
+
+		//cout << "entrou2" << endl;
+
+
+		s.fitness_set(s.fitness_get() - in->distance_matrix[s.route[previous_index_node1]][s.route[node1]]
+									  - in->distance_matrix[s.route[node1]][s.route[next_index_node1]]
+									  + in->distance_matrix[s.route[previous_index_node1]][s.route[next_index_node1]]);
+
+		if(next_index_node1 == 0){
+			s.stop_index[node1] = 0;
+			s.setStopIndex(previous_index_node1);
+		}
+	}
+
+
+	if(previous_index_node2 == 0 && next_index_node2 == 0){
+
+		//cout << "entrou3" << endl;
+
+				s.fitness_set(s.fitness_get() + in->distance_matrix[0][s.route[node1]] 
+									  		  + in->distance_matrix[s.route[node1]][0]);
+				
+				//s.setStopIndex(node1);
+	}
+
+	else{
+
+		//cout << "entrou4" << endl;
+		s.fitness_set(s.fitness_get() + in->distance_matrix[s.route[previous_index_node2]][s.route[node1]]
+									  + in->distance_matrix[s.route[node1]][s.route[next_index_node2]]
+									  - in->distance_matrix[s.route[previous_index_node2]][s.route[next_index_node2]]);
+
+		if(next_index_node2 == 0){
+			s.stop_index[previous_index_node2] = 0;
+			s.setStopIndex(node1);
+		}
+	}
 
 }
 
@@ -1058,17 +1159,22 @@ void Genetic::run()
 
 				mutation(f1);
 				mutation(f2);
-
 				
-				removeVertexFromVehicle(f1);
-				removeVertexFromVehicle(f2);
-				
-
+				if(alfa <= 1){
+					removeVertexFromVehicle(f1);
+					removeVertexFromVehicle(f2);
+				}
 				alfa++;
 			}
 
 			twoOptBestImprovement(f1);
 			twoOptBestImprovement(f2);
+
+			//if(alfa <= 2){
+				//removeVertexFromVehicle(f1);
+				//removeVertexFromVehicle(f2);
+			//}
+
 
 			insertion(f1, best, beta);
 			insertion(f2, best, beta);
@@ -1082,4 +1188,6 @@ void Genetic::run()
 	}
 
 	population[0] = best;
+
+	printPopulation();
 }
