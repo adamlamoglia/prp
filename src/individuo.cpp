@@ -46,6 +46,10 @@ void Individuo::setStopIndex(unsigned int vertex){
 	stop_index[vertex] = true;
 }
 
+void Individuo::setNumVehicles(int num){
+	this->num_vehicles = num;
+}
+
 bool Individuo::isStopIndex(unsigned int vertex){
 
 	return stop_index[vertex];
@@ -65,6 +69,10 @@ int Individuo::verifyPrecedent(unsigned int index,unsigned int real){
 			return 0;
 	
 	return route[real];
+}
+
+int Individuo::getNumVehicles(){
+	return num_vehicles;
 }
 
 

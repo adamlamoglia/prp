@@ -21,6 +21,8 @@ Genetic::Genetic(Input *in, int alfa, int beta, int generations, double prob_mut
 	limit = generations;
 	probability = prob_mutation;
 
+	this->crossover_type = ctype;
+
 	this->lucky_factor = lucky_factor;
 	this->lucky_range = lucky_range;
 	this->mutation_range = mutation_range;
@@ -158,6 +160,7 @@ void Genetic::create(int limit)
 		}
 
 		population[i].setFitness();
+		population[i].setNumVehicles(atual_vehicle - 1);
 	}
 
 	buildMinHeap();
@@ -209,6 +212,9 @@ void Genetic::crossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &
 
 	case 3:
 		onePointCrossover(p1, p2, f1, f2);
+	
+	case 4:
+		routeCrossover(p1, p2, f1, f2);
 
 	default:
 		swapNodeCrossover(p1, p2, f1, f2);
@@ -236,8 +242,6 @@ void Genetic::mutation(Individuo &f)
 	default:
 		mutationSwap(f);
 	}
-
-	//removeVertexFromVehicle(f);
 					
 }
 
@@ -549,6 +553,94 @@ void Genetic::mutationSwap(Individuo &f)
 
 	else
 		swapNodes(f, random_node2, random_node1);
+}
+
+void Genetic::routeCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2)
+{
+
+	mask.resize(p1.getNumVehicles(), 0);
+
+	for(int i = 0; i < mask.size(); i++)
+		mask[i] = rand() % 2;
+
+	p1.printRoute();
+	p1.printVehicles();
+	
+	for(int i = 0; i < mask.size(); i++)
+		cout << mask[i] << " ";
+	
+	cout << endl;
+	
+	for(int i = 0; i < mask.size(); i++){
+
+		//pick route to change
+		if(mask[i] == 0){
+
+			pickRoute(p1, i + 1);
+
+			for(int j = 0; j < list.size(); j++)
+				cout << list[j] << " ";
+
+			cout << endl;
+
+			sortRoute(p2);
+
+			p2.printRoute();
+
+			for(int j = 0; j < list.size(); j++)
+				cout << list[j] << " ";
+
+			cout << endl;
+
+			exit(1);
+		}
+	}
+
+}
+
+void Genetic::pickRoute(Individuo &s, int index){
+
+	int sizeRoute = 0, list_index = 0;
+
+	for(int i = 0; i < s.route.size(); i++){
+
+		if(s.vehicle_associated[i] == index)
+			sizeRoute++;
+	}
+
+	
+	list.resize(sizeRoute);
+	sort_index.resize(sizeRoute);
+
+	for(int i = 0; i < s.route.size(); i++){
+
+		if(s.vehicle_associated[i] == index)
+				list[list_index++] = s.route[i];
+	}	
+	
+}
+
+void Genetic::sortRoute(Individuo &s){
+	
+	for(int i = 0; i < list.size(); i++){
+
+		for(int j = 0; j < s.route.size(); j++){
+
+			if(list[i] == s.route[j]){
+
+				sort_index[i] = j;
+				break;
+			}
+		}
+			
+	}
+
+	sort(sort_index.begin(), sort_index.end());
+
+	for(int i = 0; i < list.size(); i++){
+
+		list[i] = s.route[sort_index[i]];
+	}
 }
 
 void Genetic::mutationScramble(Individuo &f)
@@ -1090,7 +1182,6 @@ void Genetic::showResult()
 	population[0].printCapacities();
 	population[0].printStopIndexes();
 	population[0].printFitness();
-	//population[0].printDistanceMatrix();
 }
 
 void Genetic::printPopulation()
@@ -1160,20 +1251,11 @@ void Genetic::run()
 				mutation(f1);
 				mutation(f2);
 				
-				if(alfa <= 1){
-					removeVertexFromVehicle(f1);
-					removeVertexFromVehicle(f2);
-				}
 				alfa++;
 			}
 
 			twoOptBestImprovement(f1);
 			twoOptBestImprovement(f2);
-
-			//if(alfa <= 2){
-				//removeVertexFromVehicle(f1);
-				//removeVertexFromVehicle(f2);
-			//}
 
 
 			insertion(f1, best, beta);
@@ -1188,6 +1270,4 @@ void Genetic::run()
 	}
 
 	population[0] = best;
-
-	printPopulation();
 }

@@ -62,33 +62,22 @@ public:
 	int	cut;
 
 	//TODO: Comment
-	double probability;
+	double probability,
+		   lucky_factor,
+		   lucky_number;
 
-	double lucky_factor;
-
-	double lucky_number;
-
-	int mutation_range;
-
-	int lowest_fitness;
-
-	int new_fitness;
-
-	int old_fitness;
-
-	int current_edges_value;
-
-	int new_edges_value;
-
-	int number_vehicles;
-
-	//twoOptBestImprovement variables
-	int delta,
+	int mutation_range,
+		lowest_fitness,
+		new_fitness,
+		old_fitness,
+		current_edges_value,
+		new_edges_value,
+		number_vehicles,
+		delta,
 		best_i,
 		best_k,
-		best_delta;
-
-	int begin_index,
+		best_delta,
+		begin_index,
 		end_index;
 	
 	//heap variables
@@ -96,15 +85,16 @@ public:
 				 r,
 				 smallest;
 
-	vector<bool> inserted_vertex_f1;
+	vector<bool> inserted_vertex_f1,
+				 inserted_vertex_f2,
+				 repeated_vertex_f1,
+				 repeated_vertex_f2,
+				 inserted;
 
-	vector<bool> inserted_vertex_f2;
+	vector<int> mask,
+				list,
+				sort_index;
 
-	vector<bool> repeated_vertex_f1;
-
-	vector<bool> repeated_vertex_f2;
-
-	vector<bool>inserted;
 
 	vector<Individuo> population;
 
@@ -151,6 +141,8 @@ public:
 	void uniformCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2);
 
 	void swapNodeCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2);
+
+	void routeCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2);
 
 	//TODO: Comment
 	void mutation(Individuo &f);
@@ -236,6 +228,11 @@ public:
 	void lineUp(Individuo &s, int vehicle1, int vehicle2, int node1, int node2);
 
 	void findIndexes(Individuo &s, int node, int vehicle);
+
+	void pickRoute(Individuo &s, int index);
+
+	void sortRoute(Individuo &s);
+	
 };
 
 #endif /* GA_H_ */

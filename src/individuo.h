@@ -25,11 +25,15 @@ public:
 
 	void setStopIndex(unsigned int vertex);
 
+	void setNumVehicles(int num);
+
 	bool isStopIndex(unsigned int vertex);
 
 	int returnVertex(unsigned int vertex);
 
 	int verifyPrecedent(unsigned int index, unsigned int real);
+
+	int getNumVehicles();
 
 	//void setNumberVehicles(int num);
 

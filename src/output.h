@@ -26,6 +26,8 @@ public:
 
 	vector<int> atual_capacity;
 
+	int num_vehicles;
+
 	//int number_vehicles;
 
 	Output(Input *in);
