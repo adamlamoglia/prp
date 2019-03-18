@@ -14,10 +14,12 @@ using namespace std;
 
 int main( int argc, char ** argv ) {
 
-	//int seed = time(NULL);
-	int seed = 10;
+	int seed = time(NULL);
+	//int seed = 1552931512;
 
 	srand(seed);
+
+	cout << "seed: " << seed << endl;
 
 	if(argc > 1){
 

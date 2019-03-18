@@ -232,6 +232,8 @@ public:
 	void pickRoute(Individuo &s, int index);
 
 	void sortRoute(Individuo &s);
+
+	void updateRoute(Individuo &s);
 	
 };
 
