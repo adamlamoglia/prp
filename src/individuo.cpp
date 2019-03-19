@@ -18,15 +18,10 @@ void Individuo::setFitness(){
 
 	for(unsigned int i = 0; i < route.size() - 1; i++){
 		
-		if(isStopIndex(i))
-			fitness_set( fitness_get() + in->distance_matrix[route[i]][0] + in->distance_matrix[0][route[i+1]]);
-		else
-			fitness_set( fitness_get() + in->distance_matrix[route[i]][route[i+1]]);
+		if(route[i].id == 0 && route[i+1].id == 0)
+			break;
 
-		//cout << in->distance_matrix[route[i]][route[i+1]] << endl;
-	}
-
-	for(unsigned int i = 0; i < route.size(); i++ ){
+		fitness_set( fitness_get() + in->distance_matrix[route[i].id][route[i+1].id]);
 
 	}
 		
@@ -37,38 +32,14 @@ int Individuo::getFitness(){
 	return fitness_get();
 }
 
-void Individuo::setRoute(unsigned int id, unsigned int vertex){
+void Individuo::setRoute(unsigned int index, unsigned int vertex){
 
-	route[id] = vertex;
+	route[index].id = vertex;
 }
 
-void Individuo::setStopIndex(unsigned int vertex){
-	stop_index[vertex] = true;
-}
 
 void Individuo::setNumVehicles(int num){
 	this->num_vehicles = num;
-}
-
-bool Individuo::isStopIndex(unsigned int vertex){
-
-	return stop_index[vertex];
-}
-
-int Individuo::returnVertex(unsigned int vertex){
-
-	if(isStopIndex(vertex))
-		return 0;
-	
-	return vertex;
-}	
-
-int Individuo::verifyPrecedent(unsigned int index,unsigned int real){
-
-		if(isStopIndex(index))
-			return 0;
-	
-	return route[real];
 }
 
 int Individuo::getNumVehicles(){

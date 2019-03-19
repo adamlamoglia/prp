@@ -9,6 +9,8 @@
 #define OUTPUT_H_
 
 #include "input.h"
+#include "client.h"
+#include "vehicle.h"
 
 
 class Output {
@@ -18,13 +20,9 @@ public:
 	Input *in;
 
 	//Used to output a sequence of nodes representing the vertex of graph that was visited.
-	vector<int> route;
+	vector<Client> route;
 
-	vector<bool> stop_index;
-
-	vector<int> vehicle_associated;
-
-	vector<int> atual_capacity;
+	vector<Vehicle> fleet;
 
 	int num_vehicles;
 
@@ -36,11 +34,7 @@ public:
 
 	void printRoute();
 
-	void printStopIndexes();
-
 	void printFitness();
-
-	void printArray2d();
 
 	void fitness_set(int f);
 

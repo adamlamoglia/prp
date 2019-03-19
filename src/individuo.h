@@ -21,21 +21,11 @@ public:
 
 	void setFitness();
 
-	void setRoute(unsigned int id, unsigned int vertex);
-
-	void setStopIndex(unsigned int vertex);
+	void setRoute(unsigned int index, unsigned int vertex);
 
 	void setNumVehicles(int num);
 
-	bool isStopIndex(unsigned int vertex);
-
-	int returnVertex(unsigned int vertex);
-
-	int verifyPrecedent(unsigned int index, unsigned int real);
-
 	int getNumVehicles();
-
-	//void setNumberVehicles(int num);
 
 
 };
