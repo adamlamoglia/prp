@@ -563,14 +563,6 @@ void Genetic::routeCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Indivi
 	for (int i = 0; i < mask.size(); i++)
 		mask[i] = rand() % 2;
 
-	//f1.printRoute();
-	//f1.printFitness();
-
-	//for (int i = 0; i < mask.size(); i++)
-	//	cout << mask[i] << " ";
-
-	//cout << endl;
-
 	//pick route to change
 	while (mask[change_index] == 1)
 	{
@@ -582,25 +574,9 @@ void Genetic::routeCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Indivi
 
 	pickRoute(f1, change_index + 1);
 
-	//for (int i = 0; i < list.size(); i++)
-	//	cout << list[i] << " ";
-
-	//cout << endl;
-
 	sortRoute(p2);
 
 	updateRoute(f1);
-
-	//p2.printRoute();
-
-	//for (int i = 0; i < list.size(); i++)
-	//	cout << list[i] << " ";
-
-	//cout << endl;
-
-	//f1.printRoute();
-	//f1.printFitness();
-
 
 	change_index = 0;
 
@@ -622,9 +598,6 @@ void Genetic::routeCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Indivi
 	sortRoute(p1);
 
 	updateRoute(f2);
-
-
-	//exit(1);
 
 }
 
@@ -688,7 +661,7 @@ void Genetic::sortRoute(Individuo &s)
 }
 
 void Genetic::updateRoute(Individuo &s){
-	
+
 	int before_route = 0,
 		after_route = 0,
 		list_index = 0;
