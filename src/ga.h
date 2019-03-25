@@ -92,7 +92,8 @@ public:
 				 inserted;
 
 	vector<int> mask,
-				list,
+				before_list,
+				after_list,
 				sort_index;
 
 
@@ -229,11 +230,15 @@ public:
 
 	void findIndexes(Individuo &s, int node, int vehicle);
 
-	void pickRoute(Individuo &s, int index);
+	void pickRoute(Individuo &s, int vehicle);
 
 	void sortRoute(Individuo &s);
 
 	void updateRoute(Individuo &s);
+
+	bool clientsServed();
+
+	void remove(Individuo &s, int vehicle_removed, int vehicle_added, int node);
 	
 };
 
