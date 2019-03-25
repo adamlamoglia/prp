@@ -1359,12 +1359,6 @@ void Genetic::run()
 
 	init();
 
-	//printPopulation();
-	//exit(1);
-	//showResult();
-
-	//exit(0);
-
 	while (generations <= limit)
 	{
 
