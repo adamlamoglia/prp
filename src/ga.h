@@ -77,8 +77,9 @@ public:
 		best_i,
 		best_k,
 		best_delta,
-		begin_index,
-		end_index;
+		begin_index = -1,
+		end_index = -1,
+		random_vehicle;
 	
 	//heap variables
 	unsigned int l,
@@ -192,6 +193,8 @@ public:
 
 	void showResult();
 
+	void printResult();
+
 	void printPopulation();
 
 	void sortPopulation();
@@ -239,6 +242,10 @@ public:
 	bool clientsServed();
 
 	void remove(Individuo &s, int vehicle_removed, int vehicle_added, int node);
+
+	int searchClient(Individuo &s, int client);
+
+	void setVehicleIndexes(Individuo &s, int vehicle);
 	
 };
 

@@ -47,7 +47,7 @@ int main( int argc, char ** argv ) {
 			Parametros::getNumberVehicles());   // Standard: 3
 			
 		ga.run();
-		ga.showResult();
+		ga.printResult();
 	}
 	else
 		cout << "error: missing file" << endl;

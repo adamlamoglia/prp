@@ -87,3 +87,17 @@ void Output::printFitness()
 	std::cout << "Best " << fitness << std::endl;
 }
 
+void Output::printResult()
+{
+	for(int i = 0; i < num_vehicles; i++){
+
+		cout << "Route #" << i + 1 << ":" << " ";
+
+		for(int j = 0; j < route.size(); j++)
+			if(route[j].vehicle == i + 1)
+				cout << route[j].id << " ";
+
+		cout << endl;
+	}
+}
+

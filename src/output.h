@@ -43,6 +43,9 @@ public:
 	void printCapacities();
 
 	int fitness_get();
+
+	void printResult();
+	
 private:
 	//Represents the value of route.
 	int fitness;
