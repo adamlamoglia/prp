@@ -11,31 +11,12 @@
 Output::Output(Input *in)
 {
 
-	this->in = in;
+	this->in = in->getInstance();
 
-	//o tamanho da rota tem um valor a mais, pois sempre ha o retorno para o deposito
-	route.resize(in->num_vertices + 1, 0);
-	stop_index.resize(in->num_vertices + 1, false);
-	vehicle_associated.resize(in->num_vertices + 1, 0);
-	atual_capacity.resize(in->num_vertices + 1, 0);
+
+	route.resize(in->num_vertices, vector<int>(in->num_vertices, 0));
 
 	fitness = 0;
-}
-
-void Output::printVehicles()
-{
-	for (unsigned int i = 0; i < vehicle_associated.size(); i++)
-		cout << vehicle_associated[i] << " ";
-
-	cout << endl;
-}
-
-void Output::printCapacities(){
-
-		for (unsigned int i = 0; i < vehicle_associated.size(); i++)
-			cout << atual_capacity[i] << " ";
-
-		cout << endl;
 }
 
 void Output::printDistanceMatrix()
@@ -62,13 +43,17 @@ void Output::printDistanceMatrix()
 void Output::printRoute()
 {
 
-	for (unsigned int i = 0; i < route.size(); i++)
-		cout << route[i] << " ";
+	for (unsigned int i = 0; i < route.size(); i++){
+		cout << "route #" << i + 1 << ": ";
 
-	cout << endl;
+		for(unsigned int j = 0; j < route[i].size(); j++)
+			cout << route[i][j] << " ";
+		
+		cout << endl;
+	}
 }
 
-void Output::fitness_set(int f)
+void Output::setFitness(int f)
 {
 	if (f < 0)
 	{
@@ -79,41 +64,13 @@ void Output::fitness_set(int f)
 	this->fitness = f;
 }
 
-int Output::fitness_get()
+int Output::getFitness()
 {
 	return this->fitness;
-}
-
-void Output::printStopIndexes()
-{
-
-	for (unsigned int i = 0; i < stop_index.size(); i++)
-		if (stop_index[i])
-			cout << i << " ";
-		else
-			cout << stop_index[i] << " ";
-
-	cout << endl;
 }
 
 void Output::printFitness()
 {
 
 	std::cout << "Best " << fitness << std::endl;
-}
-
-void Output::printArray2d()
-{
-	cout << "[" << endl;
-	for (unsigned int i = 1; i <= in->num_vertices; i++)
-	{
-		for (unsigned int j = 1; j <= in->num_vertices; j++)
-		{
-			if (i != j)
-			{
-				cout << i << "," << j << ",";
-			}
-		}
-	}
-	cout << "]);" << endl;
 }

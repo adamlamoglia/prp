@@ -20,6 +20,12 @@ using namespace std;
 
 class Input {
 
+private:
+
+	static Input* in;
+
+	Input();
+
 public:
 
 	unsigned int num_vertices;
@@ -53,7 +59,7 @@ public:
 		   edge_type,
 		   edge_format;
 
-	Input();
+	static Input* getInstance();
 
 	double euclidian2D(double x1, double y1, double x2, double y2);
 
