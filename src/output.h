@@ -26,7 +26,7 @@ class Output
 	//Used to output a sequence of nodes representing the vertex of graph that was visited.
 	vector<vector<int> > route;
 
-	Output(Input *in);
+	Output();
 
 	void printDistanceMatrix();
 

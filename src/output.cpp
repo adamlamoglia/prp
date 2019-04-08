@@ -8,10 +8,10 @@
 #include "output.h"
 #include <cassert>
 
-Output::Output(Input *in)
+Output::Output()
 {
 
-	this->in = in->getInstance();
+	this->in = Input::getInstance();
 
 
 	route.resize(in->num_vertices, vector<int>(in->num_vertices, 0));
@@ -42,14 +42,22 @@ void Output::printDistanceMatrix()
 
 void Output::printRoute()
 {
+	
 
 	for (unsigned int i = 0; i < route.size(); i++){
-		cout << "route #" << i + 1 << ": ";
-
-		for(unsigned int j = 0; j < route[i].size(); j++)
-			cout << route[i][j] << " ";
+		bool routeExists = false;
 		
-		cout << endl;
+		for(unsigned int j = 0; j < route[i].size(); j++){
+			if(j == 0 && route[i][j] != 0){
+				cout << "route #" << i + 1 << ": ";
+				routeExists = true;
+			}
+			if(route[i][j] != 0)
+				cout << route[i][j] << " ";
+		}
+		
+		if(routeExists)
+			cout << endl;
 	}
 }
 

@@ -19,6 +19,7 @@ class Genetic{
 public:
 
 	int seed;
+
     //Represents a pointer to class Input, that contains size of graph and distance matrix.
 	Input *in;
 
@@ -98,7 +99,7 @@ public:
 
 	vector<Individuo> population;
 
-	Genetic(Input *in, int alfa, int beta, int generations, double prob_mutation,
+	Genetic(int alfa, int beta, int generations, double prob_mutation,
 			int num_individuals, double lucky_factor, int lucky_range, 
 			int mutation_range,int stype, int ctype, int mtype, int itype, int number_vehicles);
 

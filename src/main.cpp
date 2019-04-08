@@ -14,24 +14,25 @@ using namespace std;
 
 int main( int argc, char ** argv ) {
 
-	int seed = time(NULL);
-	//int seed = 10;
+	//int seed = time(NULL);
+	int seed = 10;
 
-	srand(seed);
+	//srand(seed);
 
 	cout << "seed: " << seed << endl;
 
 	if(argc > 1){
 
-		Input in;
+		Input *in = Input::getInstance();
 
 		Parametros::Store(argc, argv);
 
-		in.load(Parametros::getInstance());
+		in->load(Parametros::getInstance());
 
 		//cout << "GA for one vehicle, " << Parametros::getGenerations() << " generations" << endl;
 
-		Genetic ga(&in, 
+		Genetic ga( 
+			
 			Parametros::getAlphaMax(),			// Standard: 300
 			Parametros::getBetaMax(),			// Standard: 3000
 			Parametros::getGenerations(), 		// Standard: 100

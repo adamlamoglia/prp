@@ -15,7 +15,14 @@ Input::Input() {
 	capacity = 9999999;
 }
 
+Input* Input::in = 0;
+
 Input* Input::getInstance(){
+
+	if (in == 0)
+		in = new Input();
+	
+
 	return in;
 }
 

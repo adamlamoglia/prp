@@ -18,48 +18,45 @@
 
 using namespace std;
 
-class Input {
+class Input
+{
 
 private:
-
-	static Input* in;
+	static Input *in;
 
 	Input();
 
 public:
-
 	unsigned int num_vertices;
 
-    int deg,
-		capacity;
+	int deg,
+			capacity;
 
 	double q1,
-		   q2,
-		   q3,
-		   latitude_x1,
-		   longitude_y1,
-		   latitude_x2,
-		   longitude_y2,
-		   min,
-		   pi = 3.141592,
-		   rrr = 6378.388;
+			q2,
+			q3,
+			latitude_x1,
+			longitude_y1,
+			latitude_x2,
+			longitude_y2,
+			min,
+			pi = 3.141592,
+			rrr = 6378.388;
 
-
-
-	vector<vector<int> > distance_matrix;
+	vector<vector<int>> distance_matrix;
 
 	vector<int> demand;
 
 	//Represents the euclidian2D or geo coordinates of vertex i.
-	vector<pair<double,double> > coordinates;
+	vector<pair<double, double>> coordinates;
 
 	string reader;
 
 	string type,
-		   edge_type,
-		   edge_format;
+			edge_type,
+			edge_format;
 
-	static Input* getInstance();
+	static Input *getInstance();
 
 	double euclidian2D(double x1, double y1, double x2, double y2);
 
@@ -77,9 +74,7 @@ public:
 
 	void buildAtsp();
 
-	friend ostream& operator>>(ostream& os, ifstream& file);
-
+	friend ostream &operator>>(ostream &os, ifstream &file);
 };
-
 
 #endif /* INPUT_H_ */
