@@ -15,6 +15,7 @@ Output::Output()
 
 
 	route.resize(in->num_vertices, vector<int>(in->num_vertices, 0));
+	fleet.resize(in->num_vertices, Vehicle(in->capacity) );
 
 	fitness = 0;
 }

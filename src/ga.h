@@ -48,6 +48,8 @@ public:
 	unsigned int random_node1;
 
 	unsigned int random_node2;
+	
+	unsigned int random_vehicle;
 
 	int random_index;
 
@@ -154,7 +156,7 @@ public:
 	
 	void mutationInversion(Individuo &f);
 
-	int deltaEvaluation(Individuo &s, int i, int k);
+	int deltaEvaluation(Individuo &s, int vehicle, int i, int k);
 
 	// Perform local search in solution efficiently
 	// without make changes in the solution directly,
@@ -165,9 +167,9 @@ public:
 
 	//Helper method for twoOpt().
 	//Only exchanges two route nodes.
-	void swapNodes(Individuo &s, int i, int k);
+	void swapNodes(Individuo &s, int vehicle, int i, int k);
 
-	int calculatePartialRoute(Individuo &s, int i, int k);
+	int calculatePartialRoute(Individuo &s, int vehicle, int i, int k);
 
 	//TODO: Comment
 	void insertion(Individuo &s, Individuo &best, int &beta);
