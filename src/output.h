@@ -9,6 +9,7 @@
 #define OUTPUT_H_
 
 #include "input.h"
+#include "vehicle.h"
 
 class Output
 {
@@ -25,6 +26,7 @@ class Output
 
 	//Used to output a sequence of nodes representing the vertex of graph that was visited.
 	vector<vector<int> > route;
+	vector<Vehicle> fleet;
 
 	Output();
 

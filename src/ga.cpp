@@ -35,7 +35,6 @@ Genetic::Genetic(int alfa, int beta, int generations, double prob_mutation,
 	cut = size / 2;
 
 	population.resize(size, Individuo());
-
 }
 
 bool lowerFitness(Individuo a, Individuo b)
@@ -144,8 +143,9 @@ void Genetic::create(int limit)
 				}
 				else
 					break;
-				
 			}
+
+			population[i].fleet[vehicle].setCapacity(in->capacity - cumulate_capacity);
 		}
 
 		population[i].calculateFitness();
@@ -246,20 +246,61 @@ void Genetic::crossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &
 	}
 }
 
-void Genetic::swapNodeCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2){
+void Genetic::swapNodeCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2)
+{
+
+	f1 = p1;
+	f2 = p2;
+
+	chooseNodes(f1);
+
+	if (random_node1 < random_node2)
+		swapNodes(f1, random_vehicle, random_node1, random_node2);
+
+	else
+		swapNodes(f1, random_vehicle, random_node2, random_node1);
+
+	chooseNodes(f2);
+
+	if (random_node1 < random_node2)
+		swapNodes(f2, random_vehicle, random_node1, random_node2);
+
+	else
+		swapNodes(f2, random_vehicle, random_node2, random_node1);
+}
+
+void Genetic::chooseNodes(Individuo &s)
+{
+
+	do
+	{
+		random_vehicle = rand() % in->num_vertices;
+	} while (s.route[random_vehicle][1] == 0 || s.route[random_vehicle][0] == 0);
+	
+	do
+	{
+		random_node1 = rand() % in->num_vertices;
+
+	} while (s.route[random_vehicle][random_node1] == 0);
+
+	do
+	{
+		random_node2 = rand() % in->num_vertices;
+
+	} while (s.route[random_vehicle][random_node2] == 0 || random_node1 == random_node2);
 
 }
 
-void Genetic::uniformCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2){
-
+void Genetic::uniformCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2)
+{
 }
 
-void Genetic::onePointCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2){
-
+void Genetic::onePointCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2)
+{
 }
 
-void Genetic::routeCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2){
-
+void Genetic::routeCrossover(Individuo &p1, Individuo &p2, Individuo &f1, Individuo &f2)
+{
 }
 
 void Genetic::mutation(Individuo &f)
@@ -282,16 +323,24 @@ void Genetic::mutation(Individuo &f)
 	}
 }
 
-void Genetic::mutationSwap(Individuo &f){
+void Genetic::mutationSwap(Individuo &f)
+{
 
+	chooseNodes(f);
+
+	if (random_node1 < random_node2)
+		swapNodes(f, random_vehicle, random_node1, random_node2);
+
+	else
+		swapNodes(f, random_vehicle, random_node2, random_node1);
 }
 
-void Genetic::mutationScramble(Individuo &f){
-
+void Genetic::mutationScramble(Individuo &f)
+{
 }
 
-void Genetic::mutationInversion(Individuo &f){
-
+void Genetic::mutationInversion(Individuo &f)
+{
 }
 
 void Genetic::insertion(Individuo &s, Individuo &best, int &beta)
@@ -357,6 +406,151 @@ bool Genetic::searchFitness(Individuo &s)
 			return true;
 
 	return false;
+}
+
+void Genetic::twoOptBestImprovement(Individuo &solution)
+{
+
+		global_improvement = true;
+
+		best_i = best_k = -1;
+		delta = 1;
+
+	for (unsigned int vehicle = 0; vehicle < solution.route.size(); vehicle++)
+	{
+
+
+		while (global_improvement)
+		{
+			global_improvement = false;
+
+			//cout << solution.getFitness() << endl;
+
+			lowest_fitness = solution.getFitness();
+
+			for (unsigned int i = 0; i < solution.route[vehicle].size() - 1; i++)
+			{
+
+				best_delta = 0;
+
+				improvement = false;
+
+				for (unsigned int k = i + 1; k < solution.route[vehicle].size(); k++)
+				{
+
+					if (solution.route[vehicle][i] != 0 && solution.route[vehicle][k] != 0)
+					{
+						delta = deltaEvaluation(solution, vehicle, i, k);
+
+						if (delta < 0 && delta < best_delta)
+						{
+
+							//cout << delta << endl;
+
+							best_delta = delta;
+							best_i = i;
+							best_k = k;
+							improvement = true;
+						}
+					}
+					else
+					{
+						break;
+					}
+				}
+
+				if (improvement)
+				{
+
+					swapNodes(solution, vehicle, best_i, best_k);
+
+					if (solution.getFitness() < lowest_fitness)
+					{
+						global_improvement = true;
+						//lowest_fitness = solution.getFitness();
+					}
+				}
+			}
+		}
+	}
+}
+
+int Genetic::deltaEvaluation(Individuo &s, int vehicle, int i, int k)
+{
+
+	current_edges_value = calculatePartialRoute(s, vehicle, i, k);
+
+	swap(s.route[i], s.route[k]);
+
+	new_edges_value = calculatePartialRoute(s, vehicle, i, k);
+
+	swap(s.route[i], s.route[k]);
+
+	return new_edges_value - current_edges_value;
+}
+
+int Genetic::calculatePartialRoute(Individuo &s, int vehicle, int i, int k)
+{
+
+	if (i == k - 1)
+	{
+
+		if (i == 0)
+		{
+
+			return in->distance_matrix[s.route[vehicle][0]][s.route[vehicle][i]] + in->distance_matrix[s.route[vehicle][i]][s.route[vehicle][k]] + in->distance_matrix[s.route[vehicle][k]][s.route[vehicle][k + 1]];
+		}
+
+		return in->distance_matrix[s.route[vehicle][i - 1]][s.route[vehicle][i]] + in->distance_matrix[s.route[vehicle][i]][s.route[vehicle][k]] + in->distance_matrix[s.route[vehicle][k]][s.route[vehicle][k + 1]];
+	}
+
+	if (i == 0)
+	{
+
+		return in->distance_matrix[s.route[vehicle][0]][s.route[vehicle][i]] + in->distance_matrix[s.route[vehicle][i]][s.route[vehicle][i + 1]] + in->distance_matrix[s.route[vehicle][k - 1]][s.route[vehicle][k]] + in->distance_matrix[s.route[vehicle][k]][s.route[vehicle][k + 1]];
+	}
+
+	return in->distance_matrix[s.route[vehicle][i - 1]][s.route[vehicle][i]] + in->distance_matrix[s.route[vehicle][i]][s.route[vehicle][i + 1]] + in->distance_matrix[s.route[vehicle][k - 1]][s.route[vehicle][k]] + in->distance_matrix[s.route[vehicle][k]][s.route[vehicle][k + 1]];
+}
+
+void Genetic::swapNodes(Individuo &s, int vehicle, int i, int k)
+{
+
+	/*if(vehicle1 != vehicle2){
+
+
+		if (vehicle1 != vehicle2)
+		{
+
+			s.fleet[vehicle1].setCapacity(s.fleet[vehicle1].getCapacity() + in->demand[ s.route[vehicle1][i] ] - in->demand[ s.route[vehicle2][k] ] );
+			s.fleet[vehicle2].setCapacity(s.fleet[vehicle2].getCapacity() + in->demand[ s.route[vehicle2][k] ] - in->demand[ s.route[vehicle1][i] ] );
+		}
+	}*/
+
+	current_edges_value = calculatePartialRoute(s, vehicle, i, k);
+
+	swap(s.route[vehicle][i], s.route[vehicle][k]);
+
+	new_edges_value = calculatePartialRoute(s, vehicle, i, k);
+
+	s.setFitness(s.getFitness() - current_edges_value + new_edges_value);
+
+	/*#ifdef DEBUG_SWAP
+		// Valor do fitness apos a execucao de swapnodes
+		int old_fitness = s.fitness_get();
+		// Calcula o fitness do zero
+		s.setFitness();
+		// Pega o novo valor do fitness
+		int new_fitness = s.getFitness();
+		// Verifica se existe divergencia
+		if(old_fitness != new_fitness){
+			cout << "fitness apos swap: " << old_fitness << endl;
+			cout << "fitness calculado: " << new_fitness << endl;
+		}
+			
+		// Continua com o valor computado por esta função
+		s.fitness_set(old_fitness);
+		#endif*/
 }
 
 void Genetic::showResult()

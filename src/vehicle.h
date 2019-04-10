@@ -6,17 +6,14 @@ class Vehicle{
     private:
 
             int capacity;
-            int id;
 
     public:
 
-        Vehicle(int id, int capacity);
+        Vehicle(int capacity);
 
         void setCapacity(int capacity);
-        void setId(int id);
 
         int getCapacity();
-        int getId();
 
 
 };
