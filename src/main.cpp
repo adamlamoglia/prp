@@ -14,8 +14,8 @@ using namespace std;
 
 int main( int argc, char ** argv ) {
 
-	//int seed = time(NULL);
-	int seed = 10;
+	int seed = time(NULL);
+	//int seed = 10;
 
 	srand(seed);
 
@@ -30,6 +30,7 @@ int main( int argc, char ** argv ) {
 		in->load(Parametros::getInstance());
 
 		//cout << "GA for one vehicle, " << Parametros::getGenerations() << " generations" << endl;
+		cout << in->capacity << endl;
 
 		Genetic ga( 
 			

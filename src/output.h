@@ -40,6 +40,7 @@ class Output
 
 	int getFitness();
 
+
 };
 
 #endif /* OUTPUT_H_ */

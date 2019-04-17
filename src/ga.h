@@ -88,11 +88,8 @@ public:
 				 r,
 				 smallest;
 
-	vector<bool> inserted_vertex_f1,
-				 inserted_vertex_f2,
-				 repeated_vertex_f1,
-				 repeated_vertex_f2,
-				 inserted;
+	vector<bool> inserted,
+				 visited;
 
 	vector<int> mask,
 				list,
@@ -238,6 +235,9 @@ public:
 
 	void updateRoute(Individuo &s);
 	
+	bool clientsServed();
+
+	bool clientsChecked();
 };
 
 #endif /* GA_H_ */

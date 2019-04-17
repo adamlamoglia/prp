@@ -29,6 +29,10 @@ Genetic::Genetic(int alfa, int beta, int generations, double prob_mutation,
 	this->number_vehicles = number_vehicles - 1;
 
 	inserted.resize(in->num_vertices, false);
+	inserted[0] = true;
+
+	visited.resize(in->num_vertices, false);
+	visited[0] = true;
 
 	cut_size = in->num_vertices / 2;
 
@@ -107,6 +111,26 @@ void Genetic::buildMinHeap()
 		minHeapify(i);
 }
 
+bool Genetic::clientsServed(){
+	
+
+	for (unsigned int i = 1; i < inserted.size(); i++)
+			if(!inserted[i])
+				return false;
+	
+	return true;
+}
+
+bool Genetic::clientsChecked(){
+	
+
+	for (unsigned int i = 1; i < visited.size(); i++)
+			if(!visited[i])
+				return false;
+	
+	return true;
+}
+
 void Genetic::create(int limit)
 {
 
@@ -114,38 +138,61 @@ void Genetic::create(int limit)
 	{
 
 		int random_client;
-		int num_inserted = 0;
+		int vehicle = 0;
 
-		for (unsigned int j = 0; j < inserted.size(); j++)
+		for (unsigned int j = 1; j < inserted.size(); j++)
 			inserted[j] = false;
 
-		for (int vehicle = 0; vehicle < in->num_vertices; vehicle++)
-		{
-			int cumulate_capacity = 0;
-			int atual_index = 0;
+		
+		if(limit > 0){
 
-			while (cumulate_capacity < in->capacity && num_inserted < in->num_vertices - 1)
-			{
+			population[i].route.clear();
+			
+			population[i].route.resize(in->num_vertices);
 
-				random_client = rand() % in->num_vertices;
+			for(unsigned int j = 0; j < population[i].fleet.size(); j++)
+					population[i].fleet[j].setCapacity(in->capacity);
+			
+		}
 
-				while (inserted[random_client] || random_client == 0)
+
+		while(!clientsServed()){
+
+			for (unsigned int j = 1; j < visited.size(); j++)
+				if(!inserted[j])
+					visited[j] = false;
+				
+			int cont = 0;
+
+			while(!clientsChecked()){
+
+					if(cont == 0){
+						population[i].setRoute(vehicle, 0);
+						cont = 1;
+					}
+
 					random_client = rand() % in->num_vertices;
 
-				if (in->demand[random_client] + cumulate_capacity <= in->capacity)
-				{
+					while (inserted[random_client] || visited[random_client]){
+						random_client = rand() % in->num_vertices;
+					}
 
-					population[i].setRoute(vehicle, random_client);
-					cumulate_capacity += in->demand[random_client];
-					inserted[random_client] = true;
-					atual_index++;
-					num_inserted++;
-				}
-				else
-					break;
+					visited[random_client] = true;
+
+					if (population[i].fleet[vehicle].getCapacity() - in->demand[random_client] >= 0)
+					{
+
+						population[i].setRoute(vehicle, random_client);
+						population[i].fleet[vehicle].setCapacity(population[i].fleet[vehicle].getCapacity() - in->demand[random_client]);
+						inserted[random_client] = true;
+					}
+					
 			}
 
-			population[i].fleet[vehicle].setCapacity(in->capacity - cumulate_capacity);
+			population[i].setRoute(vehicle, 0);
+
+			vehicle++;
+		
 		}
 
 		population[i].calculateFitness();
@@ -275,25 +322,19 @@ void Genetic::chooseNodes(Individuo &s)
 	do
 	{
 		random_vehicle = rand() % in->num_vertices;
-	} while (s.route[random_vehicle].size() <= 1);
+	} while (s.route[random_vehicle].size() <= 3);
 
-	//cout << "1" << endl;
+
+	do{
+	random_node1 = rand() % s.route[random_vehicle].size();
+	}while(s.route[random_vehicle][random_node1] == 0);
 	
-	do
-	{
-		random_node1 = rand() % s.route[random_vehicle].size();
-
-	} while (s.route[random_vehicle][random_node1] == 0);
-
-	//cout << "2" << endl;
-
 	do
 	{
 		random_node2 = rand() % s.route[random_vehicle].size();
 
-	} while (random_node1 == random_node2);
-
-	//cout << "3" << endl;
+	} while (random_node1 == random_node2 || s.route[random_vehicle][random_node2] == 0);
+	
 
 }
 
@@ -425,32 +466,27 @@ void Genetic::twoOptBestImprovement(Individuo &solution)
 	for (unsigned int vehicle = 0; vehicle < solution.route.size(); vehicle++)
 	{
 
-		//cout << solution.route[vehicle].size() << endl;
 
 		if(solution.route[vehicle].size() <= 1)
 			continue;
 
-		//cout << "passou porra" << endl;
 
 		while (global_improvement)
 		{
 			global_improvement = false;
 
-			//cout << solution.getFitness() << endl;
 
 			lowest_fitness = solution.getFitness();
 
-			for (unsigned int i = 0; i < solution.route[vehicle].size() - 1; i++)
+			for (unsigned int i = 1; i < solution.route[vehicle].size() - 2; i++)
 			{
 
 				best_delta = 0;
 
 				improvement = false;
 
-				for (unsigned int k = i + 1; k < solution.route[vehicle].size(); k++)
+				for (unsigned int k = i + 1; k < solution.route[vehicle].size() - 1; k++)
 				{
-
-						//cout << "achei" << endl;
 					
 						delta = deltaEvaluation(solution, vehicle, i, k);
 
@@ -462,8 +498,6 @@ void Genetic::twoOptBestImprovement(Individuo &solution)
 							best_k = k;
 							improvement = true;
 						}
-
-						//cout << "q1" << endl;
 				
 				}
 
@@ -475,26 +509,19 @@ void Genetic::twoOptBestImprovement(Individuo &solution)
 					if (solution.getFitness() < lowest_fitness)
 					{
 						global_improvement = true;
-						//lowest_fitness = solution.getFitness();
 					}
 				}
 
-				//cout << "q2" << endl;
 			}
 
-			//cout << "q3" << endl;
 		}
 
-		//cout << vehicle << endl;
 	}
 }
 
 int Genetic::deltaEvaluation(Individuo &s, int vehicle, int i, int k)
 {
 
-	//cout << s.route[vehicle].size() << endl;
-	
-	//cout << i << " " << k << endl;
 
 	current_edges_value = calculatePartialRoute(s, vehicle, i, k);
 
@@ -502,8 +529,6 @@ int Genetic::deltaEvaluation(Individuo &s, int vehicle, int i, int k)
 	swap(s.route[vehicle][i], s.route[vehicle][k]);
 
 	new_edges_value = calculatePartialRoute(s, vehicle, i, k);
-
-	//cout << "oxx" << endl;
 
 	swap(s.route[vehicle][i], s.route[vehicle][k]);
 
@@ -513,67 +538,24 @@ int Genetic::deltaEvaluation(Individuo &s, int vehicle, int i, int k)
 int Genetic::calculatePartialRoute(Individuo &s, int vehicle, int i, int k)
 {
 
-	if (i == k - 1)
-	{
-
-		if (i == 0)
-		{
-
-			if(k == s.route[vehicle].size() - 1)
-						return in->distance_matrix[0][s.route[vehicle][i]] + 
-						in->distance_matrix[s.route[vehicle][i]][s.route[vehicle][k]] + 
-						in->distance_matrix[s.route[vehicle][k]][0];
-
-
-			
-			return in->distance_matrix[0][s.route[vehicle][i]] + 
-			in->distance_matrix[s.route[vehicle][i]][s.route[vehicle][k]] + 
-			in->distance_matrix[s.route[vehicle][k]][s.route[vehicle][k + 1]];
-		}
-
-		if(k == s.route[vehicle].size() - 1)
-			return in->distance_matrix[0][s.route[vehicle][i]] + 
-			in->distance_matrix[s.route[vehicle][i]][s.route[vehicle][k]] + 
-			in->distance_matrix[s.route[vehicle][k]][0];
-
-
-		return in->distance_matrix[s.route[vehicle][i - 1]][s.route[vehicle][i]] + 
-		in->distance_matrix[s.route[vehicle][i]][s.route[vehicle][k]] + 
-		in->distance_matrix[s.route[vehicle][k]][s.route[vehicle][k + 1]];
+	if(i == k - 1){
+		return in->distance_matrix[s.route[vehicle][i-1]][s.route[vehicle][i]] 
+				+ in->distance_matrix[s.route[vehicle][i]][s.route[vehicle][k]] 
+				+ in->distance_matrix[s.route[vehicle][k]][s.route[vehicle][k+1]];
 	}
 
-	if (i == 0)
-	{	
-		//cout << "entrou" << endl;
-		
-		//cout << s.route[vehicle].size() << endl;
-		//cout << in->distance_matrix[0][s.route[vehicle][i]] << endl;
-		//cout << in->distance_matrix[s.route[vehicle][i]][s.route[vehicle][i + 1]] << endl;
-		//cout << in->distance_matrix[s.route[vehicle][k - 1]][s.route[vehicle][k]] << endl;
-		//cout << in->distance_matrix[s.route[vehicle][k]][s.route[vehicle][k + 1]] << endl;
-
-		if(k == s.route[vehicle].size() - 1)
-			return in->distance_matrix[0][s.route[vehicle][i]] + 
-			in->distance_matrix[s.route[vehicle][i]][s.route[vehicle][i + 1]] + 
-			in->distance_matrix[s.route[vehicle][k - 1]][s.route[vehicle][k]] + 
-			in->distance_matrix[s.route[vehicle][k]][0];
-
-		return in->distance_matrix[0][s.route[vehicle][i]] + 
-		in->distance_matrix[s.route[vehicle][i]][s.route[vehicle][i + 1]] + 
-		in->distance_matrix[s.route[vehicle][k - 1]][s.route[vehicle][k]] + 
-		in->distance_matrix[s.route[vehicle][k]][s.route[vehicle][k + 1]];
+	if(i == k + 1){
+		return in->distance_matrix[s.route[vehicle][k-1]][s.route[vehicle][k]]
+				+ in->distance_matrix[s.route[vehicle][k]][s.route[vehicle][i]] 
+				+ in->distance_matrix[s.route[vehicle][i]][s.route[vehicle][i+1]]; 
+				
 	}
 
-	if(k == s.route[vehicle].size() - 1)
-		return in->distance_matrix[s.route[vehicle][i - 1]][s.route[vehicle][i]] + 
-	in->distance_matrix[s.route[vehicle][i]][s.route[vehicle][i + 1]] + 
-	in->distance_matrix[s.route[vehicle][k - 1]][s.route[vehicle][k]] + 
-	in->distance_matrix[s.route[vehicle][k]][0];
+	return 	in->distance_matrix[s.route[vehicle][i-1]][s.route[vehicle][i]] 
+			+ in->distance_matrix[s.route[vehicle][i]][s.route[vehicle][i+1]] 
+			+ in->distance_matrix[s.route[vehicle][k-1]][s.route[vehicle][k]] 
++ in->distance_matrix[s.route[vehicle][k]][s.route[vehicle][k+1]];
 
-	return in->distance_matrix[s.route[vehicle][i - 1]][s.route[vehicle][i]] + 
-	in->distance_matrix[s.route[vehicle][i]][s.route[vehicle][i + 1]] + 
-	in->distance_matrix[s.route[vehicle][k - 1]][s.route[vehicle][k]] + 
-	in->distance_matrix[s.route[vehicle][k]][s.route[vehicle][k + 1]];
 }
 
 void Genetic::swapNodes(Individuo &s, int vehicle, int i, int k)
@@ -598,7 +580,7 @@ void Genetic::swapNodes(Individuo &s, int vehicle, int i, int k)
 
 	s.setFitness(s.getFitness() - current_edges_value + new_edges_value);
 
-	#ifdef DEBUG_SWAP
+	/*#ifdef DEBUG_SWAP
 		// Valor do fitness apos a execucao de swapnodes
 		int old_fitness = s.getFitness();
 		// Calcula o fitness do zero
@@ -607,13 +589,13 @@ void Genetic::swapNodes(Individuo &s, int vehicle, int i, int k)
 		int new_fitness = s.getFitness();
 		// Verifica se existe divergencia
 		if(old_fitness != new_fitness){
-			//cout << "fitness apos swap: " << old_fitness << endl;
-			//cout << "fitness calculado: " << new_fitness << endl;
+			cout << "fitness apos swap: " << old_fitness << endl;
+			cout << "fitness calculado: " << new_fitness << endl;
 		}
 			
 		// Continua com o valor computado por esta função
 		s.setFitness(new_fitness);
-		#endif
+		#endif*/
 }
 
 void Genetic::showResult()
@@ -658,6 +640,10 @@ void Genetic::run()
 
 	init();
 
+	//printPopulation();
+	//exit(1);
+
+
 	while (generations <= limit)
 	{
 
@@ -673,7 +659,7 @@ void Genetic::run()
 
 			crossover(p1, p2, f1, f2);
 
-			//cout << "pass1" << endl;
+			
 
 			mutation_number = rand() % mutation_range;
 
@@ -685,12 +671,12 @@ void Genetic::run()
 
 				alfa++;
 			}
-			//cout << "pass2" << endl;
+		
 
 			twoOptBestImprovement(f1);
 			twoOptBestImprovement(f2);
 
-			//cout << "pass3" << endl;
+			
 
 			insertion(f1, best, beta);
 			insertion(f2, best, beta);

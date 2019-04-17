@@ -49,12 +49,12 @@ void Output::printRoute()
 		bool routeExists = false;
 		
 		for(unsigned int j = 0; j < route[i].size(); j++){
-			if(j == 0 && route[i][j] != 0){
+			if(j == 0){
 				cout << "route #" << i + 1 << ": ";
 				routeExists = true;
 			}
-			if(route[i][j] != 0)
-				cout << route[i][j] << " ";
+				if(route[i][j] != 0)
+					cout << route[i][j] << " ";
 		}
 		
 		if(routeExists)
