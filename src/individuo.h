@@ -19,7 +19,7 @@ public:
 
 	void calculateFitness();
 
-	void setRoute(unsigned int vehicle, unsigned int id, unsigned int vertex);
+	void setRoute(unsigned int vehicle, unsigned int vertex);
 
 	int verifyPrecedent(unsigned int index, unsigned int real);
 

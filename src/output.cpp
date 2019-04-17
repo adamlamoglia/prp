@@ -14,7 +14,7 @@ Output::Output()
 	this->in = Input::getInstance();
 
 
-	route.resize(in->num_vertices, vector<int>(in->num_vertices, 0));
+	route.resize(in->num_vertices);
 	fleet.resize(in->num_vertices, Vehicle(in->capacity) );
 
 	fitness = 0;
