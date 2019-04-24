@@ -179,6 +179,8 @@ void Genetic::create(int limit)
 
 					visited[random_client] = true;
 
+					//cheapestInsertion(population[i], random_client);
+
 					if (population[i].fleet[vehicle].getCapacity() - in->demand[random_client] >= 0)
 					{
 
@@ -199,6 +201,36 @@ void Genetic::create(int limit)
 	}
 
 	buildMinHeap();
+}
+
+void Genetic::cheapestInsertion(Individuo &s, int client){
+
+	int vehicle = 0;
+
+	//there's no space for more clients in this route
+	while(s.fleet[vehicle].getCapacity() == 0){
+		
+		if(s.route[vehicle][s.route[vehicle].size() - 1] != 0)
+			s.setRoute(vehicle, 0);
+
+		vehicle++;
+
+	}
+
+	//there's no route yet for vehicle to vehicle.size() - 1
+	if(s.route[vehicle].size() == 0){
+		
+		s.setRoute(vehicle, 0);
+
+		if (s.fleet[vehicle].getCapacity() - in->demand[client] >= 0)
+		{
+			s.setRoute(vehicle, client);
+			s.fleet[vehicle].setCapacity(s.fleet[vehicle].getCapacity() - in->demand[client]);
+			inserted[client] = true;
+		}
+	}
+
+
 }
 
 void Genetic::init()

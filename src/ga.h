@@ -238,6 +238,8 @@ public:
 	bool clientsServed();
 
 	bool clientsChecked();
+
+	void cheapestInsertion(Individuo &s, int client);
 };
 
 #endif /* GA_H_ */
