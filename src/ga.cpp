@@ -203,33 +203,55 @@ void Genetic::create(int limit)
 	buildMinHeap();
 }
 
+struct Insertion{
+	int vehicle;
+	int index;
+	int cost;
+};
+
+bool compare(Insertion &a, Insertion &b){
+
+	return a.cost < b.cost;
+			
+}
+
 void Genetic::cheapestInsertion(Individuo &s, int client){
 
 	int vehicle = 0;
+	vector<Insertion> permutations;
+    Insertion possibility;
 
-	//there's no space for more clients in this route
-	while(s.fleet[vehicle].getCapacity() == 0){
-		
-		if(s.route[vehicle][s.route[vehicle].size() - 1] != 0)
-			s.setRoute(vehicle, 0);
+	for(int vehicle = 0; vehicle < s.route.size(); vehicle++){
 
-		vehicle++;
+		if(s.fleet[vehicle].getCapacity() - in->demand[client] >= 0){
 
-	}
+			//there's no route yet for vehicle to vehicle.size() - 1
+			if(s.route[vehicle].size() == 0){
+				
+				s.setRoute(vehicle, 0);
+				s.setRoute(vehicle, 0);
+			}
 
-	//there's no route yet for vehicle to vehicle.size() - 1
-	if(s.route[vehicle].size() == 0){
-		
-		s.setRoute(vehicle, 0);
-
-		if (s.fleet[vehicle].getCapacity() - in->demand[client] >= 0)
-		{
-			s.setRoute(vehicle, client);
-			s.fleet[vehicle].setCapacity(s.fleet[vehicle].getCapacity() - in->demand[client]);
-			inserted[client] = true;
+			for(int i = 1; i < s.route[vehicle].size(); i++){
+				
+				possibility.index = i;
+				possibility.vehicle = vehicle;
+				possibility.cost = in->distance_matrix[ s.route[ vehicle ][ i - 1 ] ][ s.route[ vehicle ][ i ] ] 
+									+ in->distance_matrix[ s.route[ vehicle ][ i ] ][ s.route[ vehicle ][ i + 1 ] ];
+				
+				permutations.push_back(possibility);
+			}
 		}
+
+		if(s.route[vehicle].size() == 2)
+			break;
 	}
 
+	sort(permutations.begin(), permutations.end(), compare);
+
+	vector<int>::iterator it = s.route[permutations[0].vehicle].begin() + permutations[0].index;
+
+	s.route[permutations[0].vehicle].insert(it, client);
 
 }
 
