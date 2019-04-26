@@ -172,7 +172,15 @@ int Parametros::getNumberVehicles(){
 	}
 }
 
-
+int Parametros::getInitType(){
+	
+	try {
+		return stoi(vm["init"]);
+	} catch (exception& e) {
+		vm["init"] = "1";
+		return stoi( vm["init"]);
+	}
+}
 
 
 void Parametros::Store(int argc, char * argv[ ]) {
@@ -197,6 +205,7 @@ void Parametros::Store(int argc, char * argv[ ]) {
 			{ "itype"				, required_argument, 0,	015 },
 			{ "vehicles" 			, required_argument, 0, 016	},
 			{ "gens" 				, required_argument, 0, 017	},
+			{"init" 				, required_argument, 0, 020	},
 			{ "help", no_argument, 0,						076 },
 			{ "h", no_argument, 0,							076 },
 			{ 0,0, 0, 0 } };
@@ -251,6 +260,9 @@ void Parametros::Store(int argc, char * argv[ ]) {
 			break;
 		case 017:
 			vm["gens"] = string(optarg);
+			break;
+		case 020:
+			vm["init"] = string(optarg);
 			break;
 		case 076:
 			cout<<"write a help." << endl;

@@ -38,10 +38,11 @@ public:
 	//Represents the limit of generations of populations (stop criterion).
 	int	limit;
 
-	unsigned int selection_type,
-				 crossover_type,
-				 mutation_type,
-				 insertion_type;
+	int init_type,
+		selection_type,
+		crossover_type,
+		mutation_type,
+		insertion_type;
 
 	int	random_person;
 
@@ -98,9 +99,17 @@ public:
 
 	vector<Individuo> population;
 
+	struct Insertion{
+		int vehicle;
+		int index;
+		int cost;
+	};
+
+	vector<Insertion> permutations;
+
 	Genetic(int alfa, int beta, int generations, double prob_mutation,
 			int num_individuals, double lucky_factor, int lucky_range, 
-			int mutation_range,int stype, int ctype, int mtype, int itype, int number_vehicles);
+			int mutation_range, int initype, int stype, int ctype, int mtype, int itype, int number_vehicles);
 
 	//Initializes a new population according to the limit of individuals.
 	//The function creates individuals from limit to population.size,
@@ -109,6 +118,18 @@ public:
 
 	//Initializes init() with the limit parameter.
 	void create(int limit);
+
+	bool clientsServed();
+
+	bool clientsChecked();
+
+	void initialization(Individuo &s, int client);
+
+	void computePossibilities(Individuo &s, int client);
+
+	void cheapestInit(Individuo &s, int client);
+
+	void randomCheapestInit(Individuo &s, int client);
 
 	int generateRandom();
 
@@ -234,12 +255,7 @@ public:
 	void sortRoute(Individuo &s);
 
 	void updateRoute(Individuo &s);
-	
-	bool clientsServed();
 
-	bool clientsChecked();
-
-	void cheapestInsertion(Individuo &s, int client);
 };
 
 #endif /* GA_H_ */

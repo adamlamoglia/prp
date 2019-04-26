@@ -11,7 +11,7 @@ int aux;
 
 Genetic::Genetic(int alfa, int beta, int generations, double prob_mutation,
 				 int size, double lucky_factor, int lucky_range, int mutation_range,
-				 int stype, int ctype, int mtype, int itype, int number_vehicles)
+				 int initype, int stype, int ctype, int mtype, int itype, int number_vehicles)
 {
 
 	this->in = Input::getInstance();
@@ -21,8 +21,12 @@ Genetic::Genetic(int alfa, int beta, int generations, double prob_mutation,
 	limit = generations;
 	probability = prob_mutation;
 
+	//this->init_type = 1;
+	//this->selection_type = stype;
 	this->crossover_type = ctype;
-
+	//this->mutation_type = mtype;
+	//this->insertion_type = itype;
+	
 	this->lucky_factor = lucky_factor;
 	this->lucky_range = lucky_range;
 	this->mutation_range = mutation_range;
@@ -138,7 +142,6 @@ void Genetic::create(int limit)
 	{
 
 		int random_client;
-		int vehicle = 0;
 
 		for (unsigned int j = 1; j < inserted.size(); j++)
 			inserted[j] = false;
@@ -167,7 +170,6 @@ void Genetic::create(int limit)
 			while(!clientsChecked()){
 
 					if(cont == 0){
-						population[i].setRoute(vehicle, 0);
 						cont = 1;
 					}
 
@@ -179,21 +181,10 @@ void Genetic::create(int limit)
 
 					visited[random_client] = true;
 
-					//cheapestInsertion(population[i], random_client);
-
-					if (population[i].fleet[vehicle].getCapacity() - in->demand[random_client] >= 0)
-					{
-
-						population[i].setRoute(vehicle, random_client);
-						population[i].fleet[vehicle].setCapacity(population[i].fleet[vehicle].getCapacity() - in->demand[random_client]);
-						inserted[random_client] = true;
-					}
-					
+					//cheapestInit(population[i], random_client);
+					//randomCheapestInit(population[i], random_client);
+					initialization(population[i], random_client);
 			}
-
-			population[i].setRoute(vehicle, 0);
-
-			vehicle++;
 		
 		}
 
@@ -203,23 +194,12 @@ void Genetic::create(int limit)
 	buildMinHeap();
 }
 
-struct Insertion{
-	int vehicle;
-	int index;
-	int cost;
-};
+void Genetic::computePossibilities(Individuo &s, int client){
 
-bool compare(Insertion &a, Insertion &b){
-
-	return a.cost < b.cost;
-			
-}
-
-void Genetic::cheapestInsertion(Individuo &s, int client){
-
-	int vehicle = 0;
-	vector<Insertion> permutations;
-    Insertion possibility;
+	Insertion possibility;
+ 
+	if(permutations.size() > 0)
+		permutations.clear();
 
 	for(int vehicle = 0; vehicle < s.route.size(); vehicle++){
 
@@ -232,26 +212,76 @@ void Genetic::cheapestInsertion(Individuo &s, int client){
 				s.setRoute(vehicle, 0);
 			}
 
+
+			//take all possibilities for insertion
 			for(int i = 1; i < s.route[vehicle].size(); i++){
-				
+
 				possibility.index = i;
 				possibility.vehicle = vehicle;
-				possibility.cost = in->distance_matrix[ s.route[ vehicle ][ i - 1 ] ][ s.route[ vehicle ][ i ] ] 
-									+ in->distance_matrix[ s.route[ vehicle ][ i ] ][ s.route[ vehicle ][ i + 1 ] ];
+				possibility.cost = in->distance_matrix[ s.route[ vehicle ][ i - 1 ] ][ client ] 
+									+ in->distance_matrix[ client ][ s.route[ vehicle ][ i ] ];
 				
 				permutations.push_back(possibility);
 			}
+
+			if(s.route[vehicle].size() == 2)
+				break;
 		}
 
-		if(s.route[vehicle].size() == 2)
-			break;
 	}
 
+}
+
+bool compare(Genetic::Insertion &a, Genetic::Insertion &b){
+
+	return a.cost < b.cost;
+			
+}
+
+void Genetic::initialization(Individuo &s, int client)
+{
+
+	switch (init_type)
+	{
+
+		case 1: cheapestInit(s, client);
+
+		case 2: randomCheapestInit(s, client);
+
+		default: cheapestInit(s, client);
+
+	}
+}
+
+void Genetic::cheapestInit(Individuo &s, int client){
+
+
+	computePossibilities(s, client);
+	
 	sort(permutations.begin(), permutations.end(), compare);
 
 	vector<int>::iterator it = s.route[permutations[0].vehicle].begin() + permutations[0].index;
 
 	s.route[permutations[0].vehicle].insert(it, client);
+	s.fleet[permutations[0].vehicle].setCapacity(s.fleet[permutations[0].vehicle].getCapacity() - in->demand[client]);
+	inserted[client] = true;
+}
+
+void Genetic::randomCheapestInit(Individuo &s, int client){
+
+	int random_possibility;
+
+	computePossibilities(s, client);
+	
+	//sort(permutations.begin(), permutations.end(), compare);
+
+	random_possibility = rand() % permutations.size();
+
+	vector<int>::iterator it = s.route[permutations[random_possibility].vehicle].begin() + permutations[random_possibility].index;
+
+	s.route[permutations[random_possibility].vehicle].insert(it, client);
+	s.fleet[permutations[random_possibility].vehicle].setCapacity(s.fleet[permutations[random_possibility].vehicle].getCapacity() - in->demand[client]);
+	inserted[client] = true;
 
 }
 
