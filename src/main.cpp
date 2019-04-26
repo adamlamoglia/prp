@@ -30,7 +30,6 @@ int main( int argc, char ** argv ) {
 		in->load(Parametros::getInstance());
 
 		//cout << "GA for one vehicle, " << Parametros::getGenerations() << " generations" << endl;
-		cout << in->capacity << endl;
 
 		Genetic ga( 
 			
@@ -42,12 +41,13 @@ int main( int argc, char ** argv ) {
 			Parametros::getLuckyFactor(),		// Standard: 997
 			Parametros::getLuckyRange(),		// Standard: 1000
 			Parametros::getMutationRange(), 	// Standard: 100
+			Parametros::getInitType(), 			// Standard: 1
 			Parametros::getSelectionType(), 	// Standard: 1
 			Parametros::getCrossoverType(),		// Standard: 1
 			Parametros::getMutationType(),		// Standard: 1
 			Parametros::getInsertionType(), 	// Standard: 1
-			Parametros::getNumberVehicles());   // Standard: 3
-			
+			Parametros::getNumberVehicles(),    // Standard: 3
+			Parametros::getFitFactor());   		// Standard: 3
 		ga.run();
 		ga.showResult();
 	}

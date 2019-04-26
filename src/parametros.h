@@ -26,6 +26,8 @@ class Parametros {
 		static int getMutationType();
 		static int getInsertionType();
 		static int getNumberVehicles();
+		static int getInitType();
+		static int getFitFactor();
 		static double getSeed();
 
 		
