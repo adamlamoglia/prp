@@ -1,6 +1,8 @@
 using namespace std;
 
 #include "individuo.h"
+#include "output.h"
+#include <map>
 
 class Statistic{
 
@@ -14,15 +16,18 @@ class Statistic{
                 worst,
                 repeated,
                 mode;
+
+            map<int,int> values;
+            Output o;
             
 
             Statistic();
 
             void calculateAll(vector<Individuo> &s);
-            
-            void mean(vector<Individuo> &s);
+            void calculateMean(vector<Individuo> &s);
             void standardDeviation(vector<Individuo> &s);
-            void mode(vector<Individuo> &s);
+            void calculateMode(vector<Individuo> &s);
             void countRepeated(vector<Individuo> &s);
+            void printStatistics();
 
 };

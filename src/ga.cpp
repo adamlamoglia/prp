@@ -46,6 +46,8 @@ Genetic::Genetic(int alfa, int beta, int generations, double prob_mutation,
 	cut = size / 2;
 
 	population.resize(size, Individuo());
+
+	stat = Statistic();
 }
 
 bool lowerFitness(Individuo a, Individuo b)
@@ -280,11 +282,7 @@ void Genetic::randomCheapestInit(Individuo &s, int client){
 
 	int random_possibility;
 
-	//cout << "damn" << endl;
-
 	computePossibilities(s, client);
-
-	//cout << "oi" << endl;
 
 	if(permutations.size() >= fit_factor){
 		random_possibility = rand() % fit_factor;		

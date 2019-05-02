@@ -11,6 +11,7 @@
 #define DEBUG_SWAP
 
 #include "individuo.h"
+#include "statistic.h"
 #include <algorithm>
 #include <utility>
 
@@ -89,6 +90,8 @@ public:
 	unsigned int l,
 				 r,
 				 smallest;
+	
+	Statistic stat;
 
 	vector<bool> inserted,
 				 visited;
