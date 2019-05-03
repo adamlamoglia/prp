@@ -52,7 +52,8 @@ public:
 
 	unsigned int random_node2;
 	
-	unsigned int random_vehicle;
+	unsigned int random_vehicle1,
+				 random_vehicle2;
 
 	int random_index;
 
@@ -193,7 +194,11 @@ public:
 	//Only exchanges two route nodes.
 	void swapNodes(Individuo &s, int vehicle, int i, int k);
 
+	void swapDiffRouteNodes(Individuo &s, int vehicle1, int vehicle2, int i, int k);
+
 	int calculatePartialRoute(Individuo &s, int vehicle, int i, int k);
+
+	int calculatePartialDiffRoute(Individuo &s, int vehicle1, int vehicle2, int i, int k);
 
 	//TODO: Comment
 	void insertion(Individuo &s, Individuo &best, int &beta);
@@ -236,7 +241,7 @@ public:
 
 	void heapFix(unsigned int i);
 
-	bool capacityIsSatisfied(Individuo &s, int node1, int node2);
+	bool capacityIsSatisfied(Individuo &s, int vehicle1, int vehicle2, int node1, int node2);
 
 	void chooseNodes(Individuo &s);
 

@@ -13,7 +13,7 @@ void Statistic::calculateAll(vector<Individuo> &s){
     mean = std_deviation = best = worst = 0;
 
     setBest(s[0].getFitness());
-    setWorst(s[s.size() - 1].getFitness());
+    setWorst(s);
     calculateMean(s);
     calculateMode(s);
     countRepeated(s);
@@ -35,6 +35,9 @@ void Statistic::countRepeated(vector<Individuo> &s){
 
 
 void Statistic::calculateMode(vector<Individuo> &s){
+
+    for(int i = 0; i < s.size(); i++)
+            values[s[i].getFitness()] = 0;
 
     for(int i = 0; i < s.size(); i++)
         values[s[i].getFitness()]++;
@@ -63,8 +66,13 @@ void Statistic::setBest(int best){
     this->best = best;
 }
 
-void Statistic::setWorst(int worst){
-    this->worst = worst;
+void Statistic::setWorst(vector<Individuo> &s){
+
+    for(int i = 0; i < s.size(); i++){
+
+        if(s[i].getFitness() > worst)
+            worst = s[i].getFitness();
+    }
 }
 
 void Statistic::printStatistics(){
