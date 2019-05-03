@@ -796,8 +796,12 @@ void Genetic::run()
 
 		generations++;
 
-		cout << "gen: " << generations << " - best fitness: " << best.getFitness() << endl;
+		cout << "gen: " << generations << endl;
+		
+		stat.calculateAll(population);
+		stat.printStatistics();
 
+		sleep(5);
 		partialReplacement();
 	}
 

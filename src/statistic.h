@@ -13,11 +13,10 @@ class Statistic{
                    std_deviation;
             
             int best,
-                worst,
-                repeated,
-                mode;
+                worst;
 
             map<int,int> values;
+            pair<int,int> mode;
             Output o;
             
 
@@ -28,6 +27,8 @@ class Statistic{
             void standardDeviation(vector<Individuo> &s);
             void calculateMode(vector<Individuo> &s);
             void countRepeated(vector<Individuo> &s);
+            void setBest(int best);
+            void setWorst(int worst);
             void printStatistics();
 
 };

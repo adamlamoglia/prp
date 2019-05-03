@@ -3,13 +3,17 @@
 
 Statistic::Statistic(){
 
-    mean = std_deviation = best = worst = repeated = mode = 0;
+    mean = std_deviation = best = worst = mode.first = mode.second = 0;
 
     o = Output();
 }
 
 void Statistic::calculateAll(vector<Individuo> &s){
 
+    mean = std_deviation = best = worst = 0;
+
+    setBest(s[0].getFitness());
+    setWorst(s[s.size() - 1].getFitness());
     calculateMean(s);
     calculateMode(s);
     countRepeated(s);
@@ -27,18 +31,6 @@ void Statistic::calculateMean(vector<Individuo> &s){
 
 void Statistic::countRepeated(vector<Individuo> &s){
 
-    int aux_fitness;
-
-    for(int i = 0; i < s.size(); i++){
-        
-        aux_fitness = s[i].getFitness();
-
-        for(int j = i + 1; j < s.size(); j++){
-
-            if(aux_fitness == s[i].getFitness())
-                repeated++;
-        }
-    }
 }
 
 
@@ -49,8 +41,11 @@ void Statistic::calculateMode(vector<Individuo> &s){
     
     for(int i = 0; i < s.size(); i++){
         
-       if(values[s[i].getFitness()] > mode)
-        mode = values[s[i].getFitness()];
+       if(values[s[i].getFitness()] > mode.second){
+            mode.first  = s[i].getFitness();
+            mode.second = values[s[i].getFitness()];
+       }
+
     }
 
 }
@@ -61,8 +56,25 @@ void Statistic::standardDeviation(vector<Individuo> &s){
         std_deviation += (s[i].getFitness() - mean)*(s[i].getFitness() - mean);
     
     std_deviation /= s.size();
+    std_deviation = sqrt(std_deviation);
+}
+
+void Statistic::setBest(int best){
+    this->best = best;
+}
+
+void Statistic::setWorst(int worst){
+    this->worst = worst;
 }
 
 void Statistic::printStatistics(){
     
+    cout << "Best: " << best << endl;
+    cout << "Worst: " << worst << endl;
+    cout << "Mean: " << mean << endl;
+    cout << "Standard Deviation: " << std_deviation << endl;
+    cout << "Mode: " << mode.first << endl;
+    cout << "Number of repetitions: " << mode.second << endl;
+    cout << endl;
+
 }

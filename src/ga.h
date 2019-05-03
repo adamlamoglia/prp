@@ -14,6 +14,7 @@
 #include "statistic.h"
 #include <algorithm>
 #include <utility>
+#include <unistd.h>
 
 class Genetic{
 
