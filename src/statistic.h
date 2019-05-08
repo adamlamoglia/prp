@@ -28,7 +28,7 @@ class Statistic{
             void calculateMode(vector<Individuo> &s);
             void countRepeated(vector<Individuo> &s);
             void setBest(int best);
-            void setWorst(int worst);
+            void setWorst(vector<Individuo> &s);
             void printStatistics();
 
 };
