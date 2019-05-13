@@ -38,7 +38,8 @@ public:
 	int	beta_max;
 
 	//Represents the limit of generations of populations (stop criterion).
-	int	limit;
+	int	gen_limit,
+		era_limit;
 
 	int init_type,
 		selection_type,

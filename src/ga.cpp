@@ -20,7 +20,7 @@ Genetic::Genetic(int alfa, int beta, int generations, double prob_mutation,
 
 	alfa_max = alfa;
 	beta_max = beta;
-	limit = generations;
+	gen_limit = generations;
 	probability = prob_mutation;
 
 	this->init_type = initype;
@@ -862,8 +862,9 @@ void Genetic::run()
 
 	init();
 
+	cout << "ger\tbest\tworst"  << endl; 
 
-	while (generations <= limit)
+	while (generations <= gen_limit)
 	{
 
 		alfa = beta = 0;
@@ -902,13 +903,12 @@ void Genetic::run()
 
 		generations++;
 
-		cout << "gen: " << generations << endl;
-
+		//cout << "gen: " << generations << endl;
 
 		stat.calculateAll(population);
-		stat.printStatistics();
+		stat.printBestAndWorst(generations - 1);
 	
-		partialReplacement();
+		//partialReplacement();
 	}
 
 	population[0] = best;

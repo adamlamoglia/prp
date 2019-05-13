@@ -53,7 +53,9 @@ public:
 
 	string reader;
 
-	string type,
+	string 	file_name,
+			seed_number,
+			type,
 			edge_type,
 			edge_format;
 
@@ -67,7 +69,7 @@ public:
 
 	double computeGeo(double a);
 
-	void load(string name);
+	void load(string name, int seed);
 
 	void addCoordenates(int id, double x, double y);
 

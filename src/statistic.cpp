@@ -16,7 +16,7 @@ void Statistic::calculateAll(vector<Individuo> &s){
     setWorst(s);
     calculateMean(s);
     calculateMode(s);
-    countRepeated(s);
+    
     standardDeviation(s);
 }
 
@@ -27,10 +27,6 @@ void Statistic::calculateMean(vector<Individuo> &s){
     }
 
     mean /= s.size();
-}
-
-void Statistic::countRepeated(vector<Individuo> &s){
-
 }
 
 
@@ -85,4 +81,9 @@ void Statistic::printStatistics(){
     cout << "Number of repetitions: " << mode.second << endl;
     cout << endl;
 
+}
+
+void Statistic::printBestAndWorst(int gen){
+
+    cout << gen << "\t" << best << "\t" << worst << endl;
 }

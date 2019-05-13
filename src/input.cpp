@@ -115,10 +115,12 @@ void Input::buildAtsp(){
 
 
 
-void Input::load(string name){
+void Input::load(string name, int seed){
+
+	file_name = name;
+	seed_number = to_string(seed);
 
 	ifstream file(name.c_str());
-
 
 	if( file.is_open() ){
 
