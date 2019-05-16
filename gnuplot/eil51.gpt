@@ -1,5 +1,5 @@
 set terminal pdf
-set output "eil51-seed-1557781396.pdf"
+set output "eil51.pdf"
 set xrange [0:100]
 set yrange [521:1200]
 set xtics 30

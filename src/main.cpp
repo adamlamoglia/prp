@@ -45,7 +45,8 @@ int main( int argc, char ** argv ) {
 			Parametros::getMutationType(),		// Standard: 1
 			Parametros::getInsertionType(), 	// Standard: 1
 			Parametros::getNumberVehicles(),    // Standard: 3
-			Parametros::getFitFactor());  		// Standard: 3
+			Parametros::getFitFactor(),  		// Standard: 3
+			Parametros::getEra());				// Standard: 10
 		
 		ga.run();
 		ga.showResult();

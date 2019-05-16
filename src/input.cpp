@@ -176,7 +176,7 @@ void Input::load(string name, int seed){
 							
 							int id;
 							double x,
-								y;
+								   y;
 
 							for(unsigned int i = 0; i < num_vertices; i++){
 
@@ -208,7 +208,6 @@ void Input::load(string name, int seed){
 						}
 						
 					}
-
 
 		}
 
