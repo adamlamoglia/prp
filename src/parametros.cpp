@@ -192,6 +192,17 @@ int Parametros::getFitFactor(){
 	}
 }
 
+int Parametros::getEra(){
+
+	try {
+		return stoi(vm["era"]);
+	} catch (exception& e) {
+		vm["era"] = "10";
+		return stoi( vm["era"]);
+	}
+
+}
+
 
 void Parametros::Store(int argc, char * argv[ ]) {
 
@@ -217,6 +228,7 @@ void Parametros::Store(int argc, char * argv[ ]) {
 			{ "gens" 				, required_argument, 0, 017	},
 			{ "init" 				, required_argument, 0, 020	},
 			{ "fit" 				, required_argument, 0, 021	},
+			{ "era" 				, required_argument, 0, 022	},
 			{ "help", no_argument, 0,						076 },
 			{ "h", no_argument, 0,							076 },
 			{ 0,0, 0, 0 } };
@@ -277,6 +289,9 @@ void Parametros::Store(int argc, char * argv[ ]) {
 			break;
 		case 021:
 			vm["fit"] = string(optarg);
+			break;
+		case 022:
+			vm["era"] = string(optarg);
 			break;
 		case 076:
 			cout<<"write a help." << endl;

@@ -28,6 +28,7 @@ class Parametros {
 		static int getNumberVehicles();
 		static int getInitType();
 		static int getFitFactor();
+		static int getEra();
 		static double getSeed();
 
 		

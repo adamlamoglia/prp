@@ -16,7 +16,7 @@ void Statistic::calculateAll(vector<Individuo> &s){
     setWorst(s);
     calculateMean(s);
     calculateMode(s);
-    countRepeated(s);
+    
     standardDeviation(s);
 }
 
@@ -27,10 +27,6 @@ void Statistic::calculateMean(vector<Individuo> &s){
     }
 
     mean /= s.size();
-}
-
-void Statistic::countRepeated(vector<Individuo> &s){
-
 }
 
 
@@ -87,7 +83,7 @@ void Statistic::printStatistics(){
 
 }
 
-void Statistic::printBestAndWorst(){
+void Statistic::printBestAndWorst(int gen){
 
-    cout << best << "\t" << worst << endl;
+    cout << gen << "\t" << best << "\t" << worst << endl;
 }

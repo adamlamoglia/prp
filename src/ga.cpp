@@ -13,14 +13,14 @@ int aux;
 Genetic::Genetic(int alfa, int beta, int generations, double prob_mutation,
 				 int size, double lucky_factor, int lucky_range, int mutation_range,
 				 int initype, int stype, int ctype, int mtype, int itype, int number_vehicles,
-				 int fit)
+				 int fit, int era)
 {
 
 	this->in = Input::getInstance();
 
 	alfa_max = alfa;
 	beta_max = beta;
-	limit = generations;
+	gen_limit = generations;
 	probability = prob_mutation;
 
 	this->init_type = initype;
@@ -44,6 +44,8 @@ Genetic::Genetic(int alfa, int beta, int generations, double prob_mutation,
 	cut_size = in->num_vertices / 2;
 
 	cut = size / 2;
+
+	this->era = era;
 
 	population.resize(size, Individuo());
 
@@ -841,7 +843,8 @@ void Genetic::printPopulation()
 void Genetic::run()
 {
 
-	int generations = 0,
+	int eras = 0,
+		generations = 0,
 		alfa = 0,
 		beta = 0;
 
@@ -863,54 +866,62 @@ void Genetic::run()
 
 	init();
 
+	while(eras <= era){
+		
+		generations = 0;
 
-	while (generations <= limit)
-	{
+		cout << "ger\tbest\tworst"  << endl; 
 
-		alfa = beta = 0;
-
-		while (alfa < alfa_max and beta < beta_max)
+		while (generations <= gen_limit)
 		{
 
-			best = population[0];
+			alfa = beta = 0;
 
-			selection(i1, i2, p1, 0);
-			selection(i1, i2, p2, p1.getFitness());
-
-			crossover(p1, p2, f1, f2);
-
-
-			mutation_number = rand() % mutation_range;
-
-			if (mutation_number < probability)
+			while (alfa < alfa_max and beta < beta_max)
 			{
 
-				mutation(f1);
-				mutation(f2);
+				best = population[0];
 
-				alfa++;
-			}
-		
+				selection(i1, i2, p1, 0);
+				selection(i1, i2, p2, p1.getFitness());
 
-			twoOptBestImprovement(f1);
-			twoOptBestImprovement(f2);
+				crossover(p1, p2, f1, f2);
 
+				mutation_number = rand() % mutation_range;
+
+				if (mutation_number < probability)
+				{
+
+					mutation(f1);
+					mutation(f2);
+
+					alfa++;
+				}
 			
 
-			insertion(f1, best, beta);
-			insertion(f2, best, beta);
+				twoOptBestImprovement(f1);
+				twoOptBestImprovement(f2);
+
+				
+				insertion(f1, best, beta);
+				insertion(f2, best, beta);
+			}
+
+			generations++;
+
+			//cout << "gen: " << generations << endl;
+
+			stat.calculateAll(population);
+			stat.printBestAndWorst(generations - 1);
+		
+			
 		}
+		eras++;
 
-		generations++;
+		population[0] = best;
 
-		//cout << "gen: " << generations << endl;
-
-
-		stat.calculateAll(population);
-		stat.printBestAndWorst();
-	
-		//partialReplacement();
+		partialReplacement();
 	}
 
-	population[0] = best;
+	
 }
