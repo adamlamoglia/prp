@@ -546,7 +546,8 @@ void Genetic::mutationScramble(Individuo &f)
 	cout << "begin index: " << begin << endl;
 	cout << "end index: " << end << endl;
 	exit(0);
-
+	
+	
 }
 
 void Genetic::mutationInversion(Individuo &f)
@@ -902,13 +903,13 @@ void Genetic::run()
 
 		generations++;
 
-		cout << "gen: " << generations << endl;
+		//cout << "gen: " << generations << endl;
 
 
 		stat.calculateAll(population);
-		stat.printStatistics();
+		stat.printBestAndWorst();
 	
-		partialReplacement();
+		//partialReplacement();
 	}
 
 	population[0] = best;

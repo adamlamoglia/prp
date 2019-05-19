@@ -30,5 +30,6 @@ class Statistic{
             void setBest(int best);
             void setWorst(vector<Individuo> &s);
             void printStatistics();
+            void printBestAndWorst();
 
 };

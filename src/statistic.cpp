@@ -86,3 +86,8 @@ void Statistic::printStatistics(){
     cout << endl;
 
 }
+
+void Statistic::printBestAndWorst(){
+
+    cout << best << "\t" << worst << endl;
+}
