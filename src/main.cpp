@@ -8,7 +8,7 @@
 
 #include "parametros.h"
 #include "input.h"
-#include "ga.h"
+#include "ils.h"
 
 using namespace std;
 
@@ -29,7 +29,14 @@ int main( int argc, char ** argv ) {
 
 		in->load(Parametros::getInstance(), seed);
 
-		Genetic ga( 
+		Ils ils(Parametros::getInitType(),
+				Parametros::getMutationType(),
+				Parametros::getFitFactor(),
+				Parametros::getIdleIterations());
+
+		ils.run();
+
+		/*Genetic ga( 
 			
 			Parametros::getAlphaMax(),			// Standard: 300
 			Parametros::getBetaMax(),			// Standard: 3000
@@ -49,7 +56,7 @@ int main( int argc, char ** argv ) {
 			Parametros::getEra());				// Standard: 10
 		
 		ga.run();
-		ga.showResult();
+		ga.showResult();*/
 	}
 	else
 		cout << "error: missing file" << endl;

@@ -203,6 +203,17 @@ int Parametros::getEra(){
 
 }
 
+int Parametros::getIdleIterations(){
+
+	try {
+		return stoi(vm["idle"]);
+	} catch (exception& e) {
+		vm["idle"] = "10000";
+		return stoi( vm["idle"]);
+	}
+
+}
+
 
 void Parametros::Store(int argc, char * argv[ ]) {
 
@@ -229,6 +240,7 @@ void Parametros::Store(int argc, char * argv[ ]) {
 			{ "init" 				, required_argument, 0, 020	},
 			{ "fit" 				, required_argument, 0, 021	},
 			{ "era" 				, required_argument, 0, 022	},
+			{"idle"					, required_argument, 0, 023 },
 			{ "help", no_argument, 0,						076 },
 			{ "h", no_argument, 0,							076 },
 			{ 0,0, 0, 0 } };
@@ -292,6 +304,9 @@ void Parametros::Store(int argc, char * argv[ ]) {
 			break;
 		case 022:
 			vm["era"] = string(optarg);
+			break;
+		case 023:
+			vm["idle"] = string(optarg);
 			break;
 		case 076:
 			cout<<"write a help." << endl;

@@ -31,7 +31,7 @@ public:
 	unsigned int num_vertices;
 
 	int deg,
-			capacity;
+		capacity;
 
 	double q1,
 			q2,
