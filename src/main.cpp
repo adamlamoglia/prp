@@ -34,6 +34,7 @@ int main( int argc, char ** argv ) {
 				Parametros::getFitFactor(),
 				Parametros::getIdleIterations());
 
+
 		ils.run();
 
 		/*Genetic ga( 

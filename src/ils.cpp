@@ -1,7 +1,8 @@
 #include "ils.h"
 
 Ils::Ils(int init_type, int mutation_type, int fit_factor, int maxIdleIterations)
-{
+{	
+	this->in = Input::getInstance();
 
     this->init_type = init_type;
     this->mutation_type = mutation_type;
@@ -69,6 +70,15 @@ void Ils::create(Individuo &s)
     }
 
     s.calculateFitness();
+
+	for (unsigned int j = 1; j < nodes_visited.size(); j++){
+		nodes_visited[j]  = false;
+		nodes_inserted[j] = false;
+	}
+
+	nodes_inserted[0] = true;
+	nodes_visited[0]  = true;
+        
 }
 
 void Ils::initialization(Individuo &s, int node){
@@ -143,8 +153,11 @@ void Ils::cheapestInit(Individuo &s, int node){
 
 	vector<int>::iterator it = s.route[permutations[0].vehicle].begin() + permutations[0].index;
 
+
 	s.route[permutations[0].vehicle].insert(it, node);
 	s.fleet[permutations[0].vehicle].setCapacity(s.fleet[permutations[0].vehicle].getCapacity() - in->demand[node]);
+
+
 
 	nodes_inserted[node] = true;
 
@@ -311,20 +324,24 @@ void Ils::chooseNodes(Individuo &s){
     do
 	{
 		vehicle1 = rand() % in->num_vertices;
+		//cout << "b" << endl;
 	} while (s.route[vehicle1].size() <= 3);
 
 	do
 	{
 		vehicle2 = rand() % in->num_vertices;
+		//cout << "c" << endl;
 	} while (s.route[vehicle2].size() <= 3);
 
 	do{
-	node1 = rand() % s.route[vehicle1].size();
+		node1 = rand() % s.route[vehicle1].size();
+		//cout << "d" << endl;
 	}while(s.route[vehicle1][node1] == 0);
 	
 	do
 	{
 		node2 = rand() % s.route[vehicle2].size();
+		//cout << "e" << endl;
 
 	} while (s.route[vehicle1][node1] == s.route[vehicle2][node2] 
 	|| s.route[vehicle2][node2] == 0);
@@ -429,12 +446,17 @@ void Ils::localSearch(Individuo &s){
 
 void Ils::showResult(){
 
-    best.printRoute();
-	best.printFitness();
+    //best.printRoute();
+	//best.printFitness();
 }
 
 void Ils::run()
 {
+
+	//Solutions
+    Individuo best,
+              current,
+              local;
 
     int idleIterations = 0,
         iterations = 0;
@@ -456,7 +478,8 @@ void Ils::run()
         {
             local = current;
 
-            perturbation(local);
+            perturbation(current);
+
             //localSearch(local);
             twoOptBest(local);
 
@@ -468,9 +491,15 @@ void Ils::run()
                 best = current;
                 idleIterations = 0;
                 improvement = true;
+
+				cout << "local: " << local.getFitness() << endl;
+				cout << "current: " << current.getFitness() << endl;
+				cout << "best: " << best.getFitness() << endl;
             }
             else
                 idleIterations++;
+			
+			
 
         } while (idleIterations < maxIdleIterations);
 

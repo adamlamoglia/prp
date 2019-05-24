@@ -16,11 +16,6 @@ class Ils{
         //Input object
         Input *in;
 
-        //Solutions
-        Individuo best,
-                  current,
-                  local;
-
         //Parameters 
         int init_type,
             mutation_type,
