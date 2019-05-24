@@ -11,7 +11,8 @@ class Ils{
 
     public:
 
-        Ils(int init_type, int mutation_type, int fit_factor, int maxIdleIterations);
+        Ils(int init_type, int mutation_type, int fit_factor, int maxIdleIterations, 
+            int maxIterations);
 
         //Input object
         Input *in;

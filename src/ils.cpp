@@ -1,9 +1,12 @@
+#define DEBUG
 #include "ils.h"
 
-Ils::Ils(int init_type, int mutation_type, int fit_factor, int maxIdleIterations)
+Ils::Ils(int init_type, int mutation_type, int fit_factor, int maxIdleIterations,
+		int maxIterations)
 {	
 	this->in = Input::getInstance();
 
+	this->maxIterations = maxIterations;
     this->init_type = init_type;
     this->mutation_type = mutation_type;
     this->fit_factor = fit_factor;
@@ -38,6 +41,16 @@ bool Ils::clientsChecked(){
 
 void Ils::create(Individuo &s)
 {
+	s.setFitness(0);
+
+	if(s.route.size() > 0){
+		s.route.clear();
+			
+		s.route.resize(in->num_vertices);
+
+		for(unsigned int j = 0; j < s.fleet.size(); j++)
+			s.fleet[j].setCapacity(in->capacity);
+	}
 
     while (!clientsServed())
     {
@@ -455,16 +468,22 @@ void Ils::run()
 
 	//Solutions
     Individuo best,
-              current,
+			  current,
               local;
 
     int idleIterations = 0,
         iterations = 0;
+	
+	 create(best);
 
     do
     {
-        create(best);
+
+		improvement = false;
+
         create(current);
+
+		cout << "current: " << current.getFitness() << endl; 
 
         if (current.getFitness() < best.getFitness())
             best = current;
@@ -473,12 +492,18 @@ void Ils::run()
 
         if (current.getFitness() < best.getFitness())
             best = current;
+		
+
+		#ifdef DEBUG3
+			cout << "best: " << best.getFitness() << endl;
+		#endif
 
         do
         {
+			
             local = current;
 
-            perturbation(current);
+            perturbation(local);
 
             //localSearch(local);
             twoOptBest(local);
@@ -491,17 +516,19 @@ void Ils::run()
                 best = current;
                 idleIterations = 0;
                 improvement = true;
-
-				cout << "local: " << local.getFitness() << endl;
-				cout << "current: " << current.getFitness() << endl;
-				cout << "best: " << best.getFitness() << endl;
             }
             else
                 idleIterations++;
 			
-			
-
         } while (idleIterations < maxIdleIterations);
 
-    } while (improvement);
+		cout << "best: " << best.getFitness() << endl;
+	
+	if(!improvement)
+		iterations++;
+
+    } while (improvement || iterations < maxIterations);
+
+	best.printRoute();
+	best.printFitness();
 }

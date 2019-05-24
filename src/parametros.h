@@ -30,6 +30,7 @@ class Parametros {
 		static int getFitFactor();
 		static int getEra();
 		static int getIdleIterations();
+		static int getIterations();
 		static double getSeed();
 
 		

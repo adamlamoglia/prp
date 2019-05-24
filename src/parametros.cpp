@@ -208,8 +208,19 @@ int Parametros::getIdleIterations(){
 	try {
 		return stoi(vm["idle"]);
 	} catch (exception& e) {
-		vm["idle"] = "10000";
+		vm["idle"] = "1000000";
 		return stoi( vm["idle"]);
+	}
+
+}
+
+int Parametros::getIterations(){
+
+	try {
+		return stoi(vm["iterations"]);
+	} catch (exception& e) {
+		vm["iterations"] = "1000";
+		return stoi( vm["iterations"]);
 	}
 
 }
@@ -241,6 +252,7 @@ void Parametros::Store(int argc, char * argv[ ]) {
 			{ "fit" 				, required_argument, 0, 021	},
 			{ "era" 				, required_argument, 0, 022	},
 			{"idle"					, required_argument, 0, 023 },
+			{"iterations"			, required_argument, 0, 024 },
 			{ "help", no_argument, 0,						076 },
 			{ "h", no_argument, 0,							076 },
 			{ 0,0, 0, 0 } };
@@ -307,6 +319,9 @@ void Parametros::Store(int argc, char * argv[ ]) {
 			break;
 		case 023:
 			vm["idle"] = string(optarg);
+			break;
+		case 024:
+			vm["iterations"] = string(optarg);
 			break;
 		case 076:
 			cout<<"write a help." << endl;

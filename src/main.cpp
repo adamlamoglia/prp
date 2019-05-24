@@ -32,7 +32,8 @@ int main( int argc, char ** argv ) {
 		Ils ils(Parametros::getInitType(),
 				Parametros::getMutationType(),
 				Parametros::getFitFactor(),
-				Parametros::getIdleIterations());
+				Parametros::getIdleIterations(),
+				Parametros::getIterations());
 
 
 		ils.run();

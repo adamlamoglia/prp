@@ -13,7 +13,6 @@ Output::Output()
 
 	this->in = Input::getInstance();
 
-
 	route.resize(in->num_vertices);
 	fleet.resize(in->num_vertices, Vehicle(in->capacity) );
 
