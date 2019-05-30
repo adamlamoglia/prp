@@ -79,7 +79,7 @@ class Ils{
         
 
         //Perturbation functions
-        void perturbation(Individuo &s);
+        void perturbation(Individuo &s, int level);
         void swap2Nodes(Individuo &s);
         void scramble(Individuo &s);
         void invert(Individuo &s);

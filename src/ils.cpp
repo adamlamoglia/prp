@@ -361,27 +361,18 @@ void Ils::chooseNodes(Individuo &s){
 
 }
 
-void Ils::perturbation(Individuo &s){
+void Ils::perturbation(Individuo &s, int level){
 
-    switch (mutation_type)
-	{
-
-	case 1:
+	if(level <= 1000){
 		swap2Nodes(s);
-	break;
-
-	case 2:
-		scramble(s);
-	break;
-
-	case 3:
-		invert(s);
-	break;
-
-	default:
-		swap2Nodes(s);
-	break;
 	}
+	else if(level > 1000 && level <= 100000){
+
+		for(int i = 0; i < level; i++)
+			swap2Nodes(s);
+	}
+	else if(level > 100000)
+		scramble(s);
 }
 
 int Ils::calculatePartialDiffRoute(Individuo &s, int vehicle1, int vehicle2, int i, int k){
@@ -447,9 +438,31 @@ void Ils::swap2Nodes(Individuo &s){
 
 void Ils::scramble(Individuo &s){
 
+	do
+	{
+		vehicle1 = rand() % in->num_vertices;
+		//cout << "b" << endl;
+	} while (s.route[vehicle1].size() <= 3);
+
+
+	random_shuffle(s.route[vehicle1].begin() + 1, s.route[vehicle1].end() - 1);
+
+	s.calculateFitness();
+
 }
 
 void Ils::invert(Individuo &s){
+
+		do
+	{
+		vehicle1 = rand() % in->num_vertices;
+		//cout << "b" << endl;
+	} while (s.route[vehicle1].size() <= 3);
+
+
+	reverse(s.route[vehicle1].begin(), s.route[vehicle1].end());
+
+	s.calculateFitness();
 
 }
 
@@ -483,7 +496,7 @@ void Ils::run()
 
         create(current);
 
-		cout << "current: " << current.getFitness() << endl; 
+		cout << "current1: " << current.getFitness() << endl; 
 
         if (current.getFitness() < best.getFitness())
             best = current;
@@ -503,10 +516,14 @@ void Ils::run()
 			
             local = current;
 
-            perturbation(local);
+            perturbation(local, idleIterations);
+
+			cout << "current2: " << current.getFitness() << endl;
 
             //localSearch(local);
             twoOptBest(local);
+
+			cout << "best1: " << best.getFitness() << endl;
 
             if (local.getFitness() < current.getFitness())
                 current = local;
@@ -522,7 +539,7 @@ void Ils::run()
 			
         } while (idleIterations < maxIdleIterations);
 
-		cout << "best: " << best.getFitness() << endl;
+		cout << "best2: " << best.getFitness() << endl;
 	
 	if(!improvement)
 		iterations++;
