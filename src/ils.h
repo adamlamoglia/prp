@@ -56,7 +56,17 @@ class Ils{
             local_improvement,
             lowest_fitness,
             current_value,
-            new_value;
+            new_value,
+            current1,
+            current2,
+            current3,
+            current4,
+            current5,
+            change1,
+            change2,
+            change3,
+            change4,
+            change5;
 
         //Ils function
         void run();
@@ -72,8 +82,10 @@ class Ils{
 
         //Local search functions
         void twoOptBest(Individuo &s);
+        void threeOptBest(Individuo &s);
         void localSearch(Individuo &s);
-        int deltaEvaluation(Individuo &s, int vehicle, int i, int k);
+        int delta2Evaluation(Individuo &s, int vehicle, int i, int k);
+        int delta3Evaluation(Individuo &s, int vehicle, int i, int j, int k);
         int calculatePartialRoute(Individuo &s, int vehicle, int i, int k);
         void swapNodes(Individuo &s, int vehicle, int i, int k);
         
@@ -84,7 +96,7 @@ class Ils{
         void scramble(Individuo &s);
         void invert(Individuo &s);
         void chooseNodes(Individuo &s);
-        void swapNodes2(Individuo &s, int vehicle1, int vehicle2, int i, int k);
+        void swapNodesCapacity(Individuo &s, int vehicle1, int vehicle2, int i, int k);
         bool capacityIsSatisfied(Individuo &s, int vehicle1, int vehicle2, int i, int k);
         int calculatePartialDiffRoute(Individuo &s, int vehicle1, int vehicle2, int i, int k);
 

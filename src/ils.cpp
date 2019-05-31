@@ -197,10 +197,9 @@ void Ils::randomCheapestInit(Individuo &s, int node){
         nodes_inserted[node] = true;
 }
 
-int Ils::deltaEvaluation(Individuo &s, int vehicle, int i, int k){
+int Ils::delta2Evaluation(Individuo &s, int vehicle, int i, int k){
 
     current_value = calculatePartialRoute(s, vehicle, i, k);
-
 
 	swap(s.route[vehicle][i], s.route[vehicle][k]);
 
@@ -212,8 +211,39 @@ int Ils::deltaEvaluation(Individuo &s, int vehicle, int i, int k){
 
 }
 
-int Ils::calculatePartialRoute(Individuo &s, int vehicle, int i, int k)
-{
+int Ils::delta3Evaluation(Individuo &s, int vehicle, int i, int j, int k){
+
+	current1 = calculatePartialRoute(s, vehicle, i, j);
+
+	swap(s.route[vehicle][i], s.route[vehicle][j]);
+
+	change1 = calculatePartialRoute(s, vehicle, i, j);
+
+	swap(s.route[vehicle][i], s.route[vehicle][j]);
+	
+		
+	current2 = calculatePartialRoute(s, vehicle, i, k);
+
+	swap(s.route[vehicle][i], s.route[vehicle][k]);
+
+	change2 = calculatePartialRoute(s, vehicle, i, k);
+
+	swap(s.route[vehicle][i], s.route[vehicle][k]);
+
+
+	current3 = calculatePartialRoute(s, vehicle, j, k);
+
+	swap(s.route[vehicle][j], s.route[vehicle][k]);
+
+	change3 = calculatePartialRoute(s, vehicle, j, k);
+
+	swap(s.route[vehicle][j], s.route[vehicle][k]); 
+
+
+
+}
+
+int Ils::calculatePartialRoute(Individuo &s, int vehicle, int i, int k){
 
 	if(i == k - 1){
 		return in->distance_matrix[s.route[vehicle][i-1]][s.route[vehicle][i]] 
@@ -231,7 +261,7 @@ int Ils::calculatePartialRoute(Individuo &s, int vehicle, int i, int k)
 	return 	in->distance_matrix[s.route[vehicle][i-1]][s.route[vehicle][i]] 
 			+ in->distance_matrix[s.route[vehicle][i]][s.route[vehicle][i+1]] 
 			+ in->distance_matrix[s.route[vehicle][k-1]][s.route[vehicle][k]] 
-+ in->distance_matrix[s.route[vehicle][k]][s.route[vehicle][k+1]];
+			+ in->distance_matrix[s.route[vehicle][k]][s.route[vehicle][k+1]];
 
 }
 
@@ -244,6 +274,70 @@ void Ils::swapNodes(Individuo &s, int vehicle, int i, int k){
 	new_value = calculatePartialRoute(s, vehicle, i, k);
 
 	s.setFitness(s.getFitness() - current_value + new_value);
+}
+
+void Ils::threeOptBest(Individuo &s){
+
+	global_improvement = true;
+
+	best_i = best_k = -1;
+	delta = 1;
+
+	for (unsigned int vehicle = 0; vehicle < s.route.size(); vehicle++)
+	{
+
+
+		if(s.route[vehicle].size() <= 1)
+			continue;
+
+
+		while (global_improvement)
+		{
+			global_improvement = false;
+
+
+			lowest_fitness = s.getFitness();
+
+			for (unsigned int i = 1; i < s.route[vehicle].size() - 2; i++)
+			{
+
+				best_delta = 0;
+
+				local_improvement = false;
+
+				for (unsigned int k = i + 1; k < s.route[vehicle].size() - 1; k++)
+				{
+					
+						delta = delta2Evaluation(s, vehicle, i, k);
+
+						if (delta < 0 && delta < best_delta)
+						{
+
+							best_delta = delta;
+							best_i = i;
+							best_k = k;
+							local_improvement = true;
+						}
+				
+				}
+
+				if (local_improvement)
+				{
+
+					swapNodes(s, vehicle, best_i, best_k);
+
+					if (s.getFitness() < lowest_fitness)
+					{
+						global_improvement = true;
+					}
+				}
+
+			}
+
+		}
+
+	}
+
 }
 
 void Ils::twoOptBest(Individuo &s){
@@ -278,7 +372,7 @@ void Ils::twoOptBest(Individuo &s){
 				for (unsigned int k = i + 1; k < s.route[vehicle].size() - 1; k++)
 				{
 					
-						delta = deltaEvaluation(s, vehicle, i, k);
+						delta = delta2Evaluation(s, vehicle, i, k);
 
 						if (delta < 0 && delta < best_delta)
 						{
@@ -363,15 +457,15 @@ void Ils::chooseNodes(Individuo &s){
 
 void Ils::perturbation(Individuo &s, int level){
 
-	if(level <= 1000){
+	if(level <= maxIdleIterations * 0.25){
 		swap2Nodes(s);
 	}
-	else if(level > 1000 && level <= 100000){
+	else if(level > maxIdleIterations * 0.25 && level <= maxIdleIterations * 0.75){
 
 		for(int i = 0; i < level; i++)
 			swap2Nodes(s);
 	}
-	else if(level > 100000)
+	else if(level > maxIdleIterations * 0.75)
 		scramble(s);
 }
 
@@ -400,7 +494,7 @@ int Ils::calculatePartialDiffRoute(Individuo &s, int vehicle1, int vehicle2, int
 			+ in->distance_matrix[s.route[vehicle2][k]][s.route[vehicle2][k+1]];
 }
 
-void Ils::swapNodes2(Individuo &s, int vehicle1, int vehicle2, int i, int k){
+void Ils::swapNodesCapacity(Individuo &s, int vehicle1, int vehicle2, int i, int k){
 
     if(vehicle1 != vehicle2){
 
@@ -429,10 +523,10 @@ void Ils::swap2Nodes(Individuo &s){
 	}while(!capacityIsSatisfied(s, vehicle1, vehicle2, node1, node2));
 
 	if (node1 < node2)
-		swapNodes2(s, vehicle1, vehicle2, node1, node2);
+		swapNodesCapacity(s, vehicle1, vehicle2, node1, node2);
 
 	else
-		swapNodes2(s, vehicle2, vehicle1, node2, node1);
+		swapNodesCapacity(s, vehicle2, vehicle1, node2, node1);
 
 }
 
@@ -496,15 +590,19 @@ void Ils::run()
 
         create(current);
 
-		cout << "current1: " << current.getFitness() << endl; 
-
-        if (current.getFitness() < best.getFitness())
+        if (current.getFitness() < best.getFitness()){
             best = current;
+
+			cout << "Best: " << best.getFitness() << endl;
+		}
 
         twoOptBest(current);
 
-        if (current.getFitness() < best.getFitness())
+        if (current.getFitness() < best.getFitness()){
             best = current;
+
+			cout << "Best: " << best.getFitness() << endl;
+		}
 		
 
 		#ifdef DEBUG3
@@ -518,12 +616,8 @@ void Ils::run()
 
             perturbation(local, idleIterations);
 
-			cout << "current2: " << current.getFitness() << endl;
-
             //localSearch(local);
             twoOptBest(local);
-
-			cout << "best1: " << best.getFitness() << endl;
 
             if (local.getFitness() < current.getFitness())
                 current = local;
@@ -533,13 +627,13 @@ void Ils::run()
                 best = current;
                 idleIterations = 0;
                 improvement = true;
+
+				cout << "Best: " << best.getFitness() << endl;
             }
             else
                 idleIterations++;
 			
         } while (idleIterations < maxIdleIterations);
-
-		cout << "best2: " << best.getFitness() << endl;
 	
 	if(!improvement)
 		iterations++;
