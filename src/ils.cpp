@@ -354,7 +354,6 @@ void Ils::twoOptBest(Individuo &s){
 		if(s.route[vehicle].size() <= 1)
 			continue;
 
-
 		while (global_improvement)
 		{
 			global_improvement = false;
@@ -457,10 +456,10 @@ void Ils::chooseNodes(Individuo &s){
 
 void Ils::perturbation(Individuo &s, int level){
 
-	if(level <= maxIdleIterations * 0.25){
+	if(level <= maxIdleIterations * 0.50){
 		swap2Nodes(s);
 	}
-	else if(level > maxIdleIterations * 0.25 && level <= maxIdleIterations * 0.75){
+	else if(level > maxIdleIterations * 0.50 && level <= maxIdleIterations * 0.75){
 
 		for(int i = 0; i < level; i++)
 			swap2Nodes(s);
@@ -577,6 +576,7 @@ void Ils::run()
     Individuo best,
 			  current,
               local;
+	int contador=0;
 
     int idleIterations = 0,
         iterations = 0;
@@ -586,13 +586,14 @@ void Ils::run()
     do
     {
 
+		idleIterations = 0;
+
 		improvement = false;
 
         create(current);
 
         if (current.getFitness() < best.getFitness()){
             best = current;
-
 			cout << "Best: " << best.getFitness() << endl;
 		}
 
@@ -600,43 +601,49 @@ void Ils::run()
 
         if (current.getFitness() < best.getFitness()){
             best = current;
-
 			cout << "Best: " << best.getFitness() << endl;
 		}
-		
 
 		#ifdef DEBUG3
 			cout << "best: " << best.getFitness() << endl;
 		#endif
 
         do
-        {
-			
+        {	
+			//create(local);
             local = current;
-
+						
             perturbation(local, idleIterations);
-
-            //localSearch(local);
+			//cout << "Local antes: " << local.getFitness() << endl;
+			//cout << "Current antes: " << current.getFitness() << endl;
             twoOptBest(local);
+			//cout << "Current: depois " << current.getFitness() << endl;
+			//cout << "Local: depois " << local.getFitness() << endl;
+			//cout << "Contador " << contador++ << endl;
+			//cout << "Best: " << best.getFitness() << endl;
+			//cout << idleIterations << " " << iterations << endl;
 
-            if (local.getFitness() < current.getFitness())
+            if (local.getFitness() < current.getFitness()){
                 current = local;
-
-            if (current.getFitness() < best.getFitness())
-            {
-                best = current;
-                idleIterations = 0;
-                improvement = true;
-
-				cout << "Best: " << best.getFitness() << endl;
-            }
-            else
-                idleIterations++;
+				
+				if (current.getFitness() < best.getFitness())
+				{
+					best = current;
+					improvement = true;
+					idleIterations = 0;
+					cout << "Best: " << best.getFitness() << endl;
+					
+            	}
+			}
+			else
+				idleIterations++;
 			
         } while (idleIterations < maxIdleIterations);
 	
 	if(!improvement)
 		iterations++;
+	else
+		iterations=0;
 
     } while (improvement || iterations < maxIterations);
 
