@@ -31,6 +31,7 @@ class Parametros {
 		static int getEra();
 		static int getIdleIterations();
 		static int getIterations();
+		static double getRRfactor();
 		static double getSeed();
 
 		

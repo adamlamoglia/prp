@@ -2,7 +2,7 @@
 #include "ils.h"
 
 Ils::Ils(int init_type, int mutation_type, int fit_factor, int maxIdleIterations,
-		int maxIterations)
+		int maxIterations, double rr_factor)
 {	
 	this->in = Input::getInstance();
 
@@ -10,6 +10,7 @@ Ils::Ils(int init_type, int mutation_type, int fit_factor, int maxIdleIterations
     this->init_type = init_type;
     this->mutation_type = mutation_type;
     this->fit_factor = fit_factor;
+	this->rr_factor = rr_factor;
     this->maxIdleIterations = maxIdleIterations;
 
     nodes_inserted.resize(in->num_vertices, false);
@@ -314,44 +315,49 @@ void Ils::ruinAndRecreate(Individuo &s){
 	
 	improvement = true;
 
+
+
 	while(improvement){
 
 		improvement = false;
 
+		if(nodes_removed.size() > 0)
+			nodes_removed.clear();
+			
 		for(int i = 0; i < 5; i++){
 
 			do{
 				random_node = rand() % in->num_vertices;
 			}while(random_node == 0);
 			
-
 			vehicle1 = searchVehicle(a, random_node);
-		
+
 			node1 = searchNode(a, random_node);
 
+			//problem of segfault here
 			a.route[vehicle1].erase(a.route[vehicle1].begin() + node1);
 
 			a.fleet[vehicle1].setCapacity(a.fleet[vehicle1].getCapacity() 
 												+ in->demand[random_node]);
 
-			computePossibilities(a, random_node);
-
-			randomCheapestInit(a, random_node);
-
-			a.calculateFitness();
-
-			if(a.getFitness() < s.getFitness()){
-				improvement = true;
-
-				s = a;
-			}
+			nodes_removed.push_back(random_node);
 
 		}
 
-	}
+		for(int i = 0; i < nodes_removed.size(); i++){
 
-	if(s.getFitness() == 0)
-		cout << "erro" << endl;
+			computePossibilities(a, nodes_removed[i]);
+			randomCheapestInit(a, nodes_removed[i]);
+		}
+
+		a.calculateFitness();
+			
+		if(a.getFitness() < s.getFitness()){
+			improvement = true;
+			s = a;
+		}
+
+	}
 
 }
 

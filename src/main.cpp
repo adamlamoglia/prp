@@ -33,7 +33,8 @@ int main( int argc, char ** argv ) {
 				Parametros::getMutationType(),
 				Parametros::getFitFactor(),
 				Parametros::getIdleIterations(),
-				Parametros::getIterations());
+				Parametros::getIterations(),
+				Parametros::getRRfactor());
 
 
 		ils.run();

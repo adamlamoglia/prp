@@ -12,7 +12,7 @@ class Ils{
     public:
 
         Ils(int init_type, int mutation_type, int fit_factor, int maxIdleIterations, 
-            int maxIterations);
+            int maxIterations, double rr_factor);
 
         //Input object
         Input *in;
@@ -24,6 +24,8 @@ class Ils{
         int init_type,
             mutation_type,
             fit_factor;
+            
+        double rr_factor;
 
         //Ils atributes
         int maxIterations,
@@ -48,7 +50,8 @@ class Ils{
 
         //Creation atributes
         vector<int> nodes_inserted,
-                    nodes_visited;
+                    nodes_visited,
+                    nodes_removed;
 
         //two Opt atributes
         int delta,

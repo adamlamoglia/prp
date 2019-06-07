@@ -225,6 +225,15 @@ int Parametros::getIterations(){
 
 }
 
+double Parametros::getRRfactor(){
+	try {
+		return stod(vm["rr"]);
+	} catch (exception& e) {
+		vm["rr"] = "0.1";
+		return stod( vm["rr"]);
+	}
+}
+
 
 void Parametros::Store(int argc, char * argv[ ]) {
 
@@ -253,6 +262,7 @@ void Parametros::Store(int argc, char * argv[ ]) {
 			{ "era" 				, required_argument, 0, 022	},
 			{"idle"					, required_argument, 0, 023 },
 			{"iterations"			, required_argument, 0, 024 },
+			{"rr"					, required_argument, 0, 025 },
 			{ "help", no_argument, 0,						076 },
 			{ "h", no_argument, 0,							076 },
 			{ 0,0, 0, 0 } };
@@ -322,6 +332,9 @@ void Parametros::Store(int argc, char * argv[ ]) {
 			break;
 		case 024:
 			vm["iterations"] = string(optarg);
+			break;
+		case 025:
+			vm["rr"] = string(optarg);
 			break;
 		case 076:
 			cout<<"write a help." << endl;
