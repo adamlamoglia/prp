@@ -84,10 +84,14 @@ class Ils{
         void twoOptBest(Individuo &s);
         void threeOptBest(Individuo &s);
         void localSearch(Individuo &s);
+        void ruinAndRecreate(Individuo &s);
         int delta2Evaluation(Individuo &s, int vehicle, int i, int k);
         int delta3Evaluation(Individuo &s, int vehicle, int i, int j, int k);
         int calculatePartialRoute(Individuo &s, int vehicle, int i, int k);
         void swapNodes(Individuo &s, int vehicle, int i, int k);
+        int searchVehicle(Individuo &s, int node);
+        int searchNode(Individuo &s, int node);
+        
         
 
         //Perturbation functions

@@ -278,64 +278,63 @@ void Ils::swapNodes(Individuo &s, int vehicle, int i, int k){
 
 void Ils::threeOptBest(Individuo &s){
 
-	global_improvement = true;
+	
+}
 
-	best_i = best_k = -1;
-	delta = 1;
+int Ils::searchNode(Individuo &s, int node){
 
-	for (unsigned int vehicle = 0; vehicle < s.route.size(); vehicle++)
-	{
+	for(int i = 0; i < s.route[vehicle1].size(); i++){
 
+		if(s.route[vehicle1][i] == node)
+			return i;
+	}
 
-		if(s.route[vehicle].size() <= 1)
-			continue;
+}
 
+int Ils::searchVehicle(Individuo &s, int node){
 
-		while (global_improvement)
-		{
-			global_improvement = false;
+	for(int i = 0; i < s.route.size(); i++){
 
+		for(int j = 0; j < s.route[i].size(); j++){
+			
+			if(s.route[i][j] == node)
+				return i;
+		}
+	}
+}
 
-			lowest_fitness = s.getFitness();
+void Ils::ruinAndRecreate(Individuo &s){
 
-			for (unsigned int i = 1; i < s.route[vehicle].size() - 2; i++)
-			{
+	Individuo aux;
 
-				best_delta = 0;
+	aux = s;
+	
+	improvement = true;
 
-				local_improvement = false;
+	while(improvement){
 
-				for (unsigned int k = i + 1; k < s.route[vehicle].size() - 1; k++)
-				{
-					
-						delta = delta2Evaluation(s, vehicle, i, k);
+		improvement = false;
 
-						if (delta < 0 && delta < best_delta)
-						{
+		for(int i = 0; i < 5; i++){
 
-							best_delta = delta;
-							best_i = i;
-							best_k = k;
-							local_improvement = true;
-						}
-				
-				}
+			random_node = rand() % in->num_vertices;
 
-				if (local_improvement)
-				{
+			vehicle1 = searchVehicle(aux, random_node);
+			node1 = searchNode(aux, random_node);
 
-					swapNodes(s, vehicle, best_i, best_k);
+			s.route[vehicle1].erase(s.route[vehicle1].begin() + node1);
 
-					if (s.getFitness() < lowest_fitness)
-					{
-						global_improvement = true;
-					}
-				}
+			randomCheapestInit(aux, random_node);
 
+			aux.calculateFitness();
+
+			if(aux.getFitness() < s.getFitness()){
+				improvement = true;
+
+				s = aux;
 			}
 
 		}
-
 	}
 
 }
@@ -430,24 +429,24 @@ void Ils::chooseNodes(Individuo &s){
     do
 	{
 		vehicle1 = rand() % in->num_vertices;
-		//cout << "b" << endl;
+		
 	} while (s.route[vehicle1].size() <= 3);
 
 	do
 	{
 		vehicle2 = rand() % in->num_vertices;
-		//cout << "c" << endl;
+	
 	} while (s.route[vehicle2].size() <= 3);
 
 	do{
 		node1 = rand() % s.route[vehicle1].size();
-		//cout << "d" << endl;
+
 	}while(s.route[vehicle1][node1] == 0);
 	
 	do
 	{
 		node2 = rand() % s.route[vehicle2].size();
-		//cout << "e" << endl;
+	
 
 	} while (s.route[vehicle1][node1] == s.route[vehicle2][node2] 
 	|| s.route[vehicle2][node2] == 0);
@@ -534,7 +533,7 @@ void Ils::scramble(Individuo &s){
 	do
 	{
 		vehicle1 = rand() % in->num_vertices;
-		//cout << "b" << endl;
+	
 	} while (s.route[vehicle1].size() <= 3);
 
 
@@ -549,7 +548,7 @@ void Ils::invert(Individuo &s){
 		do
 	{
 		vehicle1 = rand() % in->num_vertices;
-		//cout << "b" << endl;
+		
 	} while (s.route[vehicle1].size() <= 3);
 
 
@@ -576,6 +575,7 @@ void Ils::run()
     Individuo best,
 			  current,
               local;
+
 	int contador=0;
 
     int idleIterations = 0,
