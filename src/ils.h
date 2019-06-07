@@ -17,6 +17,9 @@ class Ils{
         //Input object
         Input *in;
 
+        Individuo a,
+                  b;
+
         //Parameters 
         int init_type,
             mutation_type,
@@ -83,7 +86,7 @@ class Ils{
         //Local search functions
         void twoOptBest(Individuo &s);
         void threeOptBest(Individuo &s);
-        void localSearch(Individuo &s);
+        void localSearchUnion(Individuo &s);
         void ruinAndRecreate(Individuo &s);
         int delta2Evaluation(Individuo &s, int vehicle, int i, int k);
         int delta3Evaluation(Individuo &s, int vehicle, int i, int j, int k);

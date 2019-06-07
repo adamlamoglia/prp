@@ -50,6 +50,11 @@ void Ils::create(Individuo &s)
 
 		for(unsigned int j = 0; j < s.fleet.size(); j++)
 			s.fleet[j].setCapacity(in->capacity);
+		
+		for (unsigned int j = 1; j < nodes_visited.size(); j++){
+                nodes_visited[j] = false;
+				nodes_inserted[j] = false;
+		}
 	}
 
     while (!clientsServed())
@@ -192,7 +197,7 @@ void Ils::randomCheapestInit(Individuo &s, int node){
 
         s.route[permutations[random_possibility].vehicle].insert(it, node);
         s.fleet[permutations[random_possibility].vehicle].setCapacity(
-        s.fleet[permutations[random_possibility].vehicle].getCapacity() - in->demand[node]);
+		s.fleet[permutations[random_possibility].vehicle].getCapacity() - in->demand[node]);
         
         nodes_inserted[node] = true;
 }
@@ -305,9 +310,7 @@ int Ils::searchVehicle(Individuo &s, int node){
 
 void Ils::ruinAndRecreate(Individuo &s){
 
-	Individuo aux;
-
-	aux = s;
+	a = s;
 	
 	improvement = true;
 
@@ -322,29 +325,33 @@ void Ils::ruinAndRecreate(Individuo &s){
 			}while(random_node == 0);
 			
 
-			vehicle1 = searchVehicle(aux, random_node);
+			vehicle1 = searchVehicle(a, random_node);
 		
-			node1 = searchNode(aux, random_node);
+			node1 = searchNode(a, random_node);
 
-			aux.route[vehicle1].erase(aux.route[vehicle1].begin() + node1);
+			a.route[vehicle1].erase(a.route[vehicle1].begin() + node1);
 
-			computePossibilities(aux, random_node);
+			a.fleet[vehicle1].setCapacity(a.fleet[vehicle1].getCapacity() 
+												+ in->demand[random_node]);
 
-			randomCheapestInit(aux, random_node);
+			computePossibilities(a, random_node);
 
-			aux.calculateFitness();
+			randomCheapestInit(a, random_node);
 
+			a.calculateFitness();
 
-			if(aux.getFitness() < s.getFitness()){
+			if(a.getFitness() < s.getFitness()){
 				improvement = true;
 
-				s = aux;
+				s = a;
 			}
 
 		}
 
-		//cout << "q";
 	}
+
+	if(s.getFitness() == 0)
+		cout << "erro" << endl;
 
 }
 
@@ -469,11 +476,12 @@ void Ils::perturbation(Individuo &s, int level){
 	}
 	else if(level > maxIdleIterations * 0.50 && level <= maxIdleIterations * 0.75){
 
-		for(int i = 0; i < level; i++)
+		for(int i = 0; i < level % 16; i++)
 			swap2Nodes(s);
 	}
 	else if(level > maxIdleIterations * 0.75)
-		scramble(s);
+		for(int i = 0; i < level % 32; i++)
+			swap2Nodes(s);
 }
 
 int Ils::calculatePartialDiffRoute(Individuo &s, int vehicle1, int vehicle2, int i, int k){
@@ -567,7 +575,21 @@ void Ils::invert(Individuo &s){
 
 }
 
-void Ils::localSearch(Individuo &s){
+void Ils::localSearchUnion(Individuo &s){
+
+	a = s;
+	b = s;
+
+	twoOptBest(a);
+
+	ruinAndRecreate(b);
+
+	if(a.getFitness() < b.getFitness()){
+		s = a;
+	}
+	else{
+		s = b;
+	}
 
 }
 
@@ -606,7 +628,7 @@ void Ils::run()
 			cout << "Best: " << best.getFitness() << endl;
 		}
 
-        twoOptBest(current);
+        localSearchUnion(current);
 
         if (current.getFitness() < best.getFitness()){
             best = current;
@@ -619,18 +641,9 @@ void Ils::run()
 
         do
         {	
-			//create(local);
             local = current;
 						
             perturbation(local, idleIterations);
-			//cout << "Local antes: " << local.getFitness() << endl;
-			//cout << "Current antes: " << current.getFitness() << endl;
-            //twoOptBest(local);
-			//cout << "Current: depois " << current.getFitness() << endl;
-			//cout << "Local: depois " << local.getFitness() << endl;
-			//cout << "Contador " << contador++ << endl;
-			//cout << "Best: " << best.getFitness() << endl;
-			//cout << idleIterations << " " << iterations << endl;
 
 			ruinAndRecreate(local);
 
@@ -651,10 +664,11 @@ void Ils::run()
 			
         } while (idleIterations < maxIdleIterations);
 	
-	if(!improvement)
-		iterations++;
-	else
-		iterations=0;
+		if(!improvement)
+			iterations++;
+		else
+			iterations=0;
+
 
     } while (improvement || iterations < maxIterations);
 

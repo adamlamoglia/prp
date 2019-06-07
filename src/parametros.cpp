@@ -208,7 +208,7 @@ int Parametros::getIdleIterations(){
 	try {
 		return stoi(vm["idle"]);
 	} catch (exception& e) {
-		vm["idle"] = "1000000";
+		vm["idle"] = "10000";
 		return stoi( vm["idle"]);
 	}
 
