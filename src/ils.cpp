@@ -317,16 +317,23 @@ void Ils::ruinAndRecreate(Individuo &s){
 
 		for(int i = 0; i < 5; i++){
 
-			random_node = rand() % in->num_vertices;
+			do{
+				random_node = rand() % in->num_vertices;
+			}while(random_node == 0);
+			
 
 			vehicle1 = searchVehicle(aux, random_node);
+		
 			node1 = searchNode(aux, random_node);
 
-			s.route[vehicle1].erase(s.route[vehicle1].begin() + node1);
+			aux.route[vehicle1].erase(aux.route[vehicle1].begin() + node1);
+
+			computePossibilities(aux, random_node);
 
 			randomCheapestInit(aux, random_node);
 
 			aux.calculateFitness();
+
 
 			if(aux.getFitness() < s.getFitness()){
 				improvement = true;
@@ -335,6 +342,8 @@ void Ils::ruinAndRecreate(Individuo &s){
 			}
 
 		}
+
+		//cout << "q";
 	}
 
 }
@@ -616,12 +625,14 @@ void Ils::run()
             perturbation(local, idleIterations);
 			//cout << "Local antes: " << local.getFitness() << endl;
 			//cout << "Current antes: " << current.getFitness() << endl;
-            twoOptBest(local);
+            //twoOptBest(local);
 			//cout << "Current: depois " << current.getFitness() << endl;
 			//cout << "Local: depois " << local.getFitness() << endl;
 			//cout << "Contador " << contador++ << endl;
 			//cout << "Best: " << best.getFitness() << endl;
 			//cout << idleIterations << " " << iterations << endl;
+
+			ruinAndRecreate(local);
 
             if (local.getFitness() < current.getFitness()){
                 current = local;
