@@ -12,7 +12,7 @@ class Ils{
     public:
 
         Ils(int init_type, int mutation_type, int fit_factor, int maxIdleIterations, 
-            int maxIterations, double rr_factor);
+            int maxIterations, double rr_factor, int strategy);
 
         //Input object
         Input *in;
@@ -31,7 +31,7 @@ class Ils{
         int maxIterations,
             maxIdleIterations,
             random_node,
-            criteria;
+            strategy;
 
         int node1,
             node2,
@@ -91,7 +91,8 @@ class Ils{
         //Local search functions
         void ls(Individuo &s);
         void lsTokenRing(Individuo &s);
-        void lsUnion(Individuo &s);
+        void lsLinearUnion(Individuo &s);
+        void lsMovementUnion(Individuo &s);
         void twoOptBest(Individuo &s);
         void threeOptBest(Individuo &s);
         void ruinAndRecreate(Individuo &s);

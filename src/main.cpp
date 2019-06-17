@@ -34,7 +34,8 @@ int main( int argc, char ** argv ) {
 				Parametros::getFitFactor(),
 				Parametros::getIdleIterations(),
 				Parametros::getIterations(),
-				Parametros::getRRfactor());
+				Parametros::getRRfactor(),
+				Parametros::getStrategy());
 
 
 		ils.run();

@@ -2,7 +2,7 @@
 #include "ils.h"
 
 Ils::Ils(int init_type, int mutation_type, int fit_factor, int maxIdleIterations,
-		int maxIterations, double rr_factor)
+		int maxIterations, double rr_factor, int strategy)
 {	
 	this->in = Input::getInstance();
 
@@ -12,6 +12,7 @@ Ils::Ils(int init_type, int mutation_type, int fit_factor, int maxIdleIterations
     this->fit_factor = fit_factor;
 	this->rr_factor = rr_factor;
     this->maxIdleIterations = maxIdleIterations;
+	this->strategy = strategy;
 
     nodes_inserted.resize(in->num_vertices, false);
 	nodes_visited.resize(in->num_vertices, false);
@@ -598,7 +599,7 @@ void Ils::invert(Individuo &s){
 
 }
 
-void Ils::lsUnion(Individuo &s){
+void Ils::lsLinearUnion(Individuo &s){
 
 	lsImprovement = true;
 
@@ -608,7 +609,6 @@ void Ils::lsUnion(Individuo &s){
 		b = s;
 
 		twoOptBest(a);
-
 		ruinAndRecreate(b);
 
 		if(a.getFitness() < b.getFitness()){
@@ -652,7 +652,15 @@ void Ils::lsTokenRing(Individuo &s){
 			s = a;
 			lsImprovement = true;
 		}
+		else
+		{
+			lsImprovement = false;
+		}		
 	}
+}
+
+void Ils::lsMovementUnion(Individuo &s){
+
 }
 
 void Ils::showResult(){
@@ -663,13 +671,17 @@ void Ils::showResult(){
 
 void Ils::ls(Individuo &s){
 
-	switch (criteria)
+	switch (strategy)
 	{
 	case 1:
 		lsTokenRing(s);
 		break;
 	case 2:
-		lsUnion(s);
+		lsLinearUnion(s);
+		break;
+	case 3:
+		lsMovementUnion(s);
+		break;
 	default:
 		lsTokenRing(s);
 		break;
@@ -751,4 +763,5 @@ void Ils::run()
 
 	best.printRoute();
 	best.printFitness();
+	best.printDistanceMatrix();
 }

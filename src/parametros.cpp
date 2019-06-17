@@ -234,13 +234,13 @@ double Parametros::getRRfactor(){
 	}
 }
 
-int Parametros::getCriteria(){
+int Parametros::getStrategy(){
 
 	try {
-		return stoi(vm["criteria"]);
+		return stoi(vm["strategy"]);
 	} catch (exception& e) {
-		vm["criteria"] = "1";
-		return stoi( vm["criteria"]);
+		vm["strategy"] = "1";
+		return stoi( vm["strategy"]);
 	}
 
 }
@@ -274,7 +274,7 @@ void Parametros::Store(int argc, char * argv[ ]) {
 			{"idle"					, required_argument, 0, 023 },
 			{"iterations"			, required_argument, 0, 024 },
 			{"rr"					, required_argument, 0, 025 },
-			{"criteria"				, required_argument, 0, 026 },
+			{"strategy"				, required_argument, 0, 026 },
 			{ "help", no_argument, 0,						076 },
 			{ "h", no_argument, 0,							076 },
 			{ 0,0, 0, 0 } };
@@ -349,7 +349,7 @@ void Parametros::Store(int argc, char * argv[ ]) {
 			vm["rr"] = string(optarg);
 			break;
 		case 026:
-			vm["criteria"] = string(optarg);
+			vm["strategy"] = string(optarg);
 			break;
 		case 076:
 			cout<<"write a help." << endl;
