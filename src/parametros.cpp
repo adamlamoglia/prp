@@ -229,9 +229,20 @@ double Parametros::getRRfactor(){
 	try {
 		return stod(vm["rr"]);
 	} catch (exception& e) {
-		vm["rr"] = "0.1";
+		vm["rr"] = "10";
 		return stod( vm["rr"]);
 	}
+}
+
+int Parametros::getCriteria(){
+
+	try {
+		return stoi(vm["criteria"]);
+	} catch (exception& e) {
+		vm["criteria"] = "1";
+		return stoi( vm["criteria"]);
+	}
+
 }
 
 
@@ -263,6 +274,7 @@ void Parametros::Store(int argc, char * argv[ ]) {
 			{"idle"					, required_argument, 0, 023 },
 			{"iterations"			, required_argument, 0, 024 },
 			{"rr"					, required_argument, 0, 025 },
+			{"criteria"				, required_argument, 0, 026 },
 			{ "help", no_argument, 0,						076 },
 			{ "h", no_argument, 0,							076 },
 			{ 0,0, 0, 0 } };
@@ -335,6 +347,9 @@ void Parametros::Store(int argc, char * argv[ ]) {
 			break;
 		case 025:
 			vm["rr"] = string(optarg);
+			break;
+		case 026:
+			vm["criteria"] = string(optarg);
 			break;
 		case 076:
 			cout<<"write a help." << endl;

@@ -32,6 +32,7 @@ class Parametros {
 		static int getIdleIterations();
 		static int getIterations();
 		static double getRRfactor();
+		static int getCriteria();
 		static double getSeed();
 
 		

@@ -291,8 +291,9 @@ int Ils::searchNode(Individuo &s, int node){
 
 	for(int i = 0; i < s.route[vehicle1].size(); i++){
 
-		if(s.route[vehicle1][i] == node)
+		if(s.route[vehicle1][i] == node){
 			return i;
+		}
 	}
 
 }
@@ -303,10 +304,25 @@ int Ils::searchVehicle(Individuo &s, int node){
 
 		for(int j = 0; j < s.route[i].size(); j++){
 			
-			if(s.route[i][j] == node)
+			if(s.route[i][j] == node){
 				return i;
+			}
 		}
 	}
+}
+
+bool Ils::isRemoved(Individuo &s){
+
+	if(random_node == 0)
+		return true;
+
+	for(int i = 0; i < nodes_removed.size(); i++){
+
+		if(random_node == nodes_removed[i])
+			return true;
+	}
+
+	return false;
 }
 
 void Ils::ruinAndRecreate(Individuo &s){
@@ -324,17 +340,16 @@ void Ils::ruinAndRecreate(Individuo &s){
 		if(nodes_removed.size() > 0)
 			nodes_removed.clear();
 			
-		for(int i = 0; i < 5; i++){
+		for(int i = 0; i < in->num_vertices * (rr_factor/100); i++){
 
 			do{
 				random_node = rand() % in->num_vertices;
-			}while(random_node == 0);
+			}while(isRemoved(a));
 			
 			vehicle1 = searchVehicle(a, random_node);
 
 			node1 = searchNode(a, random_node);
 
-			//problem of segfault here
 			a.route[vehicle1].erase(a.route[vehicle1].begin() + node1);
 
 			a.fleet[vehicle1].setCapacity(a.fleet[vehicle1].getCapacity() 
@@ -343,6 +358,8 @@ void Ils::ruinAndRecreate(Individuo &s){
 			nodes_removed.push_back(random_node);
 
 		}
+
+		random_shuffle(nodes_removed.begin(), nodes_removed.end());
 
 		for(int i = 0; i < nodes_removed.size(); i++){
 
@@ -581,28 +598,82 @@ void Ils::invert(Individuo &s){
 
 }
 
-void Ils::localSearchUnion(Individuo &s){
+void Ils::lsUnion(Individuo &s){
 
-	a = s;
-	b = s;
+	lsImprovement = true;
 
-	twoOptBest(a);
+	while(lsImprovement){
 
-	ruinAndRecreate(b);
+		a = s;
+		b = s;
 
-	if(a.getFitness() < b.getFitness()){
-		s = a;
+		twoOptBest(a);
+
+		ruinAndRecreate(b);
+
+		if(a.getFitness() < b.getFitness()){
+
+			if(a.getFitness() < s.getFitness()){
+				s = a;
+				lsImprovement = true;
+			}
+		}
+		else{
+
+			if(b.getFitness() < s.getFitness()){
+				s = b;
+				lsImprovement = true;
+			}
+		}
 	}
-	else{
-		s = b;
-	}
 
+}
+
+void Ils::lsTokenRing(Individuo &s){
+
+	lsImprovement = true;
+
+	while(lsImprovement){
+
+		lsImprovement = false;
+
+		a = s;
+
+		twoOptBest(a);
+
+		if(a.getFitness() < s.getFitness()){
+			s = a;
+			lsImprovement = true;
+		}
+
+		ruinAndRecreate(a);
+
+		if(a.getFitness() < s.getFitness()){
+			s = a;
+			lsImprovement = true;
+		}
+	}
 }
 
 void Ils::showResult(){
 
     //best.printRoute();
 	//best.printFitness();
+}
+
+void Ils::ls(Individuo &s){
+
+	switch (criteria)
+	{
+	case 1:
+		lsTokenRing(s);
+		break;
+	case 2:
+		lsUnion(s);
+	default:
+		lsTokenRing(s);
+		break;
+	}
 }
 
 void Ils::run()
@@ -634,7 +705,7 @@ void Ils::run()
 			cout << "Best: " << best.getFitness() << endl;
 		}
 
-        localSearchUnion(current);
+        ls(current);
 
         if (current.getFitness() < best.getFitness()){
             best = current;
@@ -651,7 +722,7 @@ void Ils::run()
 						
             perturbation(local, idleIterations);
 
-			ruinAndRecreate(local);
+			ls(local);
 
             if (local.getFitness() < current.getFitness()){
                 current = local;

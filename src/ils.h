@@ -30,14 +30,16 @@ class Ils{
         //Ils atributes
         int maxIterations,
             maxIdleIterations,
-            random_node;
+            random_node,
+            criteria;
 
         int node1,
             node2,
             vehicle1,
             vehicle2;
 
-        bool improvement;
+        bool improvement,
+             lsImprovement;
 
         //Structure for possibilities in Creation of solution
         struct Insertion{
@@ -87,9 +89,11 @@ class Ils{
         bool clientsChecked();
 
         //Local search functions
+        void ls(Individuo &s);
+        void lsTokenRing(Individuo &s);
+        void lsUnion(Individuo &s);
         void twoOptBest(Individuo &s);
         void threeOptBest(Individuo &s);
-        void localSearchUnion(Individuo &s);
         void ruinAndRecreate(Individuo &s);
         int delta2Evaluation(Individuo &s, int vehicle, int i, int k);
         int delta3Evaluation(Individuo &s, int vehicle, int i, int j, int k);
@@ -97,6 +101,7 @@ class Ils{
         void swapNodes(Individuo &s, int vehicle, int i, int k);
         int searchVehicle(Individuo &s, int node);
         int searchNode(Individuo &s, int node);
+        bool isRemoved(Individuo&s);
         
         
 
